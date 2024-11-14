@@ -18,6 +18,7 @@ import SelectInput from '../../components/SelectInput';
 import uuid from 'react-native-uuid';
 import { storage } from '../../config/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import IconWithLabel from '../../components/IconWithLabel.jsx';
 
 const NewVeicule = () => {
   const route = useRoute();
@@ -35,11 +36,16 @@ const NewVeicule = () => {
   const [renavam, setRenavam] = useState('');
   const [booster, setBooster] = useState('');
   const [sector, setSector] = useState('Setor');
-  const [img, setImg] = useState(null);
   const [statusBt, setStatusBt] = useState(true);
   const [status, setStatus] = useState('Disponível');
   const [imgKey, setImgKey] = useState('');
+  const [img, setImg] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
+
+  const getImageUrl = (imgKey) => {
+    // A chave do arquivo já vem sem o 'o/' (prefixo do Firebase Storage)
+    return `https://firebasestorage.googleapis.com/v0/b/plassonauto-7e0c1.firebasestorage.app/o/images%2F${imgKey}?alt=media`;
+  };
 
   useEffect(() => {
     if (id && !create) {
@@ -55,8 +61,7 @@ const NewVeicule = () => {
         setRenavam(veicule.renavam);
         setBooster(veicule.booster);
         setSector(veicule.sector);
-        setImg(veicule.img);
-        setImgKey(veicule.imgKey || '');
+        setImg(getImageUrl(veicule.imgKey) || '');
         setStatus(veicule.status);
 
         veicule.status === 'Disponível' ? setStatusBt(true) : setStatusBt(false);
@@ -92,18 +97,24 @@ const NewVeicule = () => {
       const response = await fetch(imageUri);
       const blob = await response.blob();
 
+      // Identifica o tipo da imagem pelo MIME type
+      const mimeType = blob.type; // Ex: "image/jpeg" ou "image/png"
+      let fileExtension = mimeType.split('/')[1]; // Pega a parte após o "/"
+
+      // Ajusta o nome da extensão caso necessário
+      if (fileExtension === 'jpeg') fileExtension = 'jpg';
+
       // Gera um UUID para o nome da imagem
-      const imageName = uuid.v4();
-      const storageRef = ref(storage, `images/${imageName}.jpg`);
+      const imageName = `${uuid.v4()}.${fileExtension}`;
+      const storageRef = ref(storage, `images/${imageName}`);
 
       // Faz o upload do arquivo
       await uploadBytes(storageRef, blob);
 
-      // Obtém a URL pública do arquivo
-      const downloadUrl = await getDownloadURL(storageRef);
-
       setLoadingImage(false);
-      return downloadUrl;
+
+      // Retorna o nome completo da imagem
+      return imageName;
     } catch (error) {
       setLoadingImage(false);
       console.error('Erro ao fazer upload da imagem:', error);
@@ -133,8 +144,10 @@ const NewVeicule = () => {
       return;
     }
 
+    let imageUrl;
+
     if (img) {
-      const imageUrl = await uploadImage(img);
+      imageUrl = await uploadImage(img);
       setImgKey(imageUrl);
     }
 
@@ -149,7 +162,7 @@ const NewVeicule = () => {
       kilometers,
       booster,
       sector,
-      imgKey: imgKey || '',
+      imgKey: imageUrl || '',
       status: create ? 'Disponível' : statusBt ? 'Disponível' : 'Indisponível',
     };
 
@@ -158,6 +171,7 @@ const NewVeicule = () => {
       : veicules.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
 
     setVeicules(updatedData);
+
     navigation.goBack();
   };
 
@@ -298,7 +312,20 @@ const NewVeicule = () => {
             {img ? (
               <Image source={{ uri: img }} style={styleJS.image} />
             ) : (
-              <Text style={styleJS.imagePlaceholderText}>Escolher Imagem</Text>
+              <View style={{alignItems:'center'}}>
+                <IconWithLabel
+                  iconName={'camera'}
+                  size={18}
+                  color={styleJS.primaryColor}
+                  width={20}
+                  height={22}
+                  margin={0}
+                />
+                <Text style={styleJS.imagePlaceholderText}>
+                
+                  Escolher Imagem
+                </Text>
+              </View>
             )}
           </TouchableOpacity>
         </View>

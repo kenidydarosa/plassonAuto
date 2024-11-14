@@ -6,6 +6,7 @@ import Card from '../../components/CardPost';
 import FloatingButton from '../../components/FloatingButton';
 import styleJS from '../../components/style';
 import { useDataContext } from '../../data/DataContext';
+import { getImageUrl } from '../../config/ImageUrl';
 
 const Veicules = () => {
   const { veicules } = useDataContext();
@@ -19,12 +20,6 @@ const Veicules = () => {
     navigation.navigate('NewVeicule', { create: true });
   };
 
-  // Função para gerar a URL da imagem com base no imgKey do veículo
-  const getImageUrl = (imgKey) => {
-    // A chave do arquivo já vem sem o 'o/' (prefixo do Firebase Storage)
-    return `https://firebasestorage.googleapis.com/v0/b/plassonauto-7e0c1.firebasestorage.app/o/images%2F${imgKey}?alt=media&token=9345dea5-ac45-4e0b-af30-2bb8ad889a9d`;
-  };
-  
   // Função que renderiza um card de veículo
   const renderCardVeicule = (veicule) => {
     let statusColor;
@@ -47,7 +42,6 @@ const Veicules = () => {
           statusFont = '#000';
           break;
       }
-
       return (
         <Card
           key={veicule.id}

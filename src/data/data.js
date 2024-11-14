@@ -118,7 +118,7 @@ export const notifyData = [
 export const veiculesData = [
     {
         id: 1,
-        imgKey: 'cronos.png',
+        imgKey: '0f04ad49-3eaf-443e-8771-a2f6d9d6b0a1.png',
         model: 'Cronos 1.0 turbo',
         brand: 'Fiat',
         year: 2024,
@@ -132,7 +132,7 @@ export const veiculesData = [
     },
     {
         id: 2,
-        imgKey: 'cronos.png',
+        imgKey: '0a0f37a8-f08b-488f-a5c1-4d075b5fdad1.png',
         model: 'Onix 1.0 turbo',
         brand: 'Chevrolet',
         year: 2024,
@@ -146,7 +146,7 @@ export const veiculesData = [
     },
     {
         id: 3,
-        imgKey: 'cronos.png',
+        imgKey: '0c4fc5ac-f786-4a54-bb37-ffccae9952fb.png',
         model: 'Saveiro 1.0 turbo',
         brand: 'Volkswagem',
         year: 2024,

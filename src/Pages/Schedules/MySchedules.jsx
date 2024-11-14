@@ -10,6 +10,7 @@ import SearchableCardList from '../../components/Search.jsx';
 import { useDataContext } from '../../data/DataContext.js';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useState, useCallback } from 'react';
+import { getImageUrl } from '../../config/ImageUrl.js';
 
 export const MySchedules = () => {
   const navigation = useNavigation();
@@ -48,12 +49,6 @@ export const MySchedules = () => {
     navigation.navigate('Veicules', { type: 'newSchedule' });
   };
 
-  // Função para gerar a URL da imagem com base no imgKey do veículo
-  const getImageUrl = (imgKey) => {
-    // A chave do arquivo já vem sem o 'o/' (prefixo do Firebase Storage)
-    return `https://firebasestorage.googleapis.com/v0/b/plassonauto-7e0c1.firebasestorage.app/o/images%2F${imgKey}?alt=media&token=9345dea5-ac45-4e0b-af30-2bb8ad889a9d`;
-  };
-  
   // Renderiza cada card usando a função `renderCard`
   const renderCard = (item) => {
     let statusColor;

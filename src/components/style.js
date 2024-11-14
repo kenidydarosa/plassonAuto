@@ -137,6 +137,7 @@ const styleJS = {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius:10
   },
   imagePlaceholderText: {
     color: primaryColor,
