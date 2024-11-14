@@ -1,0 +1,87 @@
+import { CalendarUtils } from 'react-native-calendars';
+
+const EVENT_COLOR = '#E0FBFFBE';
+const today = new Date();
+
+export const getDate = (offset = 0) => CalendarUtils.getCalendarDateString(new Date().setDate(today.getDate() + offset));
+console.log("get date:", getDate)
+
+export const timelineEvents = [
+  {
+    start: `${getDate(-1)} 09:20:00`,
+    end: `${getDate(-1)} 12:00:00`,
+    title: 'Merge Request to React Native Calendars',
+    summary: 'Merge Timeline Calendar to React Native Calendars'
+  },
+  {
+    start: `${getDate()} 08:00:00`,
+    end: `${getDate()} 09:30:00`,
+    title: 'Meeting A',
+    summary: 'Summary for meeting A',
+    color: EVENT_COLOR
+  },
+  {
+    start: `${getDate()} 15:30:00`,
+    end: `${getDate()} 16:30:00`,
+    title: 'Meeting B',
+    summary: 'Summary for meeting B',
+    color: EVENT_COLOR
+  },
+  {
+    start: `${getDate()} 13:45:00`,
+    end: `${getDate()} 14:45:00`,
+    title: 'Meeting C',
+    summary: 'Summary for meeting C',
+    color: EVENT_COLOR
+  },
+  {
+    start: `${getDate()} 02:40:00`,
+    end: `${getDate()} 03:10:00`,
+    title: 'Meeting D',
+    summary: 'Summary for meeting D',
+    color: EVENT_COLOR
+  },
+  {
+    start: `${getDate(1)} 14:30:00`,
+    end: `${getDate(1)} 16:30:00`,
+    title: 'Meeting Some Friends in ARMED',
+    summary: 'Arsalan, Hasnaat, Talha, Waleed, Bilal',
+    color: 'pink'
+  },
+  {
+    start: `${getDate(2)} 01:40:00`,
+    end: `${getDate(2)} 02:25:00`,
+    title: 'Meet Sir Khurram Iqbal',
+    summary: 'Computer Science Dept. Comsats Islamabad',
+    color: 'orange'
+  },
+  {
+    start: `${getDate(2)} 04:10:00`,
+    end: `${getDate(2)} 04:40:00`,
+    title: 'Tea Time with Colleagues',
+    summary: 'WeRplay',
+    color: EVENT_COLOR
+  },
+  {
+    start: `${getDate(2)} 00:45:00`,
+    end: `${getDate(2)} 01:35:00`,
+    title: 'Lets Play Apex Legends',
+    summary: 'with Boys at Work',
+    color: EVENT_COLOR,
+  },
+
+  {
+    start: `${getDate(4)} 15:10:00`,
+    end: `${getDate(4)} 17:45:00`,
+    title: 'Merge Request to React Native Calendars',
+    summary: 'Merge Timeline Calendar to React Native Calendars',
+    color: EVENT_COLOR
+  },
+  {
+    start: `${getDate(5)} 00:00:00`,
+    end: `${getDate(6)} 00:00:00`,
+    title: 'Merge Request to React Native Calendars',
+    summary: 'Merge Timeline Calendar to React Native Calendars',
+    color: 'red'
+  }
+];
