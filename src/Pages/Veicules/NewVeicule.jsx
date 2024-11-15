@@ -8,6 +8,7 @@ import {
   Image,
   KeyboardAvoidingView,
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import { useDataContext } from '../../data/DataContext.js';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
@@ -312,7 +313,7 @@ const NewVeicule = () => {
             {img ? (
               <Image source={{ uri: img }} style={styleJS.image} />
             ) : (
-              <View style={{alignItems:'center'}}>
+              <View style={{ alignItems: 'center' }}>
                 <IconWithLabel
                   iconName={'camera'}
                   size={18}
@@ -321,19 +322,25 @@ const NewVeicule = () => {
                   height={22}
                   margin={0}
                 />
-                <Text style={styleJS.imagePlaceholderText}>
-                
-                  Escolher Imagem
-                </Text>
+                <Text style={styleJS.imagePlaceholderText}>Escolher Imagem</Text>
               </View>
             )}
           </TouchableOpacity>
         </View>
 
         <View>
-          <TouchableOpacity style={styleJS.buttonConfirm} onPress={() => createVeicule()}>
+          <Button
+            style={''}
+            icon='check-circle'
+            mode='contained'
+            loading={loadingImage}
+            onPress={() => createVeicule()}
+            buttonColor='#24AD5DFF'
+          >
+            {/* <TouchableOpacity style={styleJS.buttonConfirm} onPress={() => createVeicule()}> */}
             <Text style={styleJS.textButton}>Confirmar</Text>
-          </TouchableOpacity>
+            {/* </TouchableOpacity>*/}
+          </Button>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
