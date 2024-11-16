@@ -32,9 +32,9 @@ O sistema de reserva de carros foi desenvolvido para facilitar a gestão de rese
 
 ## 🛠 Tecnologias Utilizadas
 
-- **Frontend**: [Tecnologias utilizadas no frontend, por exemplo: React, Vue.js, HTML/CSS, Bootstrap, etc.]
-- **Backend**: [Tecnologias utilizadas no backend, por exemplo: Node.js, Express, Django, etc.]
-- **Banco de Dados**: [Nome do banco de dados, por exemplo: MySQL, MongoDB, PostgreSQL]
+- **Frontend**: [React-native, CSS, etc.]
+- **Backend**: [Node.js, Express, SQLite, etc.]
+- **Banco de Dados**: SQLite
 - **Autenticação**: [Tecnologias de autenticação, por exemplo: JWT, OAuth, etc.]
 - **Versionamento de Código**: Git
 
@@ -50,4 +50,4 @@ Antes de começar, certifique-se de ter as seguintes ferramentas instaladas:
 
 1. Clone o repositório para sua máquina local:
    ```bash
-   git clone https://github.com/seu-usuario/nome-do-repositorio.git
+   git clone https://github.com/kenidydarosa/plassonAuto.git

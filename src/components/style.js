@@ -13,6 +13,8 @@ const statusYellow = '#ffebce';
 const statusFontYellow = '#9d6919';
 const toggleButton = '#7FDA6DFF';
 const whiteColor = '#fff';
+const colorButton = '#24AD5DFF';
+const timeButton = '#ECEBEBFF'
 
 // Styles
 const styleJS = {
@@ -29,6 +31,7 @@ const styleJS = {
   statusFontYellow,
   toggleButton,
   whiteColor,
+  colorButton,
 
   // General Containers
   pageContainer: {
@@ -69,8 +72,8 @@ const styleJS = {
   section: {
     backgroundColor: whiteColor,
     borderRadius: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
     marginBottom: 15,
     minHeight: 60,
   },
@@ -87,29 +90,20 @@ const styleJS = {
     gap: 5,
   },
   timeButton: {
-    backgroundColor: '#ECEBEBFF',
+    backgroundColor: timeButton,
     padding: 5,
     borderRadius: 7,
     alignItems: 'center',
     width: 70,
   },
   dateButton: {
-    backgroundColor: '#ECEBEBFF',
+    backgroundColor: timeButton,
     padding: 5,
     borderRadius: 7,
     alignItems: 'center',
     width: 170,
   },
-  buttonConfirm: {
-    backgroundColor: '#24AD5DFF',
-    borderColor: '#24AD5DFF',
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 7,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+
   statusBase: {
     paddingVertical: 3,
     paddingHorizontal: 10,
@@ -137,7 +131,7 @@ const styleJS = {
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius:10
+    borderRadius: 10,
   },
   imagePlaceholderText: {
     color: primaryColor,
@@ -147,10 +141,43 @@ const styleJS = {
     height: '100%',
     borderRadius: 10,
   },
+  header: {
+    width: '100%',
+    paddingTop: 30,
+    paddingBottom: 15,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: borderColor,
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+  },
+  today: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+  },
+  todayNumber: {
+    fontFamily: 'Poppins_500Medium',
+    fontSize: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  font: {
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+  },
+  circle: {
+    backgroundColor: borderColor,
+  },
+  userLogin: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 3,
+  },
 };
 
 export default styleJS;
-
 
 // Theme Configuration
 import { Platform } from 'react-native';
@@ -164,8 +191,8 @@ export function getTheme() {
   return {
     arrowColor: themeColor,
     arrowStyle: { padding: 0 },
-    backgroundColor: '#ffffff',
-    calendarBackground: '#ffffff',
+    backgroundColor: whiteColor,
+    calendarBackground: whiteColor,
     expandableKnobColor: themeColor,
     monthTextColor: 'black',
     textMonthFontSize: 16,
@@ -177,7 +204,7 @@ export function getTheme() {
     textDayHeaderFontWeight: 'normal',
     dayTextColor: '#000',
     todayTextColor: themeColor,
-    textDayFontSize: 16,
+    textDayFontSize: 14,
     textDayFontFamily: 'Poppins',
     textDayFontWeight: '500',
     textDayStyle: { marginTop: Platform.OS === 'android' ? 2 : 4 },

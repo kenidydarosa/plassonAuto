@@ -1,6 +1,6 @@
 /** @format */
 
-import { StyleSheet, Text, ActivityIndicator, ScrollView, View } from 'react-native';
+import {Text, ScrollView, View } from 'react-native';
 import Card from '../../components/CardPost.jsx';
 import FloatingButton from '../../components/FloatingButton';
 import fontConfig from '../../config/fontConfig';
@@ -9,8 +9,9 @@ import styleJS from '../../components/style';
 import SearchableCardList from '../../components/Search.jsx';
 import { useDataContext } from '../../data/DataContext.js';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { getImageUrl } from '../../config/ImageUrl.js';
+import Loading from '../../components/Loading.jsx';
 
 export const MySchedules = () => {
   const navigation = useNavigation();
@@ -30,11 +31,7 @@ export const MySchedules = () => {
   // Confere se as fontes foram carregadas
   if (!fontsLoaded) {
     return (
-      <ActivityIndicator
-        size='large'
-        color='#D13C3CFF'
-        style={{ alignItems: 'center', flex: 1 }}
-      />
+      <Loading/>
     );
   }
 

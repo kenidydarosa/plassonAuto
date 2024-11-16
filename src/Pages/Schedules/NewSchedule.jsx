@@ -6,11 +6,10 @@ import {
   TextInput,
   Switch,
   Platform,
-  styleJSheet,
   ScrollView,
-  TouchableOpacity,
   KeyboardAvoidingView,
 } from 'react-native';
+import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
 import React, { useEffect, useState } from 'react';
@@ -60,6 +59,8 @@ const NewSchedule = () => {
   const [pickerMode, setPickerMode] = useState('date');
   const [pickerField, setPickerField] = useState('');
   const [activeButton, setActiveButton] = useState('');
+  const [loadingImage, setLoadingImage] = useState(false);
+
 
   const listPicker = {
     showPicker,
@@ -98,7 +99,6 @@ const NewSchedule = () => {
         setCar(foundCar);
 
         if (schedule) {
-          console.log(schedule.returnOfKeyTime);
           setUser(schedule.user);
           setTitle(schedule.title);
           setDescription(schedule.description);
@@ -487,9 +487,16 @@ const NewSchedule = () => {
           </View>
         </View>
         <View>
-          <TouchableOpacity style={styleJS.buttonConfirm} onPress={() => createSchedule()}>
+          <Button
+            style={''}
+            icon='check-circle'
+            mode='contained'
+            loading={loadingImage}
+            onPress={() => createSchedule()}
+            buttonColor= {styleJS.colorButton}
+          >
             <Text style={styleJS.textButton}>Confirmar</Text>
-          </TouchableOpacity>
+          </Button>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

@@ -4,7 +4,6 @@ const EVENT_COLOR = '#E0FBFFBE';
 const today = new Date();
 
 export const getDate = (offset = 0) => CalendarUtils.getCalendarDateString(new Date().setDate(today.getDate() + offset));
-console.log("get date:", getDate)
 
 export const timelineEvents = [
   {

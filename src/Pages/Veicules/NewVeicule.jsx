@@ -21,12 +21,15 @@ import { storage } from '../../config/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import IconWithLabel from '../../components/IconWithLabel.jsx';
 
+// Componente funcional que gerencia a criação e edição de um veículo
 const NewVeicule = () => {
+  // Hook de roteamento para obter parâmetros passados na navegação
   const route = useRoute();
   const navigation = useNavigation();
-  const { create, id } = route.params || {};
-  const { veicules, setVeicules, userX, listSectors } = useDataContext();
+  const { create, id } = route.params || {}; // Identifica se é criação ou edição
+  const { veicules, setVeicules, userX, listSectors } = useDataContext(); // Dados do contexto
 
+  // States locais para armazenar dados do veículo
   const [car, setCar] = useState(null);
   const [model, setModel] = useState('');
   const [brand, setBrand] = useState('');
@@ -44,15 +47,17 @@ const NewVeicule = () => {
   const [loadingImage, setLoadingImage] = useState(false);
 
   const getImageUrl = (imgKey) => {
-    // A chave do arquivo já vem sem o 'o/' (prefixo do Firebase Storage)
+    // Função para montar a URL da imagem armazenada no Firebase Storage
     return `https://firebasestorage.googleapis.com/v0/b/plassonauto-7e0c1.firebasestorage.app/o/images%2F${imgKey}?alt=media`;
   };
-
+  // Efeito que é executado ao montar o componente ou quando a rota é alterada
   useEffect(() => {
+    // Verifica se é um caso de edição, caso contrário, apenas inicializa os dados
     if (id && !create) {
       const veicule = veicules.find((item) => item.id === id);
 
       if (veicule) {
+        // Preenche os campos com os dados do veículo existente
         setModel(veicule.model);
         setBrand(veicule.brand);
         setColor(veicule.color);
@@ -69,7 +74,7 @@ const NewVeicule = () => {
       }
     }
   }, [create, id]);
-
+  // Função para escolher uma imagem da galeria do dispositivo
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
@@ -85,15 +90,15 @@ const NewVeicule = () => {
     });
 
     if (!result.canceled) {
-      setImg(result.assets[0].uri);
+      setImg(result.assets[0].uri); // Atualiza a imagem escolhida
     }
   };
 
-  // Função para fazer upload da imagem
+  // Função para fazer upload da imagem no Firebase Storage
   const uploadImage = async (imageUri) => {
     if (!imageUri) return null;
 
-    setLoadingImage(true);
+    setLoadingImage(true); // Ativa o estado de loading enquanto a imagem está sendo carregada
     try {
       const response = await fetch(imageUri);
       const blob = await response.blob();
@@ -117,12 +122,13 @@ const NewVeicule = () => {
       // Retorna o nome completo da imagem
       return imageName;
     } catch (error) {
-      setLoadingImage(false);
+      setLoadingImage(false); // Desativa o estado de loading
       console.error('Erro ao fazer upload da imagem:', error);
       throw error;
     }
   };
 
+  // Função que cria ou edita o veículo no contexto
   const createVeicule = async () => {
     let updatedData;
 
@@ -138,6 +144,7 @@ const NewVeicule = () => {
       sector,
       img,
     ];
+    // Verifica se há campos obrigatórios vazios
     const hasEmptyField = fields.some((item) => item === '');
 
     if (hasEmptyField) {
@@ -148,7 +155,7 @@ const NewVeicule = () => {
     let imageUrl;
 
     if (img) {
-      imageUrl = await uploadImage(img);
+      imageUrl = await uploadImage(img); // Faz o upload da imagem, se houver
       setImgKey(imageUrl);
     }
 
@@ -168,12 +175,14 @@ const NewVeicule = () => {
     };
 
     updatedData = create
-      ? [...veicules, baseVeicule]
-      : veicules.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
+      ? // Cria um novo veículo
+        [...veicules, baseVeicule]
+      : // Edita um veículo existente
+        veicules.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
 
-    setVeicules(updatedData);
+    setVeicules(updatedData); // Atualiza os dados no contexto
 
-    navigation.goBack();
+    navigation.goBack(); // Retorna para a tela anterior
   };
 
   return (
@@ -212,7 +221,7 @@ const NewVeicule = () => {
               }}
             />
           </View>
-
+          {/* Campos de entrada para as informações do veículo */}
           <InputField
             icon={'car'}
             placeholder={'Modelo'}
@@ -254,6 +263,7 @@ const NewVeicule = () => {
             />
           </View>
         </View>
+        {/* Inputs para os dados adicionais do veículo */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
             <InputField
@@ -296,7 +306,6 @@ const NewVeicule = () => {
               width={'50%'}
             />
           </View>
-
           <SelectInput
             initialValue={'Selecione um setor'}
             value={sector}
@@ -307,7 +316,7 @@ const NewVeicule = () => {
             width={'100%'}
           />
         </View>
-
+        {/* Container para selecionar a imagem do veículo */}
         <View style={[styleJS.veicule, img ? { borderWidth: 0 } : '']}>
           <TouchableOpacity onPress={pickImage} style={styleJS.imageButton}>
             {img ? (
@@ -327,7 +336,7 @@ const NewVeicule = () => {
             )}
           </TouchableOpacity>
         </View>
-
+        {/* Botão para salvar as alterações */}
         <View>
           <Button
             style={''}
@@ -335,11 +344,9 @@ const NewVeicule = () => {
             mode='contained'
             loading={loadingImage}
             onPress={() => createVeicule()}
-            buttonColor='#24AD5DFF'
+            buttonColor={styleJS.colorButton}
           >
-            {/* <TouchableOpacity style={styleJS.buttonConfirm} onPress={() => createVeicule()}> */}
             <Text style={styleJS.textButton}>Confirmar</Text>
-            {/* </TouchableOpacity>*/}
           </Button>
         </View>
       </ScrollView>
