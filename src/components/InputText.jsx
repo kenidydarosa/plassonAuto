@@ -57,7 +57,7 @@ const InputText = ({ label, icon, type, value, setValue, width = '100%', multili
       activeOutlineColor={styleJS.primaryColor} // Cor da borda ativa (quando o campo está selecionado)
       activeUnderlineColor={styleJS.primaryColor} // Cor da linha ativa (quando o campo está selecionado)
       multiline={multiline} // Se verdadeiro, o campo se torna uma área de texto (textarea)
-      keyboardType="email-address" // Tipo de teclado (definido como 'email-address' por padrão)
+      keyboardType={type === 'password' ? 'default' : 'email-address'} // Tipo de teclado (definido como 'email-address' por padrão)
       style={{
         backgroundColor: '#F8F8F8FF', // Cor de fundo do campo de entrada
         width: width, // Largura do campo de entrada

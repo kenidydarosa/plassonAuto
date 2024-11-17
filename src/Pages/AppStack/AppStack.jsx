@@ -2,13 +2,13 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { TouchableOpacity, View, Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import Login from '../Login/Login'; 
+import Login from '../Login/Login';
 import BottomNavigator from '../../components/BottomNavigator';
 import Veicules from '../Veicules/Veicules';
 import NewVeicule from '../Veicules/NewVeicule';
 import Calendar from '../Calendar/Calendar';
 import NewSchedule from '../Schedules/NewSchedule';
-import styleJS from '../../components/style'; 
+import styleJS from '../../components/style';
 
 // Cria o stack navigator (navegação em pilha)
 const Stack = createNativeStackNavigator();
@@ -19,42 +19,43 @@ const AppStack = () => {
     // Define o Stack Navigator com a tela inicial sendo 'Login'
     <Stack.Navigator initialRouteName='Login'>
       {/* Tela de Login*/}
-      <Stack.Screen 
-        name='Login' 
-        component={Login} 
+      <Stack.Screen
+        name='Login'
+        component={Login}
         options={{ headerShown: false }} // Configura para não mostrar o cabeçalho
       />
 
       {/* Tela de Navegação Inferior */}
-      <Stack.Screen 
-        name='BottomNavigator' 
-        component={BottomNavigator} 
+      <Stack.Screen
+        name='BottomNavigator'
+        component={BottomNavigator}
         options={{ headerShown: false }} // O cabeçalho é ocultado
       />
 
       {/* Tela de MySchedules (usando o BottomNavigator)*/}
-      <Stack.Screen 
-        name='MySchedules' 
-        component={BottomNavigator} 
+      <Stack.Screen
+        name='MySchedules'
+        component={BottomNavigator}
         options={{ headerShown: false }} // O cabeçalho é ocultado
       />
 
       {/* Tela de Veículos*/}
-      <Stack.Screen 
-        name='Veicules' 
-        component={Veicules} 
+      <Stack.Screen
+        name='Veicules'
+        component={Veicules}
         options={({ navigation }) => ({
           title: 'Reservas', // Título da tela
-          headerLeft: () => <Button onPress={() => navigation.goBack()} title='Voltar' /> // Botão de voltar
+          headerBackTitle: 'Voltar',
         })}
       />
 
       {/* Tela de Calendário */}
-      <Stack.Screen 
-        name='Calendar' 
-        component={Calendar} 
+      <Stack.Screen
+        name='Calendar'
+        component={Calendar}
         options={({ navigation }) => ({
           headerTitle: '', // Não exibe título no cabeçalho
+          headerBackTitle: 'Voltar',
           headerRight: () => (
             // Adiciona ícone de busca à direita do cabeçalho
             <View style={{ flexDirection: 'row', gap: 30 }}>
@@ -63,28 +64,26 @@ const AppStack = () => {
               </TouchableOpacity>
             </View>
           ),
-          // Botão de voltar à tela anterior
-          headerLeft: () => <Button onPress={() => navigation.goBack()} title='Voltar' /> 
         })}
       />
 
       {/* Tela de Novo Agendamento */}
-      <Stack.Screen 
-        name='NewSchedule' 
-        component={NewSchedule} 
+      <Stack.Screen
+        name='NewSchedule'
+        component={NewSchedule}
         options={({ navigation }) => ({
           title: 'Nova reserva', // Título da tela
-          headerLeft: () => <Button onPress={() => navigation.goBack()} title='Voltar' /> // Botão de voltar
+          headerBackTitle: 'Voltar',
         })}
       />
 
       {/* Tela de Novo Veículo */}
-      <Stack.Screen 
-        name='NewVeicule' 
-        component={NewVeicule} 
+      <Stack.Screen
+        name='NewVeicule'
+        component={NewVeicule}
         options={({ navigation }) => ({
           title: 'Novo Veiculo', // Título da tela
-          headerLeft: () => <Button onPress={() => navigation.goBack()} title='Voltar' /> // Botão de voltar
+          headerBackTitle: 'Voltar',
         })}
       />
     </Stack.Navigator>

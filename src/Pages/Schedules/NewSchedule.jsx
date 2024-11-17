@@ -22,7 +22,7 @@ import SelectInput from '../../components/SelectInput';
 const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  
+
   const { schedules, setSchedules, veicules, userX, listTitles } = useDataContext();
   const { create, id, timeString } = route.params || {};
 
@@ -61,7 +61,6 @@ const NewSchedule = () => {
   const [activeButton, setActiveButton] = useState('');
   const [loadingImage, setLoadingImage] = useState(false);
 
-
   const listPicker = {
     showPicker,
     setShowPicker,
@@ -91,7 +90,6 @@ const NewSchedule = () => {
         setEndDate(date);
         setStartTime(date);
         setEndTime(endDate);
-        
       } else {
         const schedule = schedules.find((item) => item.id === id);
         const foundCar = veicules.find((car) => car.id === schedule.idCar);
@@ -158,14 +156,13 @@ const NewSchedule = () => {
 
   // Função ajustar data e hora de entrega das chaves
   const setDateHours = (date, time) => {
-	const currentDate = new Date(date)
-
+    const currentDate = new Date(date);
 
     if (!time || time === '--:--') return null; // Se o tempo estiver vazio ou for '--:--', retorna '--:--'
 
     const [hours, minutes] = time.split(':').map(Number);
-   
-	currentDate.setHours(hours);
+
+    currentDate.setHours(hours);
     currentDate.setMinutes(minutes);
     currentDate.setSeconds(0);
     currentDate.setMilliseconds(0);
@@ -174,39 +171,39 @@ const NewSchedule = () => {
   };
 
   const createSchedule = () => {
-	let updatedData;
-  
-	// Verifica se há algum campo vazio
-	const fields = [user, title, description, locale];
-	const hasEmptyField = fields.some((item) => item === '');
-  
-	if (hasEmptyField) {
-	  alert('Preencha todos os campos!');
-	  return;
-	}
-	
-	const baseSchedule = {
-	  id: create ? (schedules.length + 1).toString() : id,
-	  user,
-	  idCar: car.id,
-	  title,
-	  description,
-	  locale,
-	  date_time_start: formatDateTime(startDate, startTime),
-	  date_time_end: formatDateTime(endDate, endTime),
-	  allDay,
-	  keyHandOverTime: setDateHours(startDate, keyHandOverTime),
-	  returnOfKeyTime: setDateHours(startDate, returnOfKeyTime),
-	  status: create ? 'Ativa' : statusBt ? 'Ativa' : 'Cancelada',
-	  notes,
-	};
-  
-	updatedData = create
-	  ? [...schedules, baseSchedule]
-	  : schedules.map((item) => (item.id === id ? { ...item, ...baseSchedule } : item));
-  
-	setSchedules(updatedData);
-	navigation.navigate('MySchedules', { data: updatedData });
+    let updatedData;
+
+    // Verifica se há algum campo vazio
+    const fields = [user, title, description, locale];
+    const hasEmptyField = fields.some((item) => item === '');
+
+    if (hasEmptyField) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
+    const baseSchedule = {
+      id: create ? (schedules.length + 1).toString() : id,
+      user,
+      idCar: car.id,
+      title,
+      description,
+      locale,
+      date_time_start: formatDateTime(startDate, startTime),
+      date_time_end: formatDateTime(endDate, endTime),
+      allDay,
+      keyHandOverTime: setDateHours(startDate, keyHandOverTime),
+      returnOfKeyTime: setDateHours(startDate, returnOfKeyTime),
+      status: create ? 'Ativa' : statusBt ? 'Ativa' : 'Cancelada',
+      notes,
+    };
+
+    updatedData = create
+      ? [...schedules, baseSchedule]
+      : schedules.map((item) => (item.id === id ? { ...item, ...baseSchedule } : item));
+
+    setSchedules(updatedData);
+    navigation.navigate('MySchedules', { data: updatedData });
   };
 
   return (
@@ -215,7 +212,10 @@ const NewSchedule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // ajuste se necessário
     >
-      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
+      <ScrollView
+        style={styleJS.containerForm}
+        contentContainerStyle={{ paddingBottom: 70 }}
+      >
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
@@ -493,7 +493,7 @@ const NewSchedule = () => {
             mode='contained'
             loading={loadingImage}
             onPress={() => createSchedule()}
-            buttonColor= {styleJS.colorButton}
+            buttonColor={styleJS.colorButton}
           >
             <Text style={styleJS.textButton}>Confirmar</Text>
           </Button>

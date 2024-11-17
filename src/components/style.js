@@ -36,6 +36,7 @@ const styleJS = {
   // General Containers
   pageContainer: {
     flex: 1,
+    zIndex: 0,
     backgroundColor: whiteColor,
   },
   container: {

@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
 		fontSize: 13,
 	},
 	containerIcon: {
-		width: '25%',
+		width: '18%',
 	},
 	cardText: {
 		width: '83%',

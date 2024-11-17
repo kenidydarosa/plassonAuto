@@ -72,7 +72,7 @@ const Login = () => {
         <InputText
           value={username}
           setValue={setUsername}
-          label='Email'
+          label='Usuário'
           icon={'account-circle'}
         />
         {/* Campo de entrada para a senha */}
