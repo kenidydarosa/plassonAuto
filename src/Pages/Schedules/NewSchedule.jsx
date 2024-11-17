@@ -30,7 +30,7 @@ const NewSchedule = () => {
   const [car, setCar] = useState(null);
   const [user, setUser] = useState('');
   const [title, setTitle] = useState('Selecione um título');
-  const [description, setDescription] = useState('');
+  const [sumary, setSumary] = useState('');
 
   const [locale, setLocale] = useState('');
   const [allDay, setAllDay] = useState(false);
@@ -99,13 +99,13 @@ const NewSchedule = () => {
         if (schedule) {
           setUser(schedule.user);
           setTitle(schedule.title);
-          setDescription(schedule.description);
+          setSumary(schedule.sumary);
           setLocale(schedule.locale);
           setAllDay(schedule.allDay);
-          setStartDate(new Date(schedule.date_time_start));
-          setStartTime(new Date(schedule.date_time_start));
-          setEndDate(new Date(schedule.date_time_end));
-          setEndTime(new Date(schedule.date_time_end));
+          setStartDate(new Date(schedule.start));
+          setStartTime(new Date(schedule.start));
+          setEndDate(new Date(schedule.end));
+          setEndTime(new Date(schedule.end));
           setNotes(schedule.notes);
 
           setKeyHandOverTime(
@@ -174,7 +174,7 @@ const NewSchedule = () => {
     let updatedData;
 
     // Verifica se há algum campo vazio
-    const fields = [user, title, description, locale];
+    const fields = [user, title, sumary, locale];
     const hasEmptyField = fields.some((item) => item === '');
 
     if (hasEmptyField) {
@@ -187,10 +187,10 @@ const NewSchedule = () => {
       user,
       idCar: car.id,
       title,
-      description,
+      sumary,
       locale,
-      date_time_start: formatDateTime(startDate, startTime),
-      date_time_end: formatDateTime(endDate, endTime),
+      start: formatDateTime(startDate, startTime),
+      end: formatDateTime(endDate, endTime),
       allDay,
       keyHandOverTime: setDateHours(startDate, keyHandOverTime),
       returnOfKeyTime: setDateHours(startDate, returnOfKeyTime),
@@ -262,8 +262,8 @@ const NewSchedule = () => {
           <InputField
             icon={'target'}
             placeholder={'Descrição'}
-            value={description}
-            func={setDescription}
+            value={sumary}
+            func={setSumary}
             editable={true}
             border={true}
             width={'100%'}

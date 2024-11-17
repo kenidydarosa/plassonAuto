@@ -8,6 +8,7 @@ import styleJS from '../../components/style';
 import fontConfig from '../../config/fontConfig';
 import { usersData } from '../../data/data';
 import AlertDialog from '../../components/Dialog';
+import { fetchUsers } from '../../data/api.js';
 
 /**
  * Tela de Login que permite ao usuário inserir um nome de usuário e senha para acessar o aplicativo.
@@ -32,9 +33,10 @@ const Login = () => {
    * Caso sejam, define o usuário e navega para a tela principal.
    * Caso contrário, exibe um alerta informando que os dados estão incorretos.
    */
-  const handleLogin = () => {
+  const  handleLogin = async () => {
     setLoadingImage(true); // Ativa o carregamento ao clicar no botão
-
+    const users = await fetchUsers()
+    console.log(users)
     // Procura no banco de dados se existe um usuário com o nome de usuário e senha fornecidos
     const user = usersData.find(
       (item) => username === item.username && password === item.password

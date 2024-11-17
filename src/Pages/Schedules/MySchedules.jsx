@@ -1,6 +1,6 @@
 /** @format */
 
-import {Text, ScrollView, View } from 'react-native';
+import { Text, ScrollView, View } from 'react-native';
 import Card from '../../components/CardPost.jsx';
 import FloatingButton from '../../components/FloatingButton';
 import fontConfig from '../../config/fontConfig';
@@ -30,9 +30,7 @@ export const MySchedules = () => {
 
   // Confere se as fontes foram carregadas
   if (!fontsLoaded) {
-    return (
-      <Loading/>
-    );
+    return <Loading />;
   }
 
   // Define a propriedade padrão para `Text`
@@ -70,29 +68,30 @@ export const MySchedules = () => {
         statusFont = '#000';
     }
 
-    const car = veicules.find((car) => car.id === item.idCar);
+    const car = veicules.find((car) => car.id === item.veicule_id);
+    const user = veicules.find((user) => user.id === item.user_id);
 
     // Renderiza o Card
     return (
       <Card
         key={item.id}
         id={item.id}
-		imgUrl={getImageUrl(car.imgKey)}
+        imgUrl={getImageUrl(car.imgKey)}
         title={item.title}
-        subtitle={item.description}
+        subtitle={item.sumary}
         text1={item.locale}
-        text2={`${new Date(item.date_time_start).toLocaleDateString()}`}
-        text3={`${new Date(item.date_time_start).toLocaleTimeString('pt-BR', {
+        text2={`${new Date(item.start).toLocaleDateString()}`}
+        text3={`${new Date(item.start).toLocaleTimeString('pt-BR', {
           hour: '2-digit',
           minute: '2-digit',
           hour12: false,
-        })} - ${new Date(item.date_time_end).toLocaleTimeString('pt-BR', {
+        })} - ${new Date(item.end).toLocaleTimeString('pt-BR', {
           hour: '2-digit',
           minute: '2-digit',
           hour12: false,
         })}h`}
         text4={item.user}
-        status={item.status}
+        status={user.name}
         statusColor={statusColor}
         statusFont={statusFont}
         icon1={'map-marker'}
@@ -101,7 +100,7 @@ export const MySchedules = () => {
         icon4={'account'}
         href='NewSchedule'
         sendParams={true}
-        idCar={item.idCar}
+        idCar={item.veicule_id}
         create={false}
       />
     );
@@ -117,7 +116,7 @@ export const MySchedules = () => {
         <SearchableCardList
           data={updateSchedule} // Passa os dados das reservas filtrados
           renderCard={renderCard} // Função que renderiza cada card
-          searchKeys={['user', 'title', 'description', 'locale', 'date_time_start']} // Chaves para a pesquisa
+          searchKeys={['user', 'title', 'sumary', 'locale', 'start']} // Chaves para a pesquisa
           filters={[
             { label: 'Todas', value: 'todos' },
             { label: 'Ativas', value: 'ativa' },
