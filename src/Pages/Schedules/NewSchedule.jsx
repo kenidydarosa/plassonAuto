@@ -183,6 +183,7 @@ const NewSchedule = () => {
     }
 
     const baseSchedule = {
+      //Verificar aqui, o id é gerado pelo backend 
       id: create ? (schedules.length + 1).toString() : id,
       user,
       idCar: car.id,

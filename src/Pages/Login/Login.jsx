@@ -6,9 +6,8 @@ import { useDataContext } from '../../data/DataContext.js';
 import InputText from '../../components/InputText';
 import styleJS from '../../components/style';
 import fontConfig from '../../config/fontConfig';
-import { usersData } from '../../data/data';
 import AlertDialog from '../../components/Dialog';
-import { fetchUsers } from '../../data/api.js';
+import { loginUser } from '../../data/api.js';
 
 /**
  * Tela de Login que permite ao usuário inserir um nome de usuário e senha para acessar o aplicativo.
@@ -20,7 +19,7 @@ import { fetchUsers } from '../../data/api.js';
 const Login = () => {
   const navigation = useNavigation(); // Navegação para outras telas
   const fontsLoaded = fontConfig(); // Carrega a configuração de fontes
-  const { setUserX } = useDataContext(); // Função para definir o usuário no contexto global
+  const { setUserX, setSchedules, veiculesc, setVeicules, setNotifications } = useDataContext(); // Função para definir o usuário no contexto global
 
   // Estado local para armazenar os valores dos campos de entrada
   const [username, setUsername] = useState('');
@@ -33,20 +32,31 @@ const Login = () => {
    * Caso sejam, define o usuário e navega para a tela principal.
    * Caso contrário, exibe um alerta informando que os dados estão incorretos.
    */
-  const  handleLogin = async () => {
+  const handleLogin = async () => {
     setLoadingImage(true); // Ativa o carregamento ao clicar no botão
-    const users = await fetchUsers()
-    console.log(users)
-    // Procura no banco de dados se existe um usuário com o nome de usuário e senha fornecidos
-    const user = usersData.find(
-      (item) => username === item.username && password === item.password
-    );
 
-    if (user) {
-      setLoadingImage(false); // Desativa o carregamento
-      setUserX(user); // Define o usuário no contexto global
-      navigation.navigate('BottomNavigator'); // Navega para a tela principal
-    } else {
+    try {
+      const { user, schedules, notify, veicules } = await loginUser(username, password);
+
+      if (!user) {
+        setLoadingImage(false);
+        setVisible(true);
+        return;
+      }
+
+      setLoadingImage(false);
+      setUserX(user);
+      setSchedules(schedules);
+      setNotifications(notify);
+      setVeicules(veicules);
+
+      console.log(veiculesc)
+
+      navigation.navigate('BottomNavigator');
+    } catch (error) {
+      // Captura erros e desativa o carregamento
+      console.error('Erro ao fazer login:', error);
+      setLoadingImage(false);
       setVisible(true); // Exibe o alerta de erro
     }
   };
@@ -112,4 +122,3 @@ const Login = () => {
 };
 
 export default Login;
-

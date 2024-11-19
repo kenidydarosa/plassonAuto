@@ -17,12 +17,12 @@ const DataContext = createContext();
 export const DataProvider = ({ children }) => {
   // Declaração de estados para armazenar os dados de usuário, agendamentos, usuários, notificações e veículos
   const [userX, setUserX] = useState(null); // Estado para o usuário atual (inicialmente null)
-  const [schedules, setSchedules] = useState(schedulesData); // Estado para armazenar os agendamentos, com valor inicial vindo de 'schedulesData'
-  const [users, setUsers] = useState(usersData); // Estado para armazenar os dados dos usuários
-  const [notifications, setNotifications] = useState(notifyData); // Estado para armazenar as notificações
-  const [veicules, setVeicules] = useState(veiculesData); // Estado para armazenar os veículos
+  const [schedules, setSchedules] = useState(null); // Estado para armazenar os agendamentos, com valor inicial vindo de 'schedulesData'
+  const [users, setUsers] = useState(null); // Estado para armazenar os dados dos usuários
+  const [notifications, setNotifications] = useState(null); // Estado para armazenar as notificações
+  const [veiculesc, setVeicules] = useState(null); // Estado para armazenar os veículos
 
- return (
+  return (
     // O DataContext.Provider fornece o contexto para os componentes filhos.
     // O valor do contexto inclui os estados e suas funções de atualização
     <DataContext.Provider
@@ -35,13 +35,13 @@ export const DataProvider = ({ children }) => {
         setUsers, // Função para atualizar os usuários
         notifications, // Fornece as notificações
         setNotifications, // Função para atualizar as notificações
-        veicules, // Fornece os veículos
+        veiculesc, // Fornece os veículos
         setVeicules, // Função para atualizar os veículos
         listTitles, // Fornece os títulos da lista
         listSectors, // Fornece os setores da lista
       }}
     >
-        {/* Os componentes filhos que recebem esse contexto */}
+      {/* Os componentes filhos que recebem esse contexto */}
       {children}
     </DataContext.Provider>
   );

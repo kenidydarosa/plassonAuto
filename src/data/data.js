@@ -97,7 +97,7 @@ export const usersData = [
     job: 'Supervisor Central de Apoio',
     sector: 'Comercial',
     registration: '184571-1',
-    email: 'kenidy.rosa@plasson.com.br',
+    registration: 'kenidy.rosa@plasson.com.br',
   },
   {
     id: 3,

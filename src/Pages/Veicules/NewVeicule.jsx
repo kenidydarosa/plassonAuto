@@ -160,6 +160,7 @@ const NewVeicule = () => {
     }
 
     const baseVeicule = {
+      //Verificar aqui, o id é gerado pelo backend 
       id: create ? (veicules.length + 1).toString() : id,
       model,
       brand,

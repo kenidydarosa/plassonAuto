@@ -15,7 +15,7 @@ import Loading from '../../components/Loading.jsx';
 
 export const MySchedules = () => {
   const navigation = useNavigation();
-  const { schedules, veicules } = useDataContext();
+  const { schedules, veiculesc, users } = useDataContext();
   const fontsLoaded = fontConfig();
 
   let updateSchedule = schedules;
@@ -68,8 +68,10 @@ export const MySchedules = () => {
         statusFont = '#000';
     }
 
-    const car = veicules.find((car) => car.id === item.veicule_id);
-    const user = veicules.find((user) => user.id === item.user_id);
+    console.log(veiculesc);
+
+    const car = veiculesc.find((car) => car.id === item.veicule_id);
+    const user = users.find((user) => user.id === item.user_id);
 
     // Renderiza o Card
     return (
@@ -116,7 +118,7 @@ export const MySchedules = () => {
         <SearchableCardList
           data={updateSchedule} // Passa os dados das reservas filtrados
           renderCard={renderCard} // Função que renderiza cada card
-          searchKeys={['user', 'title', 'sumary', 'locale', 'start']} // Chaves para a pesquisa
+          searchKeys={['user', 'title', 'summary', 'locale', 'start']} // Chaves para a pesquisa
           filters={[
             { label: 'Todas', value: 'todos' },
             { label: 'Ativas', value: 'ativa' },
