@@ -25,7 +25,13 @@ export const MySchedules = () => {
       if (schedules) {
         updateSchedule = schedules;
       }
-    }, [schedules])
+      if (veiculesc) {
+        console.log('Estado veiculesc atual:', veiculesc);
+      }
+      if (users) {
+        console.log('Estado users atual:', users);
+      }
+    }, [schedules, veiculesc, users])
   );
 
   // Confere se as fontes foram carregadas
@@ -68,7 +74,8 @@ export const MySchedules = () => {
         statusFont = '#000';
     }
 
-    console.log(veiculesc);
+    console.log(item.user_id);
+    console.log('users:', users);
 
     const car = veiculesc.find((car) => car.id === item.veicule_id);
     const user = users.find((user) => user.id === item.user_id);

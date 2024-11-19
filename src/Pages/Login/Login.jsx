@@ -19,7 +19,7 @@ import { loginUser } from '../../data/api.js';
 const Login = () => {
   const navigation = useNavigation(); // Navegação para outras telas
   const fontsLoaded = fontConfig(); // Carrega a configuração de fontes
-  const { setUserX, setSchedules, veiculesc, setVeicules, setNotifications } = useDataContext(); // Função para definir o usuário no contexto global
+  const { setUserX, setSchedules, setVeicules, setNotifications, setUsers } = useDataContext(); // Função para definir o usuário no contexto global
 
   // Estado local para armazenar os valores dos campos de entrada
   const [username, setUsername] = useState('');
@@ -36,7 +36,7 @@ const Login = () => {
     setLoadingImage(true); // Ativa o carregamento ao clicar no botão
 
     try {
-      const { user, schedules, notify, veicules } = await loginUser(username, password);
+      const { user, schedules, notify, veicules, users } = await loginUser(username, password);
 
       if (!user) {
         setLoadingImage(false);
@@ -49,8 +49,7 @@ const Login = () => {
       setSchedules(schedules);
       setNotifications(notify);
       setVeicules(veicules);
-
-      console.log(veiculesc)
+      setUsers(users);
 
       navigation.navigate('BottomNavigator');
     } catch (error) {
@@ -70,9 +69,7 @@ const Login = () => {
   return (
     <View style={[styleJS.pageContainer, { justifyContent: 'center' }]}>
       <View style={styleJS.container}>
-        <View
-          style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
-        >
+        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
           <Image
             source={require('../../../assets/logo.png')} // Imagem do logo da aplicação
             style={{ width: 200, height: 50 }} // Estilo da imagem
@@ -81,20 +78,9 @@ const Login = () => {
         <Text style={[styleJS.title, { marginTop: 0 }]}>PlassonAuto</Text>
 
         {/* Campo de entrada para o nome de usuário (Email) */}
-        <InputText
-          value={username}
-          setValue={setUsername}
-          label='Usuário'
-          icon={'account-circle'}
-        />
+        <InputText value={username} setValue={setUsername} label='Usuário' icon={'account-circle'} />
         {/* Campo de entrada para a senha */}
-        <InputText
-          value={password}
-          setValue={setPassword}
-          label='Senha'
-          type={'password'}
-          icon={'eye'}
-        />
+        <InputText value={password} setValue={setPassword} label='Senha' type={'password'} icon={'eye'} />
 
         {/* Botão de login */}
         <Button
