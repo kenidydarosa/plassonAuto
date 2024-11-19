@@ -23,14 +23,14 @@ const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { schedules, setSchedules, veicules, userX, listTitles } = useDataContext();
+  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB } = useDataContext();
   const { create, id, timeString } = route.params || {};
 
   // Variaveis de estado
   const [car, setCar] = useState(null);
   const [user, setUser] = useState('');
   const [title, setTitle] = useState('Selecione um título');
-  const [sumary, setSumary] = useState('');
+  const [summary, setSummary] = useState('');
 
   const [locale, setLocale] = useState('');
   const [allDay, setAllDay] = useState(false);
@@ -79,27 +79,27 @@ const NewSchedule = () => {
   useEffect(() => {
     if (id) {
       if (create && timeString) {
-        const foundCar = veicules.find((car) => car.id === id);
+        const foundCar = veiculesDB.find((car) => car.id === id);
         setCar(foundCar);
 
         const date = new Date(timeString);
         const endDate = new Date(date.getTime());
         endDate.setHours(date.getHours() + 1);
-        setUser(userX.name);
+        setUser(userDB.name);
         setStartDate(date);
         setEndDate(date);
         setStartTime(date);
         setEndTime(endDate);
       } else {
-        const schedule = schedules.find((item) => item.id === id);
-        const foundCar = veicules.find((car) => car.id === schedule.idCar);
+        const schedule = schedulesDB.find((item) => item.id === id);
+        const foundCar = veiculesDB.find((car) => car.id === schedule.veicule_id);
 
         setCar(foundCar);
 
         if (schedule) {
           setUser(schedule.user);
           setTitle(schedule.title);
-          setSumary(schedule.sumary);
+          setSummary(schedule.summary);
           setLocale(schedule.locale);
           setAllDay(schedule.allDay);
           setStartDate(new Date(schedule.start));
@@ -174,7 +174,7 @@ const NewSchedule = () => {
     let updatedData;
 
     // Verifica se há algum campo vazio
-    const fields = [user, title, sumary, locale];
+    const fields = [user, title, summary, locale];
     const hasEmptyField = fields.some((item) => item === '');
 
     if (hasEmptyField) {
@@ -184,11 +184,11 @@ const NewSchedule = () => {
 
     const baseSchedule = {
       //Verificar aqui, o id é gerado pelo backend 
-      id: create ? (schedules.length + 1).toString() : id,
+      id: create ? (schedulesDB.length + 1).toString() : id,
       user,
       idCar: car.id,
       title,
-      sumary,
+      summary,
       locale,
       start: formatDateTime(startDate, startTime),
       end: formatDateTime(endDate, endTime),
@@ -200,10 +200,10 @@ const NewSchedule = () => {
     };
 
     updatedData = create
-      ? [...schedules, baseSchedule]
-      : schedules.map((item) => (item.id === id ? { ...item, ...baseSchedule } : item));
+      ? [...schedulesDB, baseSchedule]
+      : schedulesDB.map((item) => (item.id === id ? { ...item, ...baseSchedule } : item));
 
-    setSchedules(updatedData);
+    setSchedulesDB(updatedData);
     navigation.navigate('MySchedules', { data: updatedData });
   };
 
@@ -255,7 +255,7 @@ const NewSchedule = () => {
           <SelectInput
             value={title}
             setValue={setTitle}
-            list={listTitles}
+            list={listTitlesDB}
             border={true}
             icon={'target'}
             width={'100%'}
@@ -263,8 +263,8 @@ const NewSchedule = () => {
           <InputField
             icon={'target'}
             placeholder={'Descrição'}
-            value={sumary}
-            func={setSumary}
+            value={summary}
+            func={setSummary}
             editable={true}
             border={true}
             width={'100%'}

@@ -8,14 +8,14 @@ export const userData = {
   sector: 'Comercial',
 };
 
-export const listTitles = [
+export const listTitlesDB = [
   'Visita técnica',
   'Padaria',
   'Manutenção',
   'Lavação',
   'Start up Aviário',
 ];
-export const listSectors = [
+export const listSectorsDB = [
   'Administrativo',
   'PCP',
   'Engenharia',

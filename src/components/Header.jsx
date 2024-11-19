@@ -15,7 +15,7 @@ import { useDataContext } from '../data/DataContext.js';
  * @returns {React.Element} O componente `Header`, com a data atual e menu de usuário.
  */
 const Header = () => {
-  const { userX, setUserX } = useDataContext(); // Obtém o estado do usuário do contexto global
+  const { userDB, setUserDB } = useDataContext(); // Obtém o estado do usuário do contexto global
 
   const navigation = useNavigation(); // Hook de navegação
   const [visible, setVisible] = useState(false); // Controla a visibilidade do menu
@@ -24,7 +24,7 @@ const Header = () => {
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
-  useEffect(() => {}, [userX]); // Reage a mudanças no estado 'userX'
+  useEffect(() => {}, [userDB]); // Reage a mudanças no estado 'userDB'
 
   // Obter a data de hoje
   const today = new Date();
@@ -81,7 +81,7 @@ const Header = () => {
             />
           </Menu>
           <Text variant='bodyLarge' style={styleJS.font}>
-            Olá, {userX ? userX.name.split(' ')[0] : 'Usuário'}
+            Olá, {userDB ? userDB.name.split(' ')[0] : 'Usuário'}
           </Text>
         </View>
       </View>

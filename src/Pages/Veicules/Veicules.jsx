@@ -12,7 +12,7 @@ import Loading from '../../components/Loading.jsx';
 
 const Veicules = () => {
   // Obtém a lista de veículos do contexto
-  const { veicules } = useDataContext();
+  const { veiculesDB } = useDataContext();
   // Obtém os parâmetros da rota, incluindo o tipo de tela
   const route = useRoute();
   // Hook de navegação para facilitar a navegação entre telas
@@ -101,7 +101,7 @@ const Veicules = () => {
         <Text style={[styleJS.title, title]}>Veículos</Text>
         {/* Componente de lista de cards pesquisáveis */}
         <SearchableCardList
-          data={veicules} // Passa os dados dos veículos filtrados
+          data={veiculesDB} // Passa os dados dos veículos filtrados
           renderCard={renderCardVeicule} // Função que renderiza cada card
           searchKeys={['model', 'brand', 'plate', 'sector']} // Chaves para a pesquisa
           filters={

@@ -15,23 +15,17 @@ import Loading from '../../components/Loading.jsx';
 
 export const MySchedules = () => {
   const navigation = useNavigation();
-  const { schedules, veiculesc, users } = useDataContext();
+  const { schedulesDB, veiculesDB, usersDB } = useDataContext();
   const fontsLoaded = fontConfig();
 
-  let updateSchedule = schedules;
+  let updateSchedule = schedulesDB;
   // Atualiza os schedules quando a tela ganha foco
   useFocusEffect(
     useCallback(() => {
-      if (schedules) {
-        updateSchedule = schedules;
+      if (schedulesDB) {
+        updateSchedule = schedulesDB;
       }
-      if (veiculesc) {
-        console.log('Estado veiculesc atual:', veiculesc);
-      }
-      if (users) {
-        console.log('Estado users atual:', users);
-      }
-    }, [schedules, veiculesc, users])
+    }, [schedulesDB, veiculesDB, usersDB])
   );
 
   // Confere se as fontes foram carregadas
@@ -74,11 +68,8 @@ export const MySchedules = () => {
         statusFont = '#000';
     }
 
-    console.log(item.user_id);
-    console.log('users:', users);
-
-    const car = veiculesc.find((car) => car.id === item.veicule_id);
-    const user = users.find((user) => user.id === item.user_id);
+    const car = veiculesDB.find((car) => car.id === item.veicule_id);
+    const user = usersDB.find((user) => user.id === item.user_id);
 
     // Renderiza o Card
     return (
@@ -87,7 +78,7 @@ export const MySchedules = () => {
         id={item.id}
         imgUrl={getImageUrl(car.imgKey)}
         title={item.title}
-        subtitle={item.sumary}
+        subtitle={item.summary}
         text1={item.locale}
         text2={`${new Date(item.start).toLocaleDateString()}`}
         text3={`${new Date(item.start).toLocaleTimeString('pt-BR', {
@@ -99,8 +90,8 @@ export const MySchedules = () => {
           minute: '2-digit',
           hour12: false,
         })}h`}
-        text4={item.user}
-        status={user.name}
+        text4={user.name}
+        status={item.status}
         statusColor={statusColor}
         statusFont={statusFont}
         icon1={'map-marker'}

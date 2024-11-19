@@ -19,7 +19,7 @@ import { loginUser } from '../../data/api.js';
 const Login = () => {
   const navigation = useNavigation(); // Navegação para outras telas
   const fontsLoaded = fontConfig(); // Carrega a configuração de fontes
-  const { setUserX, setSchedules, setVeicules, setNotifications, setUsers } = useDataContext(); // Função para definir o usuário no contexto global
+  const { setUserDB, setSchedulesDB, setVeiculesDB, setNotificationsDB, setUsersDB } = useDataContext(); // Função para definir o usuário no contexto global
 
   // Estado local para armazenar os valores dos campos de entrada
   const [username, setUsername] = useState('');
@@ -45,11 +45,11 @@ const Login = () => {
       }
 
       setLoadingImage(false);
-      setUserX(user);
-      setSchedules(schedules);
-      setNotifications(notify);
-      setVeicules(veicules);
-      setUsers(users);
+      setUserDB(user);
+      setSchedulesDB(schedules);
+      setNotificationsDB(notify);
+      setVeiculesDB(veicules);
+      setUsersDB(users);
 
       navigation.navigate('BottomNavigator');
     } catch (error) {

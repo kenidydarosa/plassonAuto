@@ -27,7 +27,7 @@ const NewVeicule = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { create, id } = route.params || {}; // Identifica se é criação ou edição
-  const { veicules, setVeicules, userX, listSectors } = useDataContext(); // Dados do contexto
+  const { veiculesDB, setVeiculesDB, userDB, listSectorsDB } = useDataContext(); // Dados do contexto
 
   // States locais para armazenar dados do veículo
   const [car, setCar] = useState(null);
@@ -54,7 +54,7 @@ const NewVeicule = () => {
   useEffect(() => {
     // Verifica se é um caso de edição, caso contrário, apenas inicializa os dados
     if (id && !create) {
-      const veicule = veicules.find((item) => item.id === id);
+      const veicule = veiculesDB.find((item) => item.id === id);
 
       if (veicule) {
         // Preenche os campos com os dados do veículo existente
@@ -161,7 +161,7 @@ const NewVeicule = () => {
 
     const baseVeicule = {
       //Verificar aqui, o id é gerado pelo backend 
-      id: create ? (veicules.length + 1).toString() : id,
+      id: create ? (veiculesDB.length + 1).toString() : id,
       model,
       brand,
       color,
@@ -177,11 +177,11 @@ const NewVeicule = () => {
 
     updatedData = create
       ? // Cria um novo veículo
-        [...veicules, baseVeicule]
+        [...veiculesDB, baseVeicule]
       : // Edita um veículo existente
-        veicules.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
+        veiculesDB.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
 
-    setVeicules(updatedData); // Atualiza os dados no contexto
+    setVeiculesDB(updatedData); // Atualiza os dados no contexto
 
     navigation.goBack(); // Retorna para a tela anterior
   };
@@ -311,7 +311,7 @@ const NewVeicule = () => {
             initialValue={'Selecione um setor'}
             value={sector}
             setValue={setSector}
-            list={listSectors}
+            list={listSectorsDB}
             border={false}
             icon={'apps-box'}
             width={'100%'}
