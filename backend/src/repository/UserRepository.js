@@ -30,6 +30,8 @@ class UserRepository extends BaseRepository {
   async getAll() {
     try {
       const response = await super.getAll('users', ['*']);
+      delete response.password;
+
       return response;
     } catch (error) {
       throw error;
@@ -38,6 +40,8 @@ class UserRepository extends BaseRepository {
   async getByID(id) {
     try {
       const response = await super.getByID('users', ['*'], id);
+      delete response.password;
+
       return response;
     } catch (error) {
       throw error;

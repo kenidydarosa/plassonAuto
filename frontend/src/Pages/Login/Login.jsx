@@ -7,7 +7,7 @@ import InputText from '../../components/InputText.jsx';
 import styleJS from '../../components/style.js';
 import fontConfig from '../../config/fontConfig.js';
 import AlertDialog from '../../components/Dialog.jsx';
-import { loginUser } from '../../data/api.js';
+import { fetchUsers, loginUser } from '../../routes/userRoutes.js';
 
 /**
  * Tela de Login que permite ao usuário inserir um nome de usuário e senha para acessar o aplicativo.
@@ -19,14 +19,7 @@ import { loginUser } from '../../data/api.js';
 const Login = () => {
   const navigation = useNavigation(); // Navegação para outras telas
   const fontsLoaded = fontConfig(); // Carrega a configuração de fontes
-  const {
-    setUserDB,
-    setSchedulesDB,
-    setVeiculesDB,
-    setNotificationsDB,
-    setUsersDB,
-    setSectorsDB,
-  } = useDataContext(); // Função para definir o usuário no contexto global
+  const { setUserDB, setSchedulesDB, setVeiculesDB, setNotificationsDB, setUsersDB, setSectorsDB } = useDataContext(); // Função para definir o usuário no contexto global
 
   // Estado local para armazenar os valores dos campos de entrada
   const [username, setUsername] = useState('Kenidy.rosa');
@@ -43,10 +36,7 @@ const Login = () => {
     setLoadingImage(true); // Ativa o carregamento ao clicar no botão
 
     try {
-      const { user, schedules, notify, veicules, users, sectors } = await loginUser(
-        username,
-        password
-      );
+      const { user, schedules, notify, veicules, users, sectors } = await loginUser(username, password);
 
       if (!user) {
         setLoadingImage(false);

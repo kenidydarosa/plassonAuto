@@ -1,0 +1,44 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# Global
+.DS_Store
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# dependencies
+node_modules/
+
+# Expo (frontend)
+frontend/.expo/
+frontend/dist/
+frontend/web-build/
+
+# Native (frontend)
+frontend/metro-health-check*
+
+# TypeScript (frontend e backend)
+frontend/*.tsbuildinfo
+backend/*.tsbuildinfo
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Local env files
+frontend/.env*.local
+backend/.env*.local
+
+# Firebase (frontend)
+frontend/config/firebaseConfig.js
+frontend/config/firebase*
+frontend/firebaseConfig.*
+
+# Backend-specific (se necessário)
+backend/node_modules/
+backend/dist/

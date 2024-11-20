@@ -94,7 +94,7 @@ const SelectInput = ({ initialValue, value, setValue, list, icon, width, border 
         <Modal
           visible={visible} // Controle de visibilidade do modal
           transparent={true} // Torna o fundo do modal transparente
-          animationType='fade' // Animação de fade para o modal
+          animationType='none' // Animação de fade para o modal
           onRequestClose={hideModal} // Função chamada ao fechar o modal
         >
           {/* Overlay de fundo do modal */}
