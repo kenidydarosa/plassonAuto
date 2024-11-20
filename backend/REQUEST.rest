@@ -1,0 +1,182 @@
+### USERS
+GET http://localhost:3000/users
+
+### LOGIN
+POST http://localhost:3000/users/login
+Content-Type: application/json
+
+{
+    "username":"Kenidy.rosa",
+    "password":"1234"
+}
+
+
+### GET ID
+GET http://localhost:3000/users/aa78db29-e29b-4e58-8acc-383537781e10
+
+### POST
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name":"Luiz Tiskoski",
+    "username":"Luiz.tiskoski",
+    "password":"1234",
+    "email": "luiz@hotmail.com",
+    "job":"Assistente",
+    "sector":"Central de Apoio",
+    "registration":"184571-1"
+}
+###
+
+PUT http://localhost:3000/users/01cf95af-5fc9-4f2e-8d2e-e15f4f33eb17
+Content-Type: application/json
+
+{
+    "name":"Andrey Gava",
+    "username":"Andrey.gava",
+    "password":"1234",
+    "email": "teste@hotmail.com",
+    "job":"Gerente Comercial",
+    "sector":"Comercial",
+    "registration":"184571-1"
+}
+
+###
+
+DELETE http://localhost:3000/users/8a2d10c4-e63b-4c51-b940-ef056df0b743
+
+============================================================================
+### VEICULOS
+GET http://localhost:3000/veicules
+
+###
+GET http://localhost:3000/veicules/f4de58ae-4845-4328-ae90-e0408323abd0
+
+###
+POST http://localhost:3000/veicules
+Content-Type: application/json
+
+{   
+    "imgKey":"0c4fc5ac-f786-4a54-bb37-ffccae9952fb.png",
+    "model":"Virtus 1.0 turbo",
+    "brand":"Volkswagem",
+    "year": 2024,
+    "color": "branco",
+    "plate":"XXX-XXX",
+    "renavam":"XXX-XXX",
+    "sector":"Administrativo",
+    "status":"Disponível",
+    "kilometers": 24400,
+    "booster": "1/4"
+}
+
+###
+
+PUT http://localhost:3000/veicules/f4de58ae-4845-4328-ae90-e0408323abd0
+Content-Type: application/json
+
+{
+    "imgKey":"0f04ad49-3eaf-443e-8771-a2f6d9d6b0a1.png",
+    "model":"Cronos 1.0 turbo",
+    "brand":"Fiat",
+    "year": 2024,
+    "color": "branco",
+    "plate":"XXX-XXX",
+    "renavam":"XXX-XXX",
+    "sector":"Administrativo",
+    "status":"Indisponível",
+    "kilometers": 24400,
+    "booster": "1/4"
+}
+
+###
+
+DELETE  http://localhost:3000/veicules/f4de58ae-4845-4328-ae90-e0408323abd0
+
+=========================================================================
+
+### AGENDAMENTOS
+GET http://localhost:3000/schedules
+
+###
+POST http://localhost:3000/schedules
+Content-Type: application/json
+
+{
+    "user_id":"25bc6913-417b-43dc-bca6-eb51eb1a3292",
+    "veicule_id": "0fa2d395-b1fc-4537-8e82-91f1aceb3616",
+    "title":"Teste de 2",
+    "summary":"Teste de 2",
+    "color":"#E0FBFFBE",
+    "locale":"Proave - Içara",
+    "start":"2024-10-15T14:10:25.358Z",
+    "end": "2024-10-15T18:26:25.358Z",
+    "allDay": "false",
+    "keyHandOverTime": "2024-10-15T14:10:25.358Z",
+    "returnOfKeyTime": "2024-10-15T14:11:25.358Z",
+    "status": "Ativa",
+    "notes":"teste observações"
+
+}
+
+###
+PUT http://localhost:3000/schedules/5a478358-c58f-41ab-91cc-9ca1421c6534
+Content-Type: application/json
+
+{
+    "user_id":"d79d035a-9060-48ab-b76c-c84af5411c4",
+    "veicule_id": "2da23380-5c21-4760-a640-6fbdd6405f1e",
+    "title":"Teste de campo",
+    "sumary":"Teste de campo",
+    "schedule_date":"2024-10-11",
+    "color":"#E0FBFFBE",
+    "locale":"Proave - Içara",
+    "start":"2024-10-15T14:10:25.358Z",
+    "end": "2024-10-15T18:26:25.358Z",
+    "allDay": "false",
+    "keyHandOverTime": "2024-10-15T14:10:25.358Z",
+    "returnOfKeyTime": "2024-10-15T14:11:25.358Z",
+    "status": "Ativa",
+    "notes":"teste observações"
+}
+
+### DELETE
+
+DELETE http://localhost:3000/schedules/11302802-275d-472b-95e8-138cf6c52b3c
+
+================================================================================
+
+### NOTIFICAÇÕES
+GET http://localhost:3000/notify
+
+
+### NOTIFICAÇÕES
+GET http://localhost:3000/notify/e76d409b-1971-4186-a9f2-3b2b51833a90
+
+###
+POST http://localhost:3000/notify
+Content-Type: application/json
+
+{
+    "title":"Nova noficação",
+    "description":"O usuário Silvana cancelou sua reserva",
+    "visualized": "false",
+    "user_id":"d79d035a-9060-48ab-b76c-c84af5411c4"
+}
+
+###
+PUT http://localhost:3000/notify/e76d409b-1971-4186-a9f2-3b2b51833a90
+Content-Type: application/json
+
+{
+    "title":"Reserva cancelada",
+    "description":"O usuário Silvana cancelou sua reserva",
+    "visualized": "false",
+    "user_id":"d79d035a-9060-48ab-b76c-c84af5411c4"
+}
+
+
+### NOTIFICAÇÕES
+DELETE http://localhost:3000/notify/817a143f-7858-46cb-999a-a2fae2a6efc9
+
