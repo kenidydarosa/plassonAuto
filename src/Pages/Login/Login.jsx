@@ -19,11 +19,18 @@ import { loginUser } from '../../data/api.js';
 const Login = () => {
   const navigation = useNavigation(); // Navegação para outras telas
   const fontsLoaded = fontConfig(); // Carrega a configuração de fontes
-  const { setUserDB, setSchedulesDB, setVeiculesDB, setNotificationsDB, setUsersDB } = useDataContext(); // Função para definir o usuário no contexto global
+  const {
+    setUserDB,
+    setSchedulesDB,
+    setVeiculesDB,
+    setNotificationsDB,
+    setUsersDB,
+    setSectorsDB,
+  } = useDataContext(); // Função para definir o usuário no contexto global
 
   // Estado local para armazenar os valores dos campos de entrada
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('Kenidy.rosa');
+  const [password, setPassword] = useState('1234');
   const [loadingImage, setLoadingImage] = useState(false); // Estado para controle de carregamento
   const [visible, setVisible] = useState(false); // Controle de visibilidade do alerta
 
@@ -36,7 +43,10 @@ const Login = () => {
     setLoadingImage(true); // Ativa o carregamento ao clicar no botão
 
     try {
-      const { user, schedules, notify, veicules, users } = await loginUser(username, password);
+      const { user, schedules, notify, veicules, users, sectors } = await loginUser(
+        username,
+        password
+      );
 
       if (!user) {
         setLoadingImage(false);
@@ -50,6 +60,7 @@ const Login = () => {
       setNotificationsDB(notify);
       setVeiculesDB(veicules);
       setUsersDB(users);
+      setSectorsDB(sectors);
 
       navigation.navigate('BottomNavigator');
     } catch (error) {

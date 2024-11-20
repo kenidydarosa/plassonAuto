@@ -60,7 +60,7 @@ const NotifyScreen = () => {
       key={notify.id} // Chave única para cada card
       id={notify.id} // Id da notificação
       text1={notify.title} // Título da notificação
-      text2={notify.description} // Descrição da notificação
+      text2={notify.summary} // Descrição da notificação
       tag={getTimeDifference()} // Calcula a diferença de tempo desde a criação da notificação
       icon={'bell'} // Ícone da notificação (ícone de campainha)
       type={'notify'} // Tipo de notificação

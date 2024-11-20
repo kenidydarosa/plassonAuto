@@ -100,14 +100,6 @@ const TimelineCalendarScreen = () => {
     alert(event.title, `Title: ${event.title}\nStart: ${event.start}`);
   };
 
-  // Configurações para o componente TimelineList
-  const timelineProps = {
-    format24h: true, // Define o formato de hora como 24 horas
-    onBackgroundLongPress: createNewEvent, // Chama a função de navegação ao pressionar em branco
-    onEventPress: onEventPress, // Chama a função ao pressionar um evento
-    styles: customEventStyles, // Estilos personalizados para os eventos
-  };
-
   return (
     <CalendarProvider
       date={currentDate}
@@ -132,10 +124,14 @@ const TimelineCalendarScreen = () => {
         theme={getTheme()} // Aplica o tema personalizado
       />
       <TimelineList
+      
         events={eventsByDate} // Passa os eventos agrupados por data
         keyExtractor={(item) => item.id || item.someUniqueIdentifier} // Utiliza uma chave única para cada evento
         timelineProps={{
-          ...timelineProps,
+          format24h: true, // Define o formato de hora como 24 horas
+          onBackgroundLongPress: createNewEvent, // Chama a função de navegação ao pressionar em branco
+          onEventPress: onEventPress, // Chama a função ao pressionar um evento
+          styles: customEventStyles, // Estilos personalizados para os eventos
         }}
         showNowIndicator // Exibe o indicador de hora atual
         scrollToFirst // Rola para o primeiro evento

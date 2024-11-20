@@ -21,6 +21,7 @@ export const DataProvider = ({ children }) => {
   const [usersDB, setUsersDB] = useState(null); // Estado para armazenar os dados dos usuários
   const [notificationsDB, setNotificationsDB] = useState(null); // Estado para armazenar as notificações
   const [veiculesDB, setVeiculesDB] = useState(null); // Estado para armazenar os veículos
+  const [sectorsDB, setSectorsDB] = useState(null); // Estado para armazenar os veículos
 
   return (
     // O DataContext.Provider fornece o contexto para os componentes filhos.
@@ -39,6 +40,8 @@ export const DataProvider = ({ children }) => {
         setVeiculesDB, // Função para atualizar os veículos
         listTitlesDB, // Fornece os títulos da lista
         listSectorsDB, // Fornece os setores da lista
+        sectorsDB,
+        setSectorsDB
       }}
     >
       {/* Os componentes filhos que recebem esse contexto */}

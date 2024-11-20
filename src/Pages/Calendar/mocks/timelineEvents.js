@@ -6,13 +6,15 @@ const today = new Date();
 export const getDate = (offset = 0) => CalendarUtils.getCalendarDateString(new Date().setDate(today.getDate() + offset));
 
 export const timelineEvents = [
-  {
+  { 
+    id:1,
     start: `${getDate(-1)} 09:20:00`,
     end: `${getDate(-1)} 12:00:00`,
     title: 'Merge Request to React Native Calendars',
     summary: 'Merge Timeline Calendar to React Native Calendars'
   },
   {
+    id:2,
     start: `${getDate()} 08:00:00`,
     end: `${getDate()} 09:30:00`,
     title: 'Meeting A',
@@ -20,6 +22,7 @@ export const timelineEvents = [
     color: EVENT_COLOR
   },
   {
+    id:3,
     start: `${getDate()} 15:30:00`,
     end: `${getDate()} 16:30:00`,
     title: 'Meeting B',
@@ -27,6 +30,7 @@ export const timelineEvents = [
     color: EVENT_COLOR
   },
   {
+    id:4,
     start: `${getDate()} 13:45:00`,
     end: `${getDate()} 14:45:00`,
     title: 'Meeting C',
@@ -34,6 +38,7 @@ export const timelineEvents = [
     color: EVENT_COLOR
   },
   {
+    id:5,
     start: `${getDate()} 02:40:00`,
     end: `${getDate()} 03:10:00`,
     title: 'Meeting D',
@@ -41,6 +46,7 @@ export const timelineEvents = [
     color: EVENT_COLOR
   },
   {
+    id:6,
     start: `${getDate(1)} 14:30:00`,
     end: `${getDate(1)} 16:30:00`,
     title: 'Meeting Some Friends in ARMED',
@@ -48,6 +54,7 @@ export const timelineEvents = [
     color: 'pink'
   },
   {
+    id:7,
     start: `${getDate(2)} 01:40:00`,
     end: `${getDate(2)} 02:25:00`,
     title: 'Meet Sir Khurram Iqbal',
@@ -55,6 +62,7 @@ export const timelineEvents = [
     color: 'orange'
   },
   {
+    id:8,
     start: `${getDate(2)} 04:10:00`,
     end: `${getDate(2)} 04:40:00`,
     title: 'Tea Time with Colleagues',
@@ -62,6 +70,7 @@ export const timelineEvents = [
     color: EVENT_COLOR
   },
   {
+    id:9,
     start: `${getDate(2)} 00:45:00`,
     end: `${getDate(2)} 01:35:00`,
     title: 'Lets Play Apex Legends',
@@ -70,6 +79,7 @@ export const timelineEvents = [
   },
 
   {
+    id:10,
     start: `${getDate(4)} 15:10:00`,
     end: `${getDate(4)} 17:45:00`,
     title: 'Merge Request to React Native Calendars',
@@ -77,6 +87,7 @@ export const timelineEvents = [
     color: EVENT_COLOR
   },
   {
+    id:11,
     start: `${getDate(5)} 00:00:00`,
     end: `${getDate(6)} 00:00:00`,
     title: 'Merge Request to React Native Calendars',

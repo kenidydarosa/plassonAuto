@@ -23,11 +23,12 @@ const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB } = useDataContext();
+  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } = useDataContext();
   const { create, id, timeString } = route.params || {};
 
   // Variaveis de estado
   const [car, setCar] = useState(null);
+  const [userID, setUserID] = useState('');
   const [user, setUser] = useState('');
   const [title, setTitle] = useState('Selecione um título');
   const [summary, setSummary] = useState('');
@@ -79,38 +80,43 @@ const NewSchedule = () => {
   useEffect(() => {
     if (id) {
       if (create && timeString) {
-        const foundCar = veiculesDB.find((car) => car.id === id);
-        setCar(foundCar);
-
+        const currentCar = veiculesDB.find((car) => car.id === id);
         const date = new Date(timeString);
         const endDate = new Date(date.getTime());
+
         endDate.setHours(date.getHours() + 1);
+        setUserID(userDB.id);
         setUser(userDB.name);
+        setCar(currentCar);
         setStartDate(date);
         setEndDate(date);
         setStartTime(date);
         setEndTime(endDate);
       } else {
-        const schedule = schedulesDB.find((item) => item.id === id);
-        const foundCar = veiculesDB.find((car) => car.id === schedule.veicule_id);
+        const currentSchedule = schedulesDB.find((item) => item.id === id);
+        const currentCar = veiculesDB.find(
+          (car) => car.id === currentSchedule.veicule_id
+        );
+        const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
-        setCar(foundCar);
+        setCar(currentCar);
 
-        if (schedule) {
-          setUser(schedule.user);
-          setTitle(schedule.title);
-          setSummary(schedule.summary);
-          setLocale(schedule.locale);
-          setAllDay(schedule.allDay);
-          setStartDate(new Date(schedule.start));
-          setStartTime(new Date(schedule.start));
-          setEndDate(new Date(schedule.end));
-          setEndTime(new Date(schedule.end));
-          setNotes(schedule.notes);
+        if (currentSchedule) {
+          setUserID(currentUser.id);
+          setUser(currentUser.name);
+          setTitle(currentSchedule.title);
+          setSummary(currentSchedule.summary);
+          setLocale(currentSchedule.locale);
+          setAllDay(currentSchedule.allDay === 'true' ? true : false);
+          setStartDate(new Date(currentSchedule.start));
+          setStartTime(new Date(currentSchedule.start));
+          setEndDate(new Date(currentSchedule.end));
+          setEndTime(new Date(currentSchedule.end));
+          setNotes(currentSchedule.notes);
 
           setKeyHandOverTime(
-            schedule.keyHandOverTime
-              ? new Date(schedule.keyHandOverTime).toLocaleTimeString([], {
+            currentSchedule.keyHandOverTime
+              ? new Date(currentSchedule.keyHandOverTime).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
                   hour12: false,
@@ -119,8 +125,8 @@ const NewSchedule = () => {
           );
 
           setReturnOfKeyTime(
-            schedule.returnOfKeyTime
-              ? new Date(schedule.returnOfKeyTime).toLocaleTimeString([], {
+            currentSchedule.returnOfKeyTime
+              ? new Date(currentSchedule.returnOfKeyTime).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
                   hour12: false,
@@ -128,15 +134,15 @@ const NewSchedule = () => {
               : '--:--'
           );
 
-          setkeyHandOver(!!schedule.keyHandOverTime);
-          setReturnOfKey(!!schedule.returnOfKeyTime);
+          setkeyHandOver(!!currentSchedule.keyHandOverTime);
+          setReturnOfKey(!!currentSchedule.returnOfKeyTime);
 
-          setStatus(schedule.status);
-          schedule.status === 'Ativa' ? setStatusBt(true) : setStatusBt(false);
+          setStatus(currentSchedule.status);
+          currentSchedule.status === 'Ativa' ? setStatusBt(true) : setStatusBt(false);
         }
       }
     }
-  }, [create, id, timeString]);
+  }, [create, id, timeString, userDB]);
 
   useEffect(() => {
     if (car) {
@@ -183,10 +189,10 @@ const NewSchedule = () => {
     }
 
     const baseSchedule = {
-      //Verificar aqui, o id é gerado pelo backend 
+      //Verificar aqui, o id é gerado pelo backend
       id: create ? (schedulesDB.length + 1).toString() : id,
-      user,
-      idCar: car.id,
+      user_id: userID,
+      veicule_id: car.id,
       title,
       summary,
       locale,
@@ -204,7 +210,11 @@ const NewSchedule = () => {
       : schedulesDB.map((item) => (item.id === id ? { ...item, ...baseSchedule } : item));
 
     setSchedulesDB(updatedData);
-    navigation.navigate('MySchedules', { data: updatedData });
+    // navigation.navigate('MySchedules', { data: updatedData });
+    navigation.navigate('BottomNavigator', {
+      screen: 'MySchedules',
+      params: { data: updatedData },
+    });
   };
 
   return (

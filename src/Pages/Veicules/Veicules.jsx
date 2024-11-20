@@ -1,4 +1,5 @@
 /** @format */
+import React, { useEffect } from 'react';
 import { Text, ScrollView, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import SearchableCardList from '../../components/Search';
@@ -12,7 +13,7 @@ import Loading from '../../components/Loading.jsx';
 
 const Veicules = () => {
   // Obtém a lista de veículos do contexto
-  const { veiculesDB } = useDataContext();
+  const { veiculesDB, sectorsDB } = useDataContext();
   // Obtém os parâmetros da rota, incluindo o tipo de tela
   const route = useRoute();
   // Hook de navegação para facilitar a navegação entre telas
@@ -58,6 +59,9 @@ const Veicules = () => {
           statusFont = '#000'; // Fonte padrão
           break;
       }
+      
+      const sector = sectorsDB.find(item => item.id === veicule.sector_id)
+
       // Retorna o componente Card com as informações do veículo
       return (
         <Card
@@ -65,7 +69,7 @@ const Veicules = () => {
           id={veicule.id} // ID do veículo
           imgUrl={getImageUrl(veicule.imgKey)} // URL da imagem do veículo
           title={`${veicule.brand} - ${veicule.model} - Ano ${veicule.year}`} // Título do card com marca, modelo e ano
-          subtitle={veicule.sector} // Setor do veículo
+          subtitle={sector.name} // Setor do veículo
           text1={veicule.plate} // Placa do veículo
           text2={`${veicule.kilometers.toLocaleString()}km`} // Quilometragem do veículo
           text3={veicule.booster} // Informações sobre o combustível
