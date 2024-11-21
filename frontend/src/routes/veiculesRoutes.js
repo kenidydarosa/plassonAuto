@@ -25,7 +25,8 @@ export const getVeiculeByID = async (id) => {
   }
 };
 export const createVeicule = async (veicule) => {
-  const response = await axios.post(`${API_URL}/veicules/${user.id}`, veicule, {
+
+  const response = await axios.post(`${API_URL}/veicules`, veicule, {
     headers: {
       'Content-Type': 'application/json',
     },

@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Switch,
-  Platform,
-  ScrollView,
-  Image,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Switch, Platform, ScrollView, Image, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useDataContext } from '../../data/DataContext.js';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -17,7 +8,8 @@ import styleJS from '../../components/style.js';
 import InputField from '../../components/InputFied.jsx';
 import SelectInput from '../../components/SelectInput.jsx';
 import uuid from 'react-native-uuid';
-import { storage } from '../../config/firebaseConfig.js';
+import { getImageUrl } from '../../config/api.js';
+import { storage } from '../../config/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import IconWithLabel from '../../components/IconWithLabel.jsx';
 import { createVeicule, updateVeicule } from '../../routes/veiculesRoutes.js';
@@ -28,7 +20,7 @@ const NewVeicule = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { create, id } = route.params || {}; // Identifica se é criação ou edição
-  const { veiculesDB, setVeiculesDB, userDB, listSectorsDB } = useDataContext(); // Dados do contexto
+  const { veiculesDB, setVeiculesDB, userDB, listSectorsDB, sectorsDB } = useDataContext(); // Dados do contexto
 
   // States locais para armazenar dados do veículo
   const [car, setCar] = useState(null);
@@ -47,10 +39,6 @@ const NewVeicule = () => {
   const [img, setImg] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
 
-  const getImageUrl = (imgKey) => {
-    // Função para montar a URL da imagem armazenada no Firebase Storage
-    return `https://firebasestorage.googleapis.com/v0/b/plassonauto-7e0c1.firebasestorage.app/o/images%2F${imgKey}?alt=media`;
-  };
   // Efeito que é executado ao montar o componente ou quando a rota é alterada
   useEffect(() => {
     // Verifica se é um caso de edição, caso contrário, apenas inicializa os dados
@@ -75,6 +63,7 @@ const NewVeicule = () => {
       }
     }
   }, [create, id]);
+
   // Função para escolher uma imagem da galeria do dispositivo
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -131,50 +120,40 @@ const NewVeicule = () => {
 
   // Função que cria ou edita o veículo no contexto
   const confirmData = async () => {
-    let updatedData;
-
-    const fields = [
-      model,
-      brand,
-      color,
-      year,
-      plate,
-      renavam,
-      kilometers,
-      booster,
-      sector,
-      img,
-    ];
-    // Verifica se há campos obrigatórios vazios
-    const hasEmptyField = fields.some((item) => item === '');
-
-    if (hasEmptyField) {
-      alert('Preencha todos os campos!');
-      return;
-    }
-
-    let imageUrl;
-
-    if (img) {
-      imageUrl = await uploadImage(img); // Faz o upload da imagem, se houver
-      setImgKey(imageUrl);
-    }
-
-    const baseVeicule = {
-      model,
-      brand,
-      color,
-      year,
-      plate,
-      renavam,
-      kilometers,
-      booster,
-      sector,
-      imgKey: imageUrl || '',
-      status: create ? 'Disponível' : statusBt ? 'Disponível' : 'Indisponível',
-    };
-
     try {
+      let updatedData;
+
+      const fields = [model, brand, color, year, plate, renavam, kilometers, booster, sector, img];
+      // Verifica se há campos obrigatórios vazios
+      const hasEmptyField = fields.some((item) => item === '');
+
+      if (hasEmptyField) {
+        alert('Preencha todos os campos!');
+        return;
+      }
+
+      let imageUrl;
+
+      if (img) {
+        imageUrl = await uploadImage(img);
+        setImgKey(imageUrl);
+      }
+      const sectorDB = sectorsDB.find((item) => item.name === sector);
+
+      const baseVeicule = {
+        model,
+        brand,
+        color,
+        year,
+        plate,
+        renavam,
+        kilometers,
+        booster,
+        sector_id: sectorDB.id,
+        imgKey: imageUrl || '',
+        status: create ? 'Disponível' : statusBt ? 'Disponível' : 'Indisponível',
+      };
+
       // Se for criação, chama a função createVeicule
       if (create) {
         await createVeicule(baseVeicule);
@@ -182,21 +161,21 @@ const NewVeicule = () => {
       } else {
         // Se for atualização, chama a função updateVeicule
         await updateVeicule(id, baseVeicule);
-        updatedData = veiculesDB.map((item) =>
-          item.id === id ? { ...item, ...baseVeicule } : item
-        );
+        updatedData = veiculesDB.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
       }
       setVeiculesDB(updatedData); // Atualiza os dados no contexto
 
-      navigation.goBack(); // Retorna para a tela anterior
+      navigation.navigate('Veicules', {
+        screen: 'Veicules',
+        // params: { data: updatedData },
+      });
 
     } catch (error) {
       setLoading(false);
-
+      console.log(error);
       if (error.response && error.response.data) {
         const { title, msg, icon } = error.response.data;
         setErrorData({ title, msg, icon });
-
       } else {
         setErrorData({
           title: 'Erro',
@@ -216,19 +195,11 @@ const NewVeicule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
-      <ScrollView
-        style={styleJS.containerForm}
-        contentContainerStyle={{ paddingBottom: 70 }}
-      >
+      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <View
-              style={[
-                styleJS.statusBase,
-                { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
-              ]}
-            >
+            <View style={[styleJS.statusBase, { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed }]}>
               <Text
                 style={{
                   color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
@@ -247,34 +218,10 @@ const NewVeicule = () => {
             />
           </View>
           {/* Campos de entrada para as informações do veículo */}
-          <InputField
-            icon={'car'}
-            placeholder={'Modelo'}
-            value={model}
-            func={setModel}
-            editable={true}
-            border={true}
-            width={'100%'}
-          />
-          <InputField
-            icon={'check-circle'}
-            placeholder={'Marca'}
-            value={brand}
-            func={setBrand}
-            editable={true}
-            border={true}
-            width={'100%'}
-          />
+          <InputField icon={'car'} placeholder={'Modelo'} value={model} func={setModel} editable={true} border={true} width={'100%'} />
+          <InputField icon={'check-circle'} placeholder={'Marca'} value={brand} func={setBrand} editable={true} border={true} width={'100%'} />
           <View style={[styleJS.row, { borderBottomWidth: 0 }]}>
-            <InputField
-              icon={'invert-colors'}
-              placeholder={'Cor'}
-              value={color}
-              func={setColor}
-              editable={true}
-              border={false}
-              width={'50%'}
-            />
+            <InputField icon={'invert-colors'} placeholder={'Cor'} value={color} func={setColor} editable={true} border={false} width={'50%'} />
             <InputField
               icon={'calendar'}
               placeholder={'Ano'}
@@ -291,24 +238,8 @@ const NewVeicule = () => {
         {/* Inputs para os dados adicionais do veículo */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <InputField
-              icon={'keyboard'}
-              placeholder={'Placa'}
-              value={plate}
-              func={setPlate}
-              editable={true}
-              border={false}
-              width={'50%'}
-            />
-            <InputField
-              icon={'keyboard'}
-              placeholder={'Renavam'}
-              value={renavam}
-              func={setRenavam}
-              editable={true}
-              border={false}
-              width={'50%'}
-            />
+            <InputField icon={'keyboard'} placeholder={'Placa'} value={plate} func={setPlate} editable={true} border={false} width={'50%'} />
+            <InputField icon={'keyboard'} placeholder={'Renavam'} value={renavam} func={setRenavam} editable={true} border={false} width={'50%'} />
           </View>
           <View style={[styleJS.row]}>
             <InputField
@@ -321,15 +252,7 @@ const NewVeicule = () => {
               width={'50%'}
               type={'numeric'}
             />
-            <InputField
-              icon={'gas-station'}
-              placeholder={'Tanque'}
-              value={booster}
-              func={setBooster}
-              editable={true}
-              border={false}
-              width={'50%'}
-            />
+            <InputField icon={'gas-station'} placeholder={'Tanque'} value={booster} func={setBooster} editable={true} border={false} width={'50%'} />
           </View>
           <SelectInput
             initialValue={'Selecione um setor'}
@@ -348,14 +271,7 @@ const NewVeicule = () => {
               <Image source={{ uri: img }} style={styleJS.image} />
             ) : (
               <View style={{ alignItems: 'center' }}>
-                <IconWithLabel
-                  iconName={'camera'}
-                  size={18}
-                  color={styleJS.primaryColor}
-                  width={20}
-                  height={22}
-                  margin={0}
-                />
+                <IconWithLabel iconName={'camera'} size={18} color={styleJS.primaryColor} width={20} height={22} margin={0} />
                 <Text style={styleJS.imagePlaceholderText}>Escolher Imagem</Text>
               </View>
             )}

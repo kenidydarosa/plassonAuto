@@ -16,9 +16,9 @@ export const listTitlesDB = [
   'Start up Aviário',
 ];
 export const listSectorsDB = [
-  'Administrativo',
+  'Comercial Administrativo',
   'PCP',
-  'Engenharia',
+  'Engenharia de Produtos',
   'Astec',
   'Comercial Externo',
   'Suprimentos',

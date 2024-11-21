@@ -8,7 +8,7 @@ const columnsArray = [
   'color',
   'plate',
   'renavam',
-  'sector',
+  'sector_id',
   'status',
   'kilometers',
   'booster',

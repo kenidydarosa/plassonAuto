@@ -8,7 +8,7 @@ const columnsArray = [
   'color',
   'plate',
   'renavam',
-  'sector',
+  'sector_id',
   'status',
   'kilometers',
   'booster',
@@ -64,6 +64,7 @@ class VeiculesController {
         return acc;
       }, []);
 
+      console.log(valuesArray)
       const response = await this.veiculesRepository.create(valuesArray);
 
       if (!response) {
