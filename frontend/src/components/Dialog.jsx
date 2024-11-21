@@ -18,7 +18,7 @@ import { Dialog, Portal, Text, Button } from 'react-native-paper';
  * 
  * @returns {React.Element} Componente `AlertDialog` exibindo um diálogo de alerta.
  */
-const AlertDialog = ({ visible, setVisible, setLoadingImage, icon, title, text }) => {
+const AlertDialog = ({ visible, setVisible, setLoadingImage, icon, title, msg }) => {
   // Função para esconder o diálogo e parar o carregamento do activeIndicator
   const hideDialog = () => {
     setVisible(false); // Fecha o diálogo
@@ -29,13 +29,13 @@ const AlertDialog = ({ visible, setVisible, setLoadingImage, icon, title, text }
     <Portal>
       <Dialog visible={visible} onDismiss={hideDialog}>
         {/* Ícone do diálogo */}
-        <Dialog.Icon icon={icon} color='red' />
+        <Dialog.Icon icon={icon} color= {icon === 'close-circle' ? 'red' : 'green'} />
         {/* Título do diálogo */}
         <Dialog.Title style={styles.text}>{title}</Dialog.Title>
         {/* Conteúdo do diálogo com o texto */}
         <Dialog.Content>
           <Text variant='bodyLarge' style={styles.text}>
-            {text}
+            {msg}
           </Text>
         </Dialog.Content>
       </Dialog>

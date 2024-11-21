@@ -20,6 +20,7 @@ import uuid from 'react-native-uuid';
 import { storage } from '../../config/firebaseConfig.js';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import IconWithLabel from '../../components/IconWithLabel.jsx';
+import { createVeicule, updateVeicule } from '../../routes/veiculesRoutes.js';
 
 // Componente funcional que gerencia a criação e edição de um veículo
 const NewVeicule = () => {
@@ -129,7 +130,7 @@ const NewVeicule = () => {
   };
 
   // Função que cria ou edita o veículo no contexto
-  const createVeicule = async () => {
+  const confirmData = async () => {
     let updatedData;
 
     const fields = [
@@ -160,8 +161,6 @@ const NewVeicule = () => {
     }
 
     const baseVeicule = {
-      //Verificar aqui, o id é gerado pelo backend 
-      id: create ? (veiculesDB.length + 1).toString() : id,
       model,
       brand,
       color,
@@ -175,15 +174,40 @@ const NewVeicule = () => {
       status: create ? 'Disponível' : statusBt ? 'Disponível' : 'Indisponível',
     };
 
-    updatedData = create
-      ? // Cria um novo veículo
-        [...veiculesDB, baseVeicule]
-      : // Edita um veículo existente
-        veiculesDB.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
+    try {
+      // Se for criação, chama a função createVeicule
+      if (create) {
+        await createVeicule(baseVeicule);
+        updatedData = [...veiculesDB, baseVeicule];
+      } else {
+        // Se for atualização, chama a função updateVeicule
+        await updateVeicule(id, baseVeicule);
+        updatedData = veiculesDB.map((item) =>
+          item.id === id ? { ...item, ...baseVeicule } : item
+        );
+      }
+      setVeiculesDB(updatedData); // Atualiza os dados no contexto
 
-    setVeiculesDB(updatedData); // Atualiza os dados no contexto
+      navigation.goBack(); // Retorna para a tela anterior
 
-    navigation.goBack(); // Retorna para a tela anterior
+    } catch (error) {
+      setLoading(false);
+
+      if (error.response && error.response.data) {
+        const { title, msg, icon } = error.response.data;
+        setErrorData({ title, msg, icon });
+
+      } else {
+        setErrorData({
+          title: 'Erro',
+          msg: 'Erro inesperado ao cadastrar o veículo..',
+          icon: 'close-circle',
+        });
+      }
+      setVisible(true);
+    } finally {
+      setLoading(false); // Desativa o carregamento, independentemente do sucesso ou falha
+    }
   };
 
   return (
@@ -344,7 +368,7 @@ const NewVeicule = () => {
             icon='check-circle'
             mode='contained'
             loading={loadingImage}
-            onPress={() => createVeicule()}
+            onPress={() => confirmData()}
             buttonColor={styleJS.colorButton}
           >
             <Text style={styleJS.textButton}>Confirmar</Text>

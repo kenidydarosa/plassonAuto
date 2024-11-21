@@ -20,9 +20,10 @@ async function createTables() {
             password TEXT NOT NULL,
             email TEXT NOT NULL,
             job TEXT NOT NULL,
-            sector TEXT NOT NULL,
+            sector_id TEXT NOT NULL,
             registration TEXT NOT NULL,
-            FOREIGN KEY (sector) REFERENCES sector(id)
+            status TEXT NOT NULL DEFAULT 'Ativo',
+            FOREIGN KEY (sector_id) REFERENCES sector(id)
         )
     `;
 

@@ -20,7 +20,7 @@ class NotifyController {
             res.status(404).json({
                 title: 'Erro',
                 msg: 'Erro ao buscar notificações!',
-                icon: 'error'
+                icon: 'close-circle'
             })
         }
     }
@@ -43,7 +43,7 @@ class NotifyController {
             res.status(404).json({
                 title: 'Erro',
                 msg: 'Erro ao buscar notificação!',
-                icon: 'error'
+                icon: 'close-circle'
             })
         }
     }
@@ -67,7 +67,7 @@ class NotifyController {
                 response,
                 title: 'Sucesso',
                 msg: 'Notificação criada com suceso!',
-                icon: 'success'
+                icon: 'check-circle'
             })
 
 
@@ -77,7 +77,7 @@ class NotifyController {
             res.status(404).json({
                 title: 'Erro',
                 msg: 'Erro ao buscar notificação!',
-                icon: 'error'
+                icon: 'close-circle'
             })
         }
     }
@@ -102,7 +102,7 @@ class NotifyController {
                 response,
                 title: 'Sucesso',
                 msg: 'Notificação atualizado com suceso!',
-                icon: 'success'
+                icon: 'check-circle'
             })
 
         } catch (error) {
@@ -111,7 +111,7 @@ class NotifyController {
             res.status(404).json({
                 title: 'Erro',
                 msg: 'Erro ao buscar notificação!',
-                icon: 'error'
+                icon: 'close-circle'
             })
         }
     }
@@ -129,7 +129,7 @@ class NotifyController {
                 response,
                 title: 'Sucesso',
                 msg: 'Notificação excluída com suceso!',
-                icon: 'success'
+                icon: 'check-circle'
             })
 
         } catch (error) {
@@ -138,7 +138,7 @@ class NotifyController {
             res.status(404).json({
                 title: 'Erro',
                 msg: 'Erro ao buscar notificação!',
-                icon: 'error'
+                icon: 'close-circle'
             })
         }
     }

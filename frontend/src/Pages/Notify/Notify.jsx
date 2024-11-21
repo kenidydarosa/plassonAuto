@@ -15,7 +15,7 @@ import { notifyData } from '../../data/data';
  * 
  * @returns {JSX.Element} A tela com a lista de notificações.
  */
-const NotifyScreen = () => {
+const Notify = () => {
   const fontsLoaded = fontConfig(); // Usa a configuração de fontes
   const [data, setData] = useState(notifyData); // Define estado com notifyData
 
@@ -64,7 +64,7 @@ const NotifyScreen = () => {
       tag={getTimeDifference()} // Calcula a diferença de tempo desde a criação da notificação
       icon={'bell'} // Ícone da notificação (ícone de campainha)
       type={'notify'} // Tipo de notificação
-      onDelete={handleDelete} // Função chamada ao deletar o card
+      setFunction={handleDelete} // Função chamada ao deletar o card
     />
   ));
 
@@ -78,4 +78,4 @@ const NotifyScreen = () => {
   );
 };
 
-export default NotifyScreen;
+export default Notify;

@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../Pages/Home/Home';
 import User from '../Pages/User/User';
 import Veicules from '../Pages/Veicules/Veicules';
-import NotifyScreen from '../Pages/Notify/NotifyScreen';
+import Notify from '../Pages/Notify/Notify';
 import MySchedules from '../Pages/Schedules/MySchedules';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -76,7 +76,7 @@ const BottomNavigator = () => {
       {/* Tela Notificações com badge */}
       <Tab.Screen
         name='Notificações'
-        component={NotifyScreen}
+        component={Notify}
         options={{ tabBarBadge: 5, headerShown: false }}
       />
 

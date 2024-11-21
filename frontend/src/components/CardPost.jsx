@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Image,
   ActivityIndicator,
-  TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import IconWithLabel from './IconWithLabel';
 import fontConfig from '../config/fontConfig';
@@ -84,52 +84,49 @@ const Card = ({
   const imageSource = { uri: imgUrl };
 
   return (
-    <TouchableOpacity onPress={handlePress} style={styles.card}>
-      {/* Header do cartão */}
-      <View style={styles.header}>
-        <View style={styles.containerTitle}>
-          <Text style={styles.title}>{`${title} ${complement}`}</Text>
-          <View style={[styles.status, { backgroundColor: statusColor }]}>
-            <Text style={{ color: statusFont }}>{status}</Text>
-          </View>
+    <TouchableHighlight onPress={handlePress} style={styles.card} underlayColor={styleJS.whiteColor}>
+  <View>
+    {/* Header do cartão */}
+    <View style={styles.header}>
+      <View style={styles.containerTitle}>
+        <Text style={styles.title}>{`${title} ${complement}`}</Text>
+        <View style={[styles.status, { backgroundColor: statusColor }]}>
+          <Text style={{ color: statusFont }}>{status}</Text>
         </View>
-        <Text>{subtitle}</Text>
       </View>
-      {/* Conteúdo do cartão */}
-      <View style={styles.content}>
-        <View style={styles.veicule}>
-          {
-            loadingImage && (
-              <Loading />
-            ) /* Exibe o Loading enquanto a imagem não é carregada */
-          }
-          <Image
-            source={imageSource}
-            style={styles.image}
-            onLoad={() => setLoadingImage(false)} // Oculta o Loading ao carregar a imagem
-            onError={() => setLoadingImage(true)} // Mantém o Loading visível em caso de erro
-          />
-        </View>
-        {/* Informações do veículo (com ícones) */}
-        <View style={styles.infoVeicule}>
-          {[icon1, icon2, icon3].map((icon, index) => (
-            <View key={index} style={styles.flex}>
-              <View style={styles.ico}>
-                <IconWithLabel
-                  iconName={icon}
-                  size={18}
-                  color={styleJS.primaryColor}
-                  width={20}
-                  height={22}
-                  margin={0}
-                />
-              </View>
-              <Text>{[text1, text2, text3][index]}</Text>
+      <Text>{subtitle}</Text>
+    </View>
+    {/* Conteúdo do cartão */}
+    <View style={styles.content}>
+      <View style={styles.veicule}>
+        {loadingImage && <Loading />}
+        <Image
+          source={imageSource}
+          style={styles.image}
+          onLoad={() => setLoadingImage(false)}
+          onError={() => setLoadingImage(true)}
+        />
+      </View>
+      <View style={styles.infoVeicule}>
+        {[icon1, icon2, icon3].map((icon, index) => (
+          <View key={index} style={styles.flex}>
+            <View style={styles.ico}>
+              <IconWithLabel
+                iconName={icon}
+                size={18}
+                color={styleJS.primaryColor}
+                width={20}
+                height={22}
+                margin={0}
+              />
             </View>
-          ))}
-        </View>
+            <Text>{[text1, text2, text3][index]}</Text>
+          </View>
+        ))}
       </View>
-    </TouchableOpacity>
+    </View>
+  </View>
+</TouchableHighlight>
   );
 };
 

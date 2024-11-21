@@ -35,7 +35,7 @@ class SchedulesController {
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao buscar agendamentos!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -57,7 +57,7 @@ class SchedulesController {
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao buscar agendamento!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -81,7 +81,7 @@ class SchedulesController {
         response,
         title: 'Sucesso',
         msg: 'Agendamento criado com suceso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
@@ -89,7 +89,7 @@ class SchedulesController {
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao buscar agendamento!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -113,7 +113,7 @@ class SchedulesController {
         response,
         title: 'Sucesso',
         msg: 'Agendamento atualizado com suceso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
@@ -121,7 +121,7 @@ class SchedulesController {
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao buscar agendamento!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -139,7 +139,7 @@ class SchedulesController {
         response,
         title: 'Sucesso',
         msg: 'Agendamento excluído com suceso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
@@ -147,7 +147,7 @@ class SchedulesController {
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao buscar agendamento!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }

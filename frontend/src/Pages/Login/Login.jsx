@@ -9,17 +9,10 @@ import fontConfig from '../../config/fontConfig.js';
 import AlertDialog from '../../components/Dialog.jsx';
 import { fetchUsers, loginUser } from '../../routes/userRoutes.js';
 
-/**
- * Tela de Login que permite ao usuário inserir um nome de usuário e senha para acessar o aplicativo.
- * Caso o login seja bem-sucedido, o usuário é redirecionado para a tela principal.
- * Caso contrário, um alerta é exibido informando que os dados estão incorretos.
- *
- * @returns {JSX.Element} A tela de login com campos de entrada, botão de login e alerta.
- */
 const Login = () => {
-  const navigation = useNavigation(); // Navegação para outras telas
-  const fontsLoaded = fontConfig(); // Carrega a configuração de fontes
-  const { setUserDB, setSchedulesDB, setVeiculesDB, setNotificationsDB, setUsersDB, setSectorsDB } = useDataContext(); // Função para definir o usuário no contexto global
+  const navigation = useNavigation();
+  const fontsLoaded = fontConfig();
+  const { setUserDB, setSchedulesDB, setVeiculesDB, setNotificationsDB, setUsersDB, setSectorsDB } = useDataContext();
 
   // Estado local para armazenar os valores dos campos de entrada
   const [username, setUsername] = useState('Kenidy.rosa');
@@ -27,39 +20,48 @@ const Login = () => {
   const [loadingImage, setLoadingImage] = useState(false); // Estado para controle de carregamento
   const [visible, setVisible] = useState(false); // Controle de visibilidade do alerta
 
-  /**
-   * Função que lida com o login. Verifica se o nome de usuário e senha são válidos.
-   * Caso sejam, define o usuário e navega para a tela principal.
-   * Caso contrário, exibe um alerta informando que os dados estão incorretos.
-   */
-  const handleLogin = async () => {
-    setLoadingImage(true); // Ativa o carregamento ao clicar no botão
+  // Estado para armazenar os dados de erro
+  const [errorData, setErrorData] = useState({
+    title: '',
+    msg: '',
+    icon: ''
+  });
 
-    try {
-      const { user, schedules, notify, veicules, users, sectors } = await loginUser(username, password);
+// Função que lida com o login
+const handleLogin = async () => {
+  setLoadingImage(true); // Ativa o carregamento ao clicar no botão
 
-      if (!user) {
-        setLoadingImage(false);
-        setVisible(true);
-        return;
-      }
+  try {
+    const { user, schedules, notify, veicules, users, sectors } = await loginUser(username, password);
 
-      setLoadingImage(false);
-      setUserDB(user);
-      setSchedulesDB(schedules);
-      setNotificationsDB(notify);
-      setVeiculesDB(veicules);
-      setUsersDB(users);
-      setSectorsDB(sectors);
+    setLoadingImage(false);
+    setUserDB(user);
+    setSchedulesDB(schedules);
+    setNotificationsDB(notify);
+    setVeiculesDB(veicules);
+    setUsersDB(users);
+    setSectorsDB(sectors);
 
-      navigation.navigate('BottomNavigator');
-    } catch (error) {
-      // Captura erros e desativa o carregamento
-      console.error('Erro ao fazer login:', error);
-      setLoadingImage(false);
-      setVisible(true); // Exibe o alerta de erro
+    navigation.navigate('BottomNavigator');
+    
+  } catch (error) {
+    setLoadingImage(false);
+
+    if (error.response && error.response.data) {
+      const { title, msg, icon } = error.response.data;
+      setErrorData({ title, msg, icon });
+
+    } else {
+      setErrorData({
+        title: 'Erro',
+        msg: 'Erro inesperado ao tentar fazer login.',
+        icon: 'close-circle'
+      });
     }
-  };
+
+    setVisible(true);
+  }
+};
 
   // Define a fonte padrão para o texto
   Text.defaultProps = {
@@ -97,9 +99,9 @@ const Login = () => {
 
       {/* Alerta que aparece quando os dados de login estão incorretos */}
       <AlertDialog
-        icon={'close-circle'}
-        title={'Dados incorretos'}
-        text={'Usuário ou senha incorretos!'}
+        icon={errorData.icon} // Usa os dados de erro capturados
+        title={errorData.title}
+        msg={errorData.msg}
         visible={visible} // Define se o alerta está visível
         setVisible={setVisible} // Função para controlar a visibilidade do alerta
         setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta

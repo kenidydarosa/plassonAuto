@@ -1,5 +1,8 @@
 /** @format */
 
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useDataContext } from '../../data/DataContext.js';
+import { useCallback } from 'react';
 import { Text, ScrollView, View } from 'react-native';
 import Card from '../../components/CardPost.jsx';
 import FloatingButton from '../../components/FloatingButton.jsx';
@@ -7,10 +10,7 @@ import fontConfig from '../../config/fontConfig.js';
 import Header from '../../components/Header.jsx';
 import styleJS from '../../components/style.js';
 import SearchableCardList from '../../components/Search.jsx';
-import { useDataContext } from '../../data/DataContext.js';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useCallback } from 'react';
-import { getImageUrl } from '../../config/ImageUrl.js';
+import { getImageUrl } from '../../config/api.js';
 import Loading from '../../components/Loading.jsx';
 
 export const MySchedules = () => {

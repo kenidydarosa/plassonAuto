@@ -10,9 +10,10 @@ const columnsArray = [
   'username',
   'password',
   'job',
-  'sector',
+  'sector_id',
   'registration',
   'email',
+  'status',
 ];
 class UserController {
   constructor() {
@@ -37,7 +38,7 @@ class UserController {
       res.status(500).json({
         title: 'Erro',
         msg: 'Erro ao buscar dados!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -58,7 +59,7 @@ class UserController {
       res.status(500).json({
         title: 'Erro',
         msg: 'Erro ao buscar usuário.',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -82,14 +83,14 @@ class UserController {
         response,
         title: 'Sucesso',
         msg: 'Usuário criado com sucesso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       res.status(500).json({
         response,
         title: 'Erro',
         msg: 'Erro ao criar usuário!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -104,7 +105,7 @@ class UserController {
         return acc;
       }, []);
 
-      const response = await this.userRepository.updateValue(valuesArray, id);
+      const response = await this.userRepository.update(valuesArray, id);
 
       if (!response) {
         throw new Error();
@@ -114,14 +115,14 @@ class UserController {
         response,
         title: 'Sucesso',
         msg: 'Usuário atualizado com sucesso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
       res.status(500).json({
         title: 'Erro',
         msg: 'Erro ao atualizar usuário.',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -140,14 +141,13 @@ class UserController {
         response,
         title: 'Sucesso',
         msg: 'Usuário excluído com sucesso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
-      console.log('Erro no UserController:', error);
       res.status(500).json({
         title: 'Erro',
         msg: 'Erro ao excluir usuário.',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -159,6 +159,15 @@ class UserController {
       // Se não encontrar o usuário, retorne erro
       if (!user) {
         throw new Error();
+      }
+
+      if (user.status == 'Inativo') {
+        res.status(401).json({
+          title: 'Erro',
+          msg: 'Usuário bloqueado. Contate o administrador.',
+          icon: 'close-circle',
+        });
+        return;
       }
 
       // Promise.all para executar as consultas em paralelo
@@ -179,14 +188,14 @@ class UserController {
         sectors,
         title: 'Sucesso',
         msg: 'Login realizado com sucesso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
       res.status(401).json({
         title: 'Erro',
         msg: 'Usuário ou senha inválidos.',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }

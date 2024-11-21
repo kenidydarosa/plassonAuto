@@ -6,11 +6,11 @@ const columnsArray = [
   'username',
   'password',
   'job',
-  'sector',
+  'sector_id',
   'registration',
-  'email'
+  'email',
+  'status'
 ];
-
 class UserRepository extends BaseRepository {
   async login(username, password) {
     const db = await openDb();

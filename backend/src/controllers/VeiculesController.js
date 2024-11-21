@@ -32,7 +32,7 @@ class VeiculesController {
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao buscar veículos!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -51,7 +51,7 @@ class VeiculesController {
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao buscar veículo!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -74,14 +74,14 @@ class VeiculesController {
         response,
         title: 'Sucesso',
         msg: 'Veiculo adicionado com sucesso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao adicionar veículo!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -106,14 +106,14 @@ class VeiculesController {
         response,
         title: 'Sucesso',
         msg: 'Veiculo atualizado com sucesso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao atualizar veiculo!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
@@ -131,14 +131,14 @@ class VeiculesController {
         response,
         title: 'Sucesso',
         msg: 'Veiculo excluído com sucesso!',
-        icon: 'success',
+        icon: 'check-circle',
       });
     } catch (error) {
       console.log(error);
       res.status(404).json({
         title: 'Erro',
         msg: 'Erro ao atualizar veiculo!',
-        icon: 'error',
+        icon: 'close-circle',
       });
     }
   }
