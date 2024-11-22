@@ -32,12 +32,21 @@ const NewVeicule = () => {
   const [kilometers, setkilometers] = useState('');
   const [renavam, setRenavam] = useState('');
   const [booster, setBooster] = useState('');
-  const [sector, setSector] = useState('Setor');
+  const [sector, setSector] = useState('Selecione o setor');
   const [statusBt, setStatusBt] = useState(true);
   const [status, setStatus] = useState('Disponível');
   const [imgKey, setImgKey] = useState('');
   const [img, setImg] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [changeImage, setChangeImage] = useState(false);
+
+  // Estado para armazenar os dados de erro
+  const [errorData, setErrorData] = useState({
+    title: '',
+    msg: '',
+    icon: '',
+  });
 
   // Efeito que é executado ao montar o componente ou quando a rota é alterada
   useEffect(() => {
@@ -66,6 +75,7 @@ const NewVeicule = () => {
 
   // Função para escolher uma imagem da galeria do dispositivo
   const pickImage = async () => {
+    setChangeImage(true);
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       alert('Desculpe, precisamos da permissão para acessar suas fotos!');
@@ -134,11 +144,12 @@ const NewVeicule = () => {
 
       let imageUrl;
 
-      if (img) {
+      if (img && changeImage) {
         imageUrl = await uploadImage(img);
         setImgKey(imageUrl);
       }
       const sectorDB = sectorsDB.find((item) => item.name === sector);
+      const veicule = veiculesDB.find((item) => item.id === id);
 
       const baseVeicule = {
         model,
@@ -150,9 +161,10 @@ const NewVeicule = () => {
         kilometers,
         booster,
         sector_id: sectorDB.id,
-        imgKey: imageUrl || '',
+        imgKey: changeImage && imageUrl ? imageUrl : veicule.imgKey || '',
         status: create ? 'Disponível' : statusBt ? 'Disponível' : 'Indisponível',
       };
+      console.log('create');
 
       // Se for criação, chama a função createVeicule
       if (create) {
@@ -169,9 +181,8 @@ const NewVeicule = () => {
         screen: 'Veicules',
         // params: { data: updatedData },
       });
-
     } catch (error) {
-      setLoading(false);
+      setLoadingImage(false);
       console.log(error);
       if (error.response && error.response.data) {
         const { title, msg, icon } = error.response.data;
@@ -185,7 +196,7 @@ const NewVeicule = () => {
       }
       setVisible(true);
     } finally {
-      setLoading(false); // Desativa o carregamento, independentemente do sucesso ou falha
+      setLoadingImage(false); // Desativa o carregamento, independentemente do sucesso ou falha
     }
   };
 

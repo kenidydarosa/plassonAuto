@@ -16,12 +16,11 @@ export const listTitlesDB = [
   'Start up Aviário',
 ];
 export const listSectorsDB = [
-  'Comercial Administrativo',
-  'PCP',
-  'Engenharia de Produtos',
   'Astec',
-  'Comercial Externo',
+  'Comercial Administrativo',
+  'Engenharia de Produtos',
   'Suprimentos',
+  'PCP',
 ];
 
 // Lista de dados dos cards

@@ -38,8 +38,8 @@ export const createVeicule = async (veicule) => {
   }
 };
 
-export const updateVeicule = async (veicule) => {
-  const response = await axios.put(`${API_URL}/veicules/${user.id}`, veicule, {
+export const updateVeicule = async (id, veicule) => {
+  const response = await axios.put(`${API_URL}/veicules/${id}`, veicule, {
     headers: {
       'Content-Type': 'application/json',
     },

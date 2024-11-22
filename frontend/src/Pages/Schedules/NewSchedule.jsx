@@ -1,14 +1,6 @@
 /** @format */
 
-import {
-  View,
-  Text,
-  TextInput,
-  Switch,
-  Platform,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
@@ -94,9 +86,7 @@ const NewSchedule = () => {
         setEndTime(endDate);
       } else {
         const currentSchedule = schedulesDB.find((item) => item.id === id);
-        const currentCar = veiculesDB.find(
-          (car) => car.id === currentSchedule.veicule_id
-        );
+        const currentCar = veiculesDB.find((car) => car.id === currentSchedule.veicule_id);
         const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
         setCar(currentCar);
@@ -205,9 +195,7 @@ const NewSchedule = () => {
       notes,
     };
 
-    updatedData = create
-      ? [...schedulesDB, baseSchedule]
-      : schedulesDB.map((item) => (item.id === id ? { ...item, ...baseSchedule } : item));
+    updatedData = create ? [...schedulesDB, baseSchedule] : schedulesDB.map((item) => (item.id === id ? { ...item, ...baseSchedule } : item));
 
     setSchedulesDB(updatedData);
     // navigation.navigate('MySchedules', { data: updatedData });
@@ -223,19 +211,11 @@ const NewSchedule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // ajuste se necessário
     >
-      <ScrollView
-        style={styleJS.containerForm}
-        contentContainerStyle={{ paddingBottom: 70 }}
-      >
+      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <View
-              style={[
-                styleJS.statusBase,
-                { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
-              ]}
-            >
+            <View style={[styleJS.statusBase, { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed }]}>
               <Text
                 style={{
                   color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
@@ -253,23 +233,8 @@ const NewSchedule = () => {
               }}
             />
           </View>
-          <InputField
-            icon={'account-circle'}
-            placeholder={'Usuário'}
-            value={user}
-            func={setUser}
-            editable={false}
-            border={true}
-            width={'100%'}
-          />
-          <SelectInput
-            value={title}
-            setValue={setTitle}
-            list={listTitlesDB}
-            border={true}
-            icon={'target'}
-            width={'100%'}
-          />
+          <InputField icon={'account-circle'} placeholder={'Usuário'} value={user} func={setUser} editable={false} border={true} width={'100%'} />
+          <SelectInput initialValue={title} value={title} setValue={setTitle} list={listTitlesDB} border={true} icon={'target'} width={'100%'} />
           <InputField
             icon={'target'}
             placeholder={'Descrição'}
@@ -280,15 +245,7 @@ const NewSchedule = () => {
             width={'100%'}
             multiline={true}
           />
-          <InputField
-            icon={'map-marker'}
-            placeholder={'Localização'}
-            value={locale}
-            func={setLocale}
-            editable={true}
-            border={false}
-            width={'100%'}
-          />
+          <InputField icon={'map-marker'} placeholder={'Localização'} value={locale} func={setLocale} editable={true} border={false} width={'100%'} />
         </View>
 
         {/* Botões para Data e Hora */}
@@ -370,12 +327,8 @@ const NewSchedule = () => {
             value={pickerField.includes('Date') ? startDate : startTime}
             mode={pickerMode}
             is24Hour={true}
-            display={
-              Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'
-            }
-            onChange={(event, selectedDateTime) =>
-              onChange(event, selectedDateTime, listPicker)
-            }
+            display={Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'}
+            onChange={(event, selectedDateTime) => onChange(event, selectedDateTime, listPicker)}
             themeVariant='light'
             minimumDate={currentDate}
             locale='pt-br'
@@ -438,13 +391,7 @@ const NewSchedule = () => {
           />
         </View>
         <View style={styleJS.section}>
-          <TextInput
-            style={[styleJS.input, { outline: 'none', height: 100 }]}
-            placeholder='Notas'
-            value={notes}
-            onChangeText={setNotes}
-            multiline
-          />
+          <TextInput style={[styleJS.input, { outline: 'none', height: 100 }]} placeholder='Notas' value={notes} onChangeText={setNotes} multiline />
         </View>
 
         {/* Chaves */}
