@@ -1,4 +1,13 @@
-import { View, Text, TouchableOpacity, Switch, Platform, ScrollView, Image, KeyboardAvoidingView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Switch,
+  Platform,
+  ScrollView,
+  Image,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { Button } from 'react-native-paper';
 import { useDataContext } from '../../data/DataContext.js';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -7,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import styleJS from '../../components/style.js';
 import InputField from '../../components/InputFied.jsx';
 import SelectInput from '../../components/SelectInput.jsx';
+import AlertDialog from '../../components/Dialog.jsx';
 import uuid from 'react-native-uuid';
 import { getImageUrl } from '../../config/api.js';
 import { storage } from '../../config/firebaseConfig';
@@ -20,7 +30,8 @@ const NewVeicule = () => {
   const route = useRoute();
   const navigation = useNavigation();
   const { create, id } = route.params || {}; // Identifica se é criação ou edição
-  const { veiculesDB, setVeiculesDB, userDB, listSectorsDB, sectorsDB } = useDataContext(); // Dados do contexto
+  const { veiculesDB, setVeiculesDB, userDB, listSectorsDB, sectorsDB } =
+    useDataContext(); // Dados do contexto
 
   // States locais para armazenar dados do veículo
   const [car, setCar] = useState(null);
@@ -40,19 +51,14 @@ const NewVeicule = () => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [visible, setVisible] = useState(false);
   const [changeImage, setChangeImage] = useState(false);
-
-  // Estado para armazenar os dados de erro
-  const [errorData, setErrorData] = useState({
-    title: '',
-    msg: '',
-    icon: '',
-  });
+  const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
 
   // Efeito que é executado ao montar o componente ou quando a rota é alterada
   useEffect(() => {
     // Verifica se é um caso de edição, caso contrário, apenas inicializa os dados
     if (id && !create) {
       const veicule = veiculesDB.find((item) => item.id === id);
+      const sector = sectorsDB.find((item) => item.id === veicule.sector_id);
 
       if (veicule) {
         // Preenche os campos com os dados do veículo existente
@@ -64,7 +70,7 @@ const NewVeicule = () => {
         setkilometers(veicule.kilometers);
         setRenavam(veicule.renavam);
         setBooster(veicule.booster);
-        setSector(veicule.sector);
+        setSector(sector.name);
         setImg(getImageUrl(veicule.imgKey) || '');
         setStatus(veicule.status);
 
@@ -133,7 +139,18 @@ const NewVeicule = () => {
     try {
       let updatedData;
 
-      const fields = [model, brand, color, year, plate, renavam, kilometers, booster, sector, img];
+      const fields = [
+        model,
+        brand,
+        color,
+        year,
+        plate,
+        renavam,
+        kilometers,
+        booster,
+        sector,
+        img,
+      ];
       // Verifica se há campos obrigatórios vazios
       const hasEmptyField = fields.some((item) => item === '');
 
@@ -164,26 +181,25 @@ const NewVeicule = () => {
         imgKey: changeImage && imageUrl ? imageUrl : veicule.imgKey || '',
         status: create ? 'Disponível' : statusBt ? 'Disponível' : 'Indisponível',
       };
-      console.log('create');
 
+      let veicules;
       // Se for criação, chama a função createVeicule
       if (create) {
-        await createVeicule(baseVeicule);
-        updatedData = [...veiculesDB, baseVeicule];
+        veicules = await createVeicule(baseVeicule);
+        // updatedData = [response.data];
       } else {
         // Se for atualização, chama a função updateVeicule
-        await updateVeicule(id, baseVeicule);
-        updatedData = veiculesDB.map((item) => (item.id === id ? { ...item, ...baseVeicule } : item));
+        veicules = await updateVeicule(id, baseVeicule);
       }
+      updatedData = veicules.response;
+
       setVeiculesDB(updatedData); // Atualiza os dados no contexto
 
-      navigation.navigate('Veicules', {
-        screen: 'Veicules',
-        // params: { data: updatedData },
-      });
+      navigation.goBack();
     } catch (error) {
       setLoadingImage(false);
       console.log(error);
+      
       if (error.response && error.response.data) {
         const { title, msg, icon } = error.response.data;
         setErrorData({ title, msg, icon });
@@ -206,11 +222,19 @@ const NewVeicule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
-      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
+      <ScrollView
+        style={styleJS.containerForm}
+        contentContainerStyle={{ paddingBottom: 70 }}
+      >
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <View style={[styleJS.statusBase, { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed }]}>
+            <View
+              style={[
+                styleJS.statusBase,
+                { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
+              ]}
+            >
               <Text
                 style={{
                   color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
@@ -229,10 +253,34 @@ const NewVeicule = () => {
             />
           </View>
           {/* Campos de entrada para as informações do veículo */}
-          <InputField icon={'car'} placeholder={'Modelo'} value={model} func={setModel} editable={true} border={true} width={'100%'} />
-          <InputField icon={'check-circle'} placeholder={'Marca'} value={brand} func={setBrand} editable={true} border={true} width={'100%'} />
+          <InputField
+            icon={'car'}
+            placeholder={'Modelo'}
+            value={model}
+            func={setModel}
+            editable={true}
+            border={true}
+            width={'100%'}
+          />
+          <InputField
+            icon={'check-circle'}
+            placeholder={'Marca'}
+            value={brand}
+            func={setBrand}
+            editable={true}
+            border={true}
+            width={'100%'}
+          />
           <View style={[styleJS.row, { borderBottomWidth: 0 }]}>
-            <InputField icon={'invert-colors'} placeholder={'Cor'} value={color} func={setColor} editable={true} border={false} width={'50%'} />
+            <InputField
+              icon={'invert-colors'}
+              placeholder={'Cor'}
+              value={color}
+              func={setColor}
+              editable={true}
+              border={false}
+              width={'50%'}
+            />
             <InputField
               icon={'calendar'}
               placeholder={'Ano'}
@@ -249,8 +297,24 @@ const NewVeicule = () => {
         {/* Inputs para os dados adicionais do veículo */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <InputField icon={'keyboard'} placeholder={'Placa'} value={plate} func={setPlate} editable={true} border={false} width={'50%'} />
-            <InputField icon={'keyboard'} placeholder={'Renavam'} value={renavam} func={setRenavam} editable={true} border={false} width={'50%'} />
+            <InputField
+              icon={'keyboard'}
+              placeholder={'Placa'}
+              value={plate}
+              func={setPlate}
+              editable={true}
+              border={false}
+              width={'50%'}
+            />
+            <InputField
+              icon={'keyboard'}
+              placeholder={'Renavam'}
+              value={renavam}
+              func={setRenavam}
+              editable={true}
+              border={false}
+              width={'50%'}
+            />
           </View>
           <View style={[styleJS.row]}>
             <InputField
@@ -263,10 +327,18 @@ const NewVeicule = () => {
               width={'50%'}
               type={'numeric'}
             />
-            <InputField icon={'gas-station'} placeholder={'Tanque'} value={booster} func={setBooster} editable={true} border={false} width={'50%'} />
+            <InputField
+              icon={'gas-station'}
+              placeholder={'Tanque'}
+              value={booster}
+              func={setBooster}
+              editable={true}
+              border={false}
+              width={'50%'}
+            />
           </View>
           <SelectInput
-            initialValue={'Selecione um setor'}
+            initialValue={sector}
             value={sector}
             setValue={setSector}
             list={listSectorsDB}
@@ -282,7 +354,14 @@ const NewVeicule = () => {
               <Image source={{ uri: img }} style={styleJS.image} />
             ) : (
               <View style={{ alignItems: 'center' }}>
-                <IconWithLabel iconName={'camera'} size={18} color={styleJS.primaryColor} width={20} height={22} margin={0} />
+                <IconWithLabel
+                  iconName={'camera'}
+                  size={18}
+                  color={styleJS.primaryColor}
+                  width={20}
+                  height={22}
+                  margin={0}
+                />
                 <Text style={styleJS.imagePlaceholderText}>Escolher Imagem</Text>
               </View>
             )}
@@ -301,6 +380,15 @@ const NewVeicule = () => {
             <Text style={styleJS.textButton}>Confirmar</Text>
           </Button>
         </View>
+        {/* Alerta que aparece quando os dados de login estão incorretos */}
+        <AlertDialog
+          icon={errorData.icon} // Usa os dados de erro capturados
+          title={errorData.title}
+          msg={errorData.msg}
+          visible={visible} // Define se o alerta está visível
+          setVisible={setVisible} // Função para controlar a visibilidade do alerta
+          setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );

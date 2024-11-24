@@ -46,33 +46,37 @@ class BaseRepository {
 
   async create(table, columnsArray, valuesArray) {
     const db = await openDb();
-
+  
     try {
       // Gera um UUID e adiciona ao início dos valores
       const id = uuidv4();
       valuesArray.unshift(id); // Adiciona o ID no início do valuesArray
-
+  
       // Adiciona "id" como a primeira coluna
       const baseColumnsArray = ['id', ...columnsArray];
-
+  
       // Gera os placeholders para a query (um "?" para cada valor)
       const flagsArray = new Array(baseColumnsArray.length).fill('?').join(', ');
-
+  
       // Monta a query, incluindo o campo "id"
       const queryText = `INSERT INTO ${table} (${baseColumnsArray.join(
         ', '
       )}) VALUES (${flagsArray})`;
-
+  
       // Inicia a transação
       await db.exec('BEGIN TRANSACTION');
-
+  
       // Executa a consulta de inserção
       await db.run(queryText, valuesArray);
-
+  
       // Confirma a transação
       await db.exec('COMMIT');
-
-      return { success: true, insertedValues: valuesArray }; // Retorna um objeto com os valores inseridos
+  
+      // Recupera todos os itens da tabela após a inserção
+      const allItems = await db.all(`SELECT * FROM ${table}`);
+  
+      // Retorna a resposta com os itens inseridos e todos os itens da tabela
+      return allItems;
     } catch (error) {
       // Desfaz a transação em caso de erro
       await db.exec('ROLLBACK');
@@ -83,6 +87,7 @@ class BaseRepository {
       await db.close();
     }
   }
+  
 
   async update(table, columnsArray, valuesArray, id) {
     const db = await openDb();
@@ -98,14 +103,12 @@ class BaseRepository {
       await db.run(queryText, [...valuesArray, id]);
       // Confirma a transação
       await db.exec('COMMIT');
+      // Recupera todos os itens da tabela após a inserção
+      const allItems = await db.all(`SELECT * FROM ${table}`);
+  
+      // Retorna a resposta com os itens inseridos e todos os itens da tabela
+      return allItems;
 
-      // Monta um objeto com as colunas e seus respectivos valores
-      const result = columnsArray.reduce((acc, column, index) => {
-        acc[column] = valuesArray[index]; // Associa a coluna ao valor correspondente
-        return acc;
-      }, {});
-
-      return result;
     } catch (error) {
       // Desfaz a transação em caso de erro
       await db.exec('ROLLBACK');

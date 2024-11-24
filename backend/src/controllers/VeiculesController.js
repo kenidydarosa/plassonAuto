@@ -64,9 +64,8 @@ class VeiculesController {
         return acc;
       }, []);
 
-      console.log(valuesArray)
       const response = await this.veiculesRepository.create(valuesArray);
-
+      
       if (!response) {
         throw new Error();
       }

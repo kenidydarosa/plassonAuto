@@ -4,7 +4,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import styleJS from './style';
 
 const Loading = () => (
-  <View style={{position:'absolute', top:'50%', left:'50%'}}>
+  <View style={{position:'absolute'}}>
   <ActivityIndicator animating={true} color={styleJS.primaryColor} />
   </View>
 );

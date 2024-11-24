@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { TouchableOpacity, View, Button } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { TouchableOpacity, View, Button, Text } from 'react-native';
+import IconWithLabel from '../../components/IconWithLabel';
 import Login from '../Login/Login';
 import BottomNavigator from '../../components/BottomNavigator';
 import Veicules from '../Veicules/Veicules';
@@ -56,14 +56,6 @@ const AppStack = () => {
         options={({ navigation }) => ({
           headerTitle: '', // Não exibe título no cabeçalho
           headerBackTitle: 'Voltar',
-          headerRight: () => (
-            // Adiciona ícone de busca à direita do cabeçalho
-            <View style={{ flexDirection: 'row', gap: 30 }}>
-              <TouchableOpacity onPress={() => alert('Adicionado!')}>
-                <Ionicons name='search' size={26} color={styleJS.titleColor} /> {/* Ícone de pesquisa */}
-              </TouchableOpacity>
-            </View>
-          ),
         })}
       />
 

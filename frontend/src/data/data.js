@@ -1,4 +1,4 @@
-const EVENT_COLOR = '#E0FBFFBE';
+export const EVENT_COLOR = '#E0FBFFBE';
 export const userData = {
   id: 1,
   name: 'Kenidy da Rosa',

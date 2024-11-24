@@ -48,3 +48,12 @@ export const updateUser = async (user) => {
     throw new Error(response.data);
   }
 };
+
+export const deleteUser = async (user) => {
+  const response = await axios.delete(`${API_URL}/users/${user.id}`);
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.data);
+  }
+};

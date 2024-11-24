@@ -19,13 +19,7 @@ const Login = () => {
   const [password, setPassword] = useState('1234');
   const [loadingImage, setLoadingImage] = useState(false); // Estado para controle de carregamento
   const [visible, setVisible] = useState(false); // Controle de visibilidade do alerta
-
-  // Estado para armazenar os dados de erro
-  const [errorData, setErrorData] = useState({
-    title: '',
-    msg: '',
-    icon: ''
-  });
+  const [errorData, setErrorData] = useState({ title: '',  msg: '', icon: ''  });
 
 // Função que lida com o login
 const handleLogin = async () => {

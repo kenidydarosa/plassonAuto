@@ -171,13 +171,16 @@ const styles = StyleSheet.create({
   },
   veicule: {
     width: '40%',
-    borderRadius: 10,
-    padding: 8,
+    borderRadius: 8,
+    alignItems:'center',
+    justifyContent:'center',
+    position:'relative',
     backgroundColor: styleJS.imgCardColor,
   },
   image: {
     width: '100%',
-    height: 70,
+    height: 80,
+    borderRadius: 8,
   },
   flex: {
     flexDirection: 'row',
