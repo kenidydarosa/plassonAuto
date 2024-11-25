@@ -18,8 +18,8 @@ import { Text, TouchableHighlight, Platform } from 'react-native';
  *
  * @returns {JSX.Element} Um botão com texto que pode ser pressionado para interagir.
  */
-export const DateTimeButton = ({ label, date, onPress, isActive, style }) => (
-  <TouchableHighlight style={style} onPress={onPress} underlayColor='#D9D9D9'>
+export const DateTimeButton = ({ label, date, onPress, isActive, style, disabled }) => (
+  <TouchableHighlight style={style} onPress={onPress} underlayColor='#D9D9D9' disabled={disabled}>
     <Text style={{ fontSize: 17, color: isActive ? styleJS.imgCardColor : 'black' }}>
       {date}
     </Text>

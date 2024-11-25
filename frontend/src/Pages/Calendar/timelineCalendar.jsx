@@ -5,20 +5,14 @@ import filter from 'lodash/filter';
 import find from 'lodash/find';
 import React, { useState } from 'react';
 import { Alert } from 'react-native';
-import {
-  ExpandableCalendar,
-  TimelineList,
-  CalendarProvider,
-  CalendarUtils,
-  LocaleConfig,
-} from 'react-native-calendars';
-import { timelineEvents, getDate } from './mocks/timelineEvents';
+import { ExpandableCalendar, TimelineList, CalendarProvider, CalendarUtils, LocaleConfig } from 'react-native-calendars';
+import { getDate } from './mocks/timelineEvents';
 import styleJS, { getTheme } from '../../components/style';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
+import { useDataContext } from '../../data/DataContext';
 
 const INITIAL_TIME = { hour: 9, minutes: 0 };
-const EVENTS = timelineEvents;
 
 const customEventStyles = {
   eventTitle: {
@@ -41,10 +35,7 @@ const customEventStyles = {
 
 // Configuração do idioma para o calendário (português)
 LocaleConfig.locales['pt-br'] = {
-  monthNames: [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-  ],
+  monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
   dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
   dayNamesShort: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
   today: 'Hoje',
@@ -62,23 +53,20 @@ const TimelineCalendarScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
+  const { schedulesDB, veiculesDB, usersDB } = useDataContext();
+
   const { create, id } = route.params || {}; // Obtém os parâmetros de navegação (se existirem)
+  const EVENTS = schedulesDB;
 
   // Estado para controlar a data atual e os eventos agrupados por data
   const [currentDate, setCurrentDate] = useState(getDate());
-  const [eventsByDate, setEventsByDate] = useState(
-    groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start))
-  );
+  const [eventsByDate, setEventsByDate] = useState(groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start)));
 
-  // Marcação de algumas datas específicas
-  const marked = {
-    [`${getDate(-1)}`]: { marked: true },
-    [`${getDate()}`]: { marked: true },
-    [`${getDate(1)}`]: { marked: true },
-    [`${getDate(2)}`]: { marked: true },
-    [`${getDate(4)}`]: { marked: true },
-    [`${getDate(5)}`]: { marked: true },
-  };
+  // Marcação de datas que têm eventos
+  const marked = {};
+  Object.keys(eventsByDate).forEach((date) => {
+    marked[date] = { marked: true };
+  });
 
   // Função chamada quando a data no calendário é alterada
   const onDateChanged = (date) => {
@@ -87,17 +75,23 @@ const TimelineCalendarScreen = () => {
 
   // Função chamada quando o mês é alterado
   const onMonthChange = (month) => {
-    console.log('TimelineCalendarScreen onMonthChange: ', month);
+    // console.log('TimelineCalendarScreen onMonthChange: ', month);
   };
 
   // Navega para a tela de criação de novo evento (NewSchedule)
   const createNewEvent = (timeString, timeObject) => {
+    console.log('timeString:', timeString);
     navigation.navigate('NewSchedule', { create, id, timeString });
   };
 
   // Função chamada ao pressionar um evento na linha do tempo
   const onEventPress = (event) => {
-    alert(event.title, `Title: ${event.title}\nStart: ${event.start}`);
+    // alert(event.title, `Title: ${event.title}\nStart: ${event.start}`);
+    // console.log(event)
+    // const createNewEvent = (timeString, timeObject) => {
+    const { id } = event;
+    navigation.navigate('NewSchedule', { create: false, id, onlyVisible: true });
+    // };
   };
 
   return (
@@ -120,11 +114,10 @@ const TimelineCalendarScreen = () => {
         showScrollIndicator // Exibe o indicador de rolagem
         minDate={new Date().toISOString()} // Define a data mínima para o calendário (hoje)
         stickyHeaderIndices={true} // Faz o cabeçalho do calendário fixo
-        hideArrows={false} // Exibe as setas de navegação
+        // hideArrows={false} // Exibe as setas de navegação
         theme={getTheme()} // Aplica o tema personalizado
       />
       <TimelineList
-      
         events={eventsByDate} // Passa os eventos agrupados por data
         keyExtractor={(item) => item.id || item.someUniqueIdentifier} // Utiliza uma chave única para cada evento
         timelineProps={{

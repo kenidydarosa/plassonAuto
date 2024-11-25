@@ -531,15 +531,7 @@
 
 /** @format */
 
-import {
-  View,
-  Text,
-  TextInput,
-  Switch,
-  Platform,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
@@ -557,9 +549,8 @@ const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } =
-    useDataContext();
-  const { create, id, timeString } = route.params || {};
+  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } = useDataContext();
+  const { create, id, timeString, onlyVisible } = route.params || {};
 
   // Variaveis de estado
   const [car, setCar] = useState(null);
@@ -617,7 +608,7 @@ const NewSchedule = () => {
     setEndDate,
     endTime,
     setEndTime,
-    setMinimumDate
+    setMinimumDate,
   };
 
   useEffect(() => {
@@ -639,9 +630,7 @@ const NewSchedule = () => {
         setEndTime(endDate);
       } else {
         const currentSchedule = schedulesDB.find((item) => item.id === id);
-        const currentCar = veiculesDB.find(
-          (car) => car.id === currentSchedule.veicule_id
-        );
+        const currentCar = veiculesDB.find((car) => car.id === currentSchedule.veicule_id);
         const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
         setCar(currentCar);
@@ -704,23 +693,6 @@ const NewSchedule = () => {
     return `${formattedDate}T${formattedTime}`; // Concatena com 'T' no meio
   };
 
-  // const defineMinimumDate = (pickerField, startDate, endDate, startTime, endTime) => {
-  //   switch (pickerField) {
-  //     case 'startDate':
-  //       return new Date();
-  //     case 'endDate':
-  //       return startDate >= new Date() ? startDate : new Date() ;
-  //     case 'startTime':
-  //       return startDate >= new Date() ? startDate : new Date() ;
-  //     case 'endTime':
-  //       return startTime;
-  //     default:
-  //       return new Date();
-  //   }
-  // };
-
-  
-
   // Função ajustar data e hora de entrega das chaves
   const setDateHours = (date, time) => {
     const currentDate = new Date(date);
@@ -775,9 +747,7 @@ const NewSchedule = () => {
         color: EVENT_COLOR,
       };
 
-      const schedules = create
-        ? await createSchedules(baseSchedule)
-        : await updateSchedules(id, baseSchedule);
+      const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
       setSchedulesDB(schedules.response);
       navigation.navigate('BottomNavigator', {
         screen: 'MySchedules',
@@ -799,19 +769,11 @@ const NewSchedule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // ajuste se necessário
     >
-      <ScrollView
-        style={styleJS.containerForm}
-        contentContainerStyle={{ paddingBottom: 70 }}
-      >
+      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <View
-              style={[
-                styleJS.statusBase,
-                { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
-              ]}
-            >
+            <View style={[styleJS.statusBase, { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed }]}>
               <Text
                 style={{
                   color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
@@ -822,28 +784,21 @@ const NewSchedule = () => {
             </View>
             <Switch
               value={statusBt}
-              disabled={create}
+              disabled={create || onlyVisible}
               onValueChange={(value) => {
                 setStatusBt(value);
                 setStatus(value ? 'Ativa' : 'Cancelada');
               }}
             />
           </View>
-          <InputField
-            icon={'account-circle'}
-            placeholder={'Usuário'}
-            value={user}
-            func={setUser}
-            editable={false}
-            border={true}
-            width={'100%'}
-          />
+          <InputField icon={'account-circle'} placeholder={'Usuário'} value={user} func={setUser} editable={false} border={true} width={'100%'} />
           <SelectInput
             initialValue={title}
             value={title}
             setValue={setTitle}
             list={listTitlesDB}
             border={true}
+            editable={!onlyVisible}
             icon={'target'}
             width={'100%'}
           />
@@ -852,7 +807,7 @@ const NewSchedule = () => {
             placeholder={'Descrição'}
             value={summary}
             func={setSummary}
-            editable={true}
+            editable={!onlyVisible}
             border={true}
             width={'100%'}
             multiline={true}
@@ -862,7 +817,7 @@ const NewSchedule = () => {
             placeholder={'Localização'}
             value={locale}
             func={setLocale}
-            editable={true}
+            editable={!onlyVisible}
             border={false}
             width={'100%'}
           />
@@ -873,7 +828,7 @@ const NewSchedule = () => {
           {/* Switch All-day */}
           <View style={styleJS.row}>
             <Text>Dia inteiro</Text>
-            <Switch value={allDay} onValueChange={setAllDay} />
+            <Switch value={allDay} onValueChange={setAllDay} disabled={onlyVisible} />
           </View>
 
           <View style={styleJS.row}>
@@ -890,6 +845,7 @@ const NewSchedule = () => {
                 style={styleJS.dateButton}
                 onPress={() => showDateTimePicker(listPicker, 'startDate', 'date')}
                 isActive={activeButton === 'startDate'}
+                disabled={onlyVisible}
               />
               {/* Start Time */}
               {!allDay && (
@@ -903,6 +859,7 @@ const NewSchedule = () => {
                   style={styleJS.timeButton}
                   onPress={() => showDateTimePicker(listPicker, 'startTime', 'time')}
                   isActive={activeButton === 'startTime'}
+                  disabled={onlyVisible}
                 />
               )}
             </View>
@@ -922,6 +879,7 @@ const NewSchedule = () => {
                 style={styleJS.dateButton}
                 onPress={() => showDateTimePicker(listPicker, 'endDate', 'date')}
                 isActive={activeButton === 'endDate'}
+                disabled={onlyVisible}
               />
               {/* End Time */}
               {!allDay && (
@@ -935,6 +893,7 @@ const NewSchedule = () => {
                   style={styleJS.timeButton}
                   onPress={() => showDateTimePicker(listPicker, 'endTime', 'time')}
                   isActive={activeButton === 'endTime'}
+                  disabled={onlyVisible}
                 />
               )}
             </View>
@@ -947,12 +906,8 @@ const NewSchedule = () => {
             value={pickerField.includes('Date') ? startDate : startTime}
             mode={pickerMode}
             is24Hour={true}
-            display={
-              Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'
-            }
-            onChange={(event, selectedDateTime) =>
-              onChange(event, selectedDateTime, listPicker)
-            }
+            display={Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'}
+            onChange={(event, selectedDateTime) => onChange(event, selectedDateTime, listPicker)}
             themeVariant='light'
             minimumDate={minimumDate}
             locale='pt-br'
@@ -978,7 +933,7 @@ const NewSchedule = () => {
             placeholder={'Km inicial'}
             value={kmStart}
             func={setKmStart}
-            editable={false}
+            editable={!onlyVisible}
             type={'numeric'}
             border={false}
             width={'50%'}
@@ -988,7 +943,7 @@ const NewSchedule = () => {
             placeholder={'Km final'}
             value={kmEnd}
             func={setKmEnd}
-            editable={true}
+            editable={!onlyVisible}
             type={'numeric'}
             border={false}
             width={'50%'}
@@ -1009,7 +964,7 @@ const NewSchedule = () => {
             placeholder={'Tanque final'}
             value={boosterEnd}
             func={setBoosterEnd}
-            editable={true}
+            editable={!onlyVisible}
             border={false}
             width={'50%'}
           />
@@ -1019,6 +974,7 @@ const NewSchedule = () => {
             style={[styleJS.input, { outline: 'none', height: 100 }]}
             placeholder='Notas'
             value={notes}
+            editable={!onlyVisible}
             onChangeText={setNotes}
             multiline
           />
@@ -1033,6 +989,7 @@ const NewSchedule = () => {
             </View>
             <Switch
               value={keyHandOver}
+              disabled={onlyVisible}
               onValueChange={(value) => {
                 setkeyHandOver(value);
                 setKeyHandOverTime(
@@ -1082,6 +1039,7 @@ const NewSchedule = () => {
             loading={loadingImage}
             onPress={() => confirmData()}
             buttonColor={styleJS.colorButton}
+            disabled={onlyVisible}
           >
             <Text style={styleJS.textButton}>Confirmar</Text>
           </Button>
