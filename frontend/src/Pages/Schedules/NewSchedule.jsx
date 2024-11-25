@@ -556,7 +556,7 @@ const NewSchedule = () => {
   const [car, setCar] = useState(null);
   const [userID, setUserID] = useState('');
   const [user, setUser] = useState('');
-  const [title, setTitle] = useState('Selecione um título');
+  const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
 
   const [locale, setLocale] = useState('');
@@ -712,7 +712,7 @@ const NewSchedule = () => {
   const confirmData = async () => {
     try {
       // Verifica se há algum campo vazio
-      const dateStart = formatDateTime(endDate, endTime);
+      const dateStart = formatDateTime(startDate, startTime);
       const dateEnd = formatDateTime(endDate, endTime);
       const fields = [user, title, summary, locale];
 
@@ -720,8 +720,9 @@ const NewSchedule = () => {
         alert('Preencha todos os campos!');
         return;
       }
-
-      if (!validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB)) {
+      const validate = validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB)
+      
+      if (!validate) {
         setErrorData({
           title: 'Erro',
           msg: 'Erro inesperado ao cadastrar o veículo.',
@@ -730,6 +731,7 @@ const NewSchedule = () => {
         setVisible(true);
         return;
       }
+      console.log('validateSchedule:', validate)
 
       const baseSchedule = {
         user_id: userID,
@@ -793,12 +795,12 @@ const NewSchedule = () => {
           </View>
           <InputField icon={'account-circle'} placeholder={'Usuário'} value={user} func={setUser} editable={false} border={true} width={'100%'} />
           <SelectInput
-            initialValue={title}
+            initialValue={'Selecione um título'}
             value={title}
             setValue={setTitle}
             list={listTitlesDB}
             border={true}
-            editable={!onlyVisible}
+            editable={onlyVisible}
             icon={'target'}
             width={'100%'}
           />

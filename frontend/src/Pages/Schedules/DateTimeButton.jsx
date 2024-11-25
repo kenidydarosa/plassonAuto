@@ -122,7 +122,7 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 //  * @param {Object} listPicker - Objeto que contém funções para atualizar os estados dos campos.
 //  */
 
-
+// Padrão, funciona
 // export const onChange = (event, selectedDateTime, listPicker) => {
 //   const {
 //     pickerField,
@@ -132,79 +132,24 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 //     setEndTime,
 //     setShowPicker,
 //     setActiveButton,
-//     startDate,
-//     endDate,
-//     startTime,
-//     endTime
 //   } = listPicker;
-
 //   const isAndroid = Platform.OS === 'android';
-//   const currentDate = new Date(); // Hora atual
-
-//   // Normaliza as datas para comparar apenas a parte da data (ano, mês, dia)
-//   const selectedDate = new Date(selectedDateTime);
-//   const normalizedSelectedDate = new Date(selectedDate);
-//   normalizedSelectedDate.setHours(0, 0, 0, 0); // Remove a parte de hora/minuto/segundo
-
-//   const normalizedCurrentDate = new Date(currentDate);
-//   normalizedCurrentDate.setHours(0, 0, 0, 0); // Remove a parte de hora/minuto/segundo
-
-//   // Função para ajustar o endTime
-//   const adjustEndTime = (newStartTime) => {
-//     const updatedEndTime = new Date(newStartTime);
-//     updatedEndTime.setHours(updatedEndTime.getHours() + 1); // Adiciona 1 hora ao startTime
-//     setEndTime(updatedEndTime);
-//   };
 
 //   if (selectedDateTime) {
 //     switch (pickerField) {
 //       case 'startDate':
 //         setStartDate(selectedDateTime); // Define a data de início
-//         setEndDate(selectedDateTime); // Atualiza a data de término para a mesma data
-
-//         if (normalizedSelectedDate.getTime() === normalizedCurrentDate.getTime()) {
-//           // Se a data selecionada for igual a hoje
-//           const currentHour = currentDate.getHours(); // Hora atual
-//           const currentMinute = currentDate.getMinutes(); // Minuto atual
-
-//           // Verifica se startTime é menor que o horário atual
-//           if (
-//             startTime.getHours() < currentHour ||
-//             (startTime.getHours() === currentHour && startTime.getMinutes() < currentMinute)
-//           ) {
-//             // Se startTime for menor que a hora atual, ajusta startTime para a data e hora atuais
-//             setStartTime(currentDate);
-//             adjustEndTime(currentDate); // Ajusta o endTime para 1 hora a mais que o startTime atualizado
-//           } else {
-//             // Caso contrário, mantém o horário de startTime com a data de hoje
-//             let updatedStartTime = new Date(selectedDateTime);
-//             updatedStartTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0); // Mantém a hora selecionada
-//             setStartTime(updatedStartTime);
-//             adjustEndTime(updatedStartTime); // Ajusta o endTime para 1 hora a mais que o startTime atualizado
-//           }
-//         } else {
-//           // Se a data não for hoje, mantém o horário anterior com a nova data selecionada
-//           let updatedStartTime = new Date(selectedDateTime); // Cria uma nova data com a data selecionada
-//           updatedStartTime.setHours(startTime.getHours(), startTime.getMinutes(), 0, 0); // Mantém o horário anterior
-//           setStartTime(updatedStartTime); // Define o horário de início corretamente
-//           adjustEndTime(updatedStartTime); // Ajusta o endTime para 1 hora a mais que o startTime atualizado
-//         }
 //         break;
-
 //       case 'startTime':
 //         setStartTime(selectedDateTime); // Define a hora de início
-//         adjustEndTime(selectedDateTime); // Ajusta o endTime para 1 hora a mais que o startTime atualizado
 //         break;
-
 //       case 'endDate':
 //         setEndDate(selectedDateTime); // Define a data de término
 //         break;
-
 //       case 'endTime':
 //         setEndTime(selectedDateTime); // Define a hora de término
 //         break;
 //     }
-
 //     if (isAndroid) {
 //       setShowPicker(false);
 //       setActiveButton('');

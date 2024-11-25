@@ -80,7 +80,6 @@ const TimelineCalendarScreen = () => {
 
   // Navega para a tela de criação de novo evento (NewSchedule)
   const createNewEvent = (timeString, timeObject) => {
-    console.log('timeString:', timeString);
     navigation.navigate('NewSchedule', { create, id, timeString });
   };
 

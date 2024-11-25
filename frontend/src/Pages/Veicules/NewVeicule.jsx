@@ -43,7 +43,7 @@ const NewVeicule = () => {
   const [kilometers, setkilometers] = useState('');
   const [renavam, setRenavam] = useState('');
   const [booster, setBooster] = useState('');
-  const [sector, setSector] = useState('Selecione o setor');
+  const [sector, setSector] = useState('');
   const [statusBt, setStatusBt] = useState(true);
   const [status, setStatus] = useState('Disponível');
   const [imgKey, setImgKey] = useState('');
@@ -338,13 +338,14 @@ const NewVeicule = () => {
             />
           </View>
           <SelectInput
-            initialValue={sector}
+            initialValue={'Selecione o setor'}
             value={sector}
             setValue={setSector}
             list={listSectorsDB}
             border={false}
             icon={'apps-box'}
             width={'100%'}
+            editable={false}
           />
         </View>
         {/* Container para selecionar a imagem do veículo */}
