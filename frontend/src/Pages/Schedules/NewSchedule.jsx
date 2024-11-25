@@ -544,7 +544,7 @@ import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
 import React, { useEffect, useState } from 'react';
-import { DateTimeButton, showDateTimePicker, onChange } from './DatePickerFunctions.jsx';
+import { DateTimeButton, showDateTimePicker, onChange } from './DateTimeButton.jsx';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styleJS from '../../components/style.js';
 import InputField from '../../components/InputFied.jsx';
@@ -574,6 +574,7 @@ const NewSchedule = () => {
   const [startTime, setStartTime] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
+  const [minimumDate, setMinimumDate] = useState(new Date());
 
   const [veicule, setVeicule] = useState('');
   const [kmStart, setKmStart] = useState('');
@@ -608,10 +609,15 @@ const NewSchedule = () => {
     setPickerField,
     activeButton,
     setActiveButton,
+    startDate,
     setStartDate,
+    startTime,
     setStartTime,
+    endDate,
     setEndDate,
+    endTime,
     setEndTime,
+    setMinimumDate
   };
 
   useEffect(() => {
@@ -638,8 +644,9 @@ const NewSchedule = () => {
         );
         const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
+        setCar(currentCar);
+
         if (currentSchedule) {
-          setCar(currentCar);
           setUserID(currentUser.id);
           setUser(currentUser.name);
           setTitle(currentSchedule.title);
@@ -697,6 +704,23 @@ const NewSchedule = () => {
     return `${formattedDate}T${formattedTime}`; // Concatena com 'T' no meio
   };
 
+  // const defineMinimumDate = (pickerField, startDate, endDate, startTime, endTime) => {
+  //   switch (pickerField) {
+  //     case 'startDate':
+  //       return new Date();
+  //     case 'endDate':
+  //       return startDate >= new Date() ? startDate : new Date() ;
+  //     case 'startTime':
+  //       return startDate >= new Date() ? startDate : new Date() ;
+  //     case 'endTime':
+  //       return startTime;
+  //     default:
+  //       return new Date();
+  //   }
+  // };
+
+  
+
   // Função ajustar data e hora de entrega das chaves
   const setDateHours = (date, time) => {
     const currentDate = new Date(date);
@@ -712,67 +736,6 @@ const NewSchedule = () => {
 
     return currentDate;
   };
-
-  // const defineMinimumDate = (pickerField) => {
-  //   switch (pickerField) {
-  //     case 'startDate':
-  //       return new Date();
-  //     case 'endDate':
-  //       return startDate;
-  //     case 'startTime':
-  //       console.log(new Date(new Date(startDate).setHours(0, 0, 0, 0)));
-  //       return new Date(new Date(startDate).setHours(0, 0, 0, 0));
-  //     case 'endTime':
-  //       console.log(new Date(new Date(startTime).setHours(0, 0, 0, 0)));
-  //       return new Date(new Date(startTime).setHours(0, 0, 0, 0));
-  //     default:
-  //       break;
-  //   }
-  // };
-  const defineMinimumDate = (pickerField) => {
-    const today = new Date();  // Captura a data de hoje
-    const todayDateString = today.toDateString();  // Considera apenas a data (sem hora)
-  
-    switch (pickerField) {
-      case 'startDate':
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        yesterday.setHours(0, 0, 0, 0);  // Zera as horas para 00:00:00
-        return yesterday;
-  
-      case 'endDate':
-        return startDate;
-  
-      case 'startTime':
-        // Verifica se a data startDate é igual a hoje, considerando apenas a data (sem horas)
-        if (new Date(startDate).toDateString() === todayDateString) {
-          // Se startDate for hoje, retorna com a hora atual
-          console.log(today);
-          return today;
-        } else {
-          // Se startDate não for hoje, retorna startDate com hora 00:00:00
-          const adjustedStartDate = new Date(new Date(startDate).setHours(0, 0, 0, 0));
-          console.log(adjustedStartDate);
-          return adjustedStartDate;
-        }
-  
-      case 'endTime':
-        const todayEndTime = new Date();
-        // Verifica se a data startTime é igual a hoje, considerando apenas a data
-        if (new Date(startTime).toDateString() === todayDateString) {
-          // Se startTime for hoje, retorna com a hora atual
-          return todayEndTime;
-        } else {
-          const adjustedStartTime = new Date(new Date(startTime).setHours(0, 0, 0, 0));
-          console.log(adjustedStartTime);
-          return adjustedStartTime;
-        }
-  
-      default:
-        break;
-    }
-  };
-  
 
   const confirmData = async () => {
     try {
@@ -991,7 +954,7 @@ const NewSchedule = () => {
               onChange(event, selectedDateTime, listPicker)
             }
             themeVariant='light'
-            minimumDate={defineMinimumDate(pickerField)}
+            minimumDate={minimumDate}
             locale='pt-br'
             accentColor={styleJS.imgCardColor}
             style={styleJS.dateTimePicker}

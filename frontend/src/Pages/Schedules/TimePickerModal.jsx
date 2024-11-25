@@ -57,7 +57,7 @@ export default function DateTimePicker({ mode = 'time' }) {
 							cancelLabel='Cancel'
 							confirmLabel='OK'
 							animationType='fade'
-							locale='en'
+							locale='pt-br'
 						/>
 					)}
 
@@ -69,7 +69,8 @@ export default function DateTimePicker({ mode = 'time' }) {
 							onDismiss={closePicker}
 							date={date}
 							onConfirm={onDateConfirm}
-							locale='en'
+							locale='pt-br'
+							presentationStyle='pageSheet'
 						/>
 					)}
 				</View>
