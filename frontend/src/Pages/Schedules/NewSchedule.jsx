@@ -531,15 +531,7 @@
 
 /** @format */
 
-import {
-  View,
-  Text,
-  TextInput,
-  Switch,
-  Platform,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
@@ -558,8 +550,7 @@ const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } =
-    useDataContext();
+  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } = useDataContext();
   const { create, id, timeString, onlyVisible } = route.params || {};
 
   // Variaveis de estado
@@ -640,9 +631,7 @@ const NewSchedule = () => {
         setEndTime(endDate);
       } else {
         const currentSchedule = schedulesDB.find((item) => item.id === id);
-        const currentCar = veiculesDB.find(
-          (car) => car.id === currentSchedule.veicule_id
-        );
+        const currentCar = veiculesDB.find((car) => car.id === currentSchedule.veicule_id);
         const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
         setCar(currentCar);
@@ -732,7 +721,7 @@ const NewSchedule = () => {
         setErrorData({
           title: 'Erro',
           msg: 'Preencha todos os campos!',
-          textButton:'Confirmar',
+          textButton: 'Confirmar',
           icon: 'close-circle',
         });
         setShowAlert(true);
@@ -746,7 +735,7 @@ const NewSchedule = () => {
         setErrorData({
           title: 'Erro',
           msg: 'Este horário está indisponível para este veículo!',
-          textButton:'Confirmar',
+          textButton: 'Confirmar',
           icon: 'close-circle',
         });
         setShowAlert(true);
@@ -769,9 +758,7 @@ const NewSchedule = () => {
         color: EVENT_COLOR,
       };
 
-      const schedules = create
-        ? await createSchedules(baseSchedule)
-        : await updateSchedules(id, baseSchedule);
+      const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
       setSchedulesDB(schedules.response);
       navigation.navigate('BottomNavigator', {
         screen: 'MySchedules',
@@ -782,7 +769,7 @@ const NewSchedule = () => {
       setErrorData({
         title: 'Erro',
         msg: error.response?.data?.msg || 'Erro inesperado.',
-        textButton:'Ok',
+        textButton: 'Ok',
         icon: 'close-circle',
       });
       setShowAlert(true);
@@ -794,19 +781,11 @@ const NewSchedule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // ajuste se necessário
     >
-      <ScrollView
-        style={styleJS.containerForm}
-        contentContainerStyle={{ paddingBottom: 70 }}
-      >
+      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <View
-              style={[
-                styleJS.statusBase,
-                { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
-              ]}
-            >
+            <View style={[styleJS.statusBase, { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed }]}>
               <Text
                 style={{
                   color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
@@ -824,7 +803,7 @@ const NewSchedule = () => {
               }}
             />
           </View>
-          <InputField
+          {/* <InputField
             icon={'account-circle'}
             placeholder={'Usuário'}
             value={user}
@@ -832,14 +811,28 @@ const NewSchedule = () => {
             editable={false}
             border={true}
             width={'100%'}
+          /> */}
+          <SelectInput
+            initialValue={'Usuário'}
+            value={user}
+            setValue={setUser}
+            list={usersDB.reduce((acc, user)=>{
+              acc.push(user.name)
+              return acc;
+            }, [])}
+            border={true}
+            disabled={onlyVisible || userDB.name != 'Admin'}
+            icon={'account-circle'}
+            width={'100%'}
           />
+
           <SelectInput
             initialValue={'Selecione um título'}
             value={title}
             setValue={setTitle}
             list={listTitlesDB}
             border={true}
-            editable={onlyVisible}
+            disabled={onlyVisible}
             icon={'target'}
             width={'100%'}
           />
@@ -878,7 +871,7 @@ const NewSchedule = () => {
             <View style={styleJS.buttons}>
               <DateTimeButton
                 label='Inicia'
-                date={startDate.toLocaleDateString('pt-BR', {
+                date={startDate.toLocaleDateString('BR', {
                   day: 'numeric',
                   month: 'short',
                   year: 'numeric',
@@ -947,12 +940,8 @@ const NewSchedule = () => {
             value={pickerField.includes('Date') ? startDate : startTime}
             mode={pickerMode}
             is24Hour={true}
-            display={
-              Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'
-            }
-            onChange={(event, selectedDateTime) =>
-              onChange(event, selectedDateTime, listPicker)
-            }
+            display={Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'}
+            onChange={(event, selectedDateTime) => onChange(event, selectedDateTime, listPicker)}
             themeVariant='light'
             minimumDate={minimumDate}
             locale='pt-br'
@@ -1091,14 +1080,14 @@ const NewSchedule = () => {
         </View>
         {/* Alerta que aparece quando os dados de login estão incorretos */}
         <AlertDialog
-        icon={errorData.icon} // Usa os dados de erro capturados
-        title={errorData.title}
-        msg={errorData.msg}
-        textButton={errorData.textButton}
-        showAlert={showAlert} // Define se o alerta está visível
-        setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
-        setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
-      />
+          icon={errorData.icon} // Usa os dados de erro capturados
+          title={errorData.title}
+          msg={errorData.msg}
+          textButton={errorData.textButton}
+          showAlert={showAlert} // Define se o alerta está visível
+          setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
+          setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
+        />
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -345,7 +345,7 @@ const NewVeicule = () => {
             border={false}
             icon={'apps-box'}
             width={'100%'}
-            editable={false}
+            disabled={false}
           />
         </View>
         {/* Container para selecionar a imagem do veículo */}

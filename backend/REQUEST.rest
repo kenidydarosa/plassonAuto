@@ -15,17 +15,18 @@ Content-Type: application/json
 GET http://localhost:3000/users/aa78db29-e29b-4e58-8acc-383537781e10
 
 ### POST
-POST http://localhost:3000/users
+POST http://10.17.30.51:3000/users
 Content-Type: application/json
 
 {
-    "name":"Luiz Tiskoski",
-    "username":"Luiz.tiskoski",
+    "name":"Admin",
+    "username":"Admin",
     "password":"1234",
-    "email": "luiz@hotmail.com",
-    "job":"Assistente",
-    "sector":"Central de Apoio",
-    "registration":"184571-1"
+    "email": "admin@hotmail.com",
+    "job":"Admin",
+    "sector_id":"df130e52-a639-440f-802f-9acb897bd9c2",
+    "registration":"00000-0",
+    "status":"Ativo"
 }
 ###
 

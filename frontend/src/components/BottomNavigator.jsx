@@ -1,4 +1,3 @@
-/** @format */
 
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,9 +7,9 @@ import Veicules from '../Pages/Veicules/Veicules';
 import Notify from '../Pages/Notify/Notify';
 import MySchedules from '../Pages/Schedules/MySchedules';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useDataContext } from '../data/DataContext';
 
-const Tab = createBottomTabNavigator();
-
+/** @format */
 /**
  * Componente `BottomNavigator`
  *
@@ -36,55 +35,45 @@ const Tab = createBottomTabNavigator();
  *
  * @returns {React.Element} Componente `BottomNavigator` renderizando a navegação com abas.
  */
+
+const Tab = createBottomTabNavigator();
+
 const BottomNavigator = () => {
+  const { userDB } = useDataContext();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
-
-          // Definindo o ícone dependendo da aba ativa
           if (route.name === 'Home') {
-            iconName = focused ? 'home' : 'home-outline'; // Ícone de casa para "Home"
+            iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Usuários') {
-            iconName = focused ? 'person' : 'person-outline'; // Ícone de usuário para "Usuários"
+            iconName = focused ? 'person' : 'person-outline';
           } else if (route.name === 'Notificações') {
-            iconName = focused ? 'notifications' : 'notifications-outline'; // Ícone de notificação para "Notificações"
+            iconName = focused ? 'notifications' : 'notifications-outline';
           } else if (route.name === 'Reservas') {
-            iconName = focused ? 'calendar' : 'calendar-outline'; // Ícone de calendário para "Reservas"
+            iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Veículos') {
-            iconName = focused ? 'car' : 'car-outline'; // Ícone de carro para "Veículos"
+            iconName = focused ? 'car' : 'car-outline';
           }
-
-          // Retorna o ícone com a cor e o tamanho adequados
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#000', // Cor do ícone quando a aba está ativa
-        tabBarInactiveTintColor: 'gray', // Cor do ícone quando a aba está inativa
+        tabBarActiveTintColor: '#000',
+        tabBarInactiveTintColor: 'gray',
       })}
     >
-      {/* Tela Home */}
       <Tab.Screen name='Home' component={Home} options={{ headerShown: false }} />
+      <Tab.Screen name='Reservas' component={MySchedules} options={{ headerShown: false }} />
+      <Tab.Screen name='Notificações' component={Notify} options={{ tabBarBadge: 5, headerShown: false }} />
 
-      {/* Tela Reservas */}
-      <Tab.Screen
-        name='Reservas'
-        component={MySchedules}
-        options={{ headerShown: false }}
-      />
-
-      {/* Tela Notificações com badge */}
-      <Tab.Screen
-        name='Notificações'
-        component={Notify}
-        options={{ tabBarBadge: 5, headerShown: false }}
-      />
-
-      {/* Tela Veículos */}
-      <Tab.Screen name='Veículos' component={Veicules} options={{ headerShown: false }} />
-
-      {/* Tela Usuários */}
-      <Tab.Screen name='Usuários' component={User} options={{ headerShown: false }} />
+      {/* Renderiza as abas de Veículos e Usuários apenas se userDB.name for "Admin" */}
+      {userDB.name === 'Admin' && (
+        <>
+          <Tab.Screen name='Veículos' component={Veicules} options={{ headerShown: false }} />
+          <Tab.Screen name='Usuários' component={User} options={{ headerShown: false }} />
+        </>
+      )}
     </Tab.Navigator>
   );
 };

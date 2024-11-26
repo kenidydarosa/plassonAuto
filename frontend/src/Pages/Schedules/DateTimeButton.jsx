@@ -20,9 +20,7 @@ import { Text, TouchableHighlight, Platform } from 'react-native';
  */
 export const DateTimeButton = ({ label, date, onPress, isActive, style, disabled }) => (
   <TouchableHighlight style={style} onPress={onPress} underlayColor='#D9D9D9' disabled={disabled}>
-    <Text style={{ fontSize: 17, color: isActive ? styleJS.imgCardColor : 'black' }}>
-      {date}
-    </Text>
+    <Text style={{ fontSize: 17, color: isActive ? styleJS.imgCardColor : 'black' }}>{date}</Text>
   </TouchableHighlight>
 );
 
@@ -49,7 +47,7 @@ export const showDateTimePicker = (listPicker, field, mode) => {
     startDate,
     endDate,
     startTime,
-    endTime
+    endTime,
   } = listPicker;
 
   if (pickerField === field && pickerMode === mode && showPicker) {
@@ -83,27 +81,23 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 
   if (pickerField === 'endDate') {
     // Comparando startDate com a data atual para definir o mínimo
-    return startDate >= currentDate
-      ? setMinimumDate(new Date(new Date(startDate).setHours(0, 0, 0, 0)))
-      : setMinimumDate(currentDate);
+    return startDate >= currentDate ? setMinimumDate(new Date(new Date(startDate).setHours(0, 0, 0, 0))) : setMinimumDate(currentDate);
   }
 
   if (pickerField === 'startTime') {
     // Se startDate for maior que a data atual, use startDate
-    return startDate >= currentDate
-      ? setMinimumDate(new Date(new Date(startDate).setHours(0, 0, 0, 0)))
-      : setMinimumDate(currentDate);
+    return startDate >= currentDate ? setMinimumDate(new Date(new Date(startDate).setHours(0, 0, 0, 0))) : setMinimumDate(currentDate);
   }
 
   if (pickerField === 'endTime') {
     // Verificar se endDate e startDate estão definidos antes de acessar getTime
     const validEndDate = endDate ? endDate.getTime() : currentDate.getTime();
     const validStartDate = startDate ? startDate.getTime() : currentDate.getTime();
-  
+
     // Ajuste da data mínima para endTime
     if (validEndDate === validStartDate || validEndDate === currentDate.setHours(0, 0, 0, 0)) {
       // Se endDate for igual a startDate ou igual à data atual, mínimo é startTime
-      setMinimumDate(startTime ? startTime : currentDate );
+      setMinimumDate(startTime ? startTime : currentDate);
     } else {
       // Caso contrário, não há restrição para o horário mínimo
       setMinimumDate(currentDate);
@@ -430,7 +424,7 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 //         } else {
 //           // Se endTime for maior que startTime, mas ainda dentro do mesmo dia
 //           // Apenas garante que o endDate pode ser igual ao startDate
-//           if (selectedDateTime.getHours() > startTime.getHours() || 
+//           if (selectedDateTime.getHours() > startTime.getHours() ||
 //               (selectedDateTime.getHours() === startTime.getHours() && selectedDateTime.getMinutes() > startTime.getMinutes())) {
 //             setEndDate(startDate); // Deixa endDate igual a startDate
 //           }
@@ -443,7 +437,6 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 //     }
 //   }
 // }
-
 
 // export const onChange = (event, selectedDateTime, listPicker) => {
 //   const {
@@ -594,7 +587,7 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 //         } else {
 //           // Se endTime for maior que startTime, mas ainda dentro do mesmo dia
 //           // Apenas garante que o endDate pode ser igual ao startDate
-//           if (selectedDateTime.getHours() > startTime.getHours() || 
+//           if (selectedDateTime.getHours() > startTime.getHours() ||
 //               (selectedDateTime.getHours() === startTime.getHours() && selectedDateTime.getMinutes() > startTime.getMinutes())) {
 //             setEndDate(startDate); // Deixa endDate igual a startDate
 //           }
@@ -618,21 +611,9 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 //   }
 // }
 
-
 export const onChange = (event, selectedDateTime, listPicker) => {
-  const {
-    pickerField,
-    setStartDate,
-    setStartTime,
-    setEndDate,
-    setEndTime,
-    setShowPicker,
-    setActiveButton,
-    startDate,
-    endDate,
-    startTime,
-    endTime,
-  } = listPicker;
+  const { pickerField, setStartDate, setStartTime, setEndDate, setEndTime, setShowPicker, setActiveButton, startDate, endDate, startTime, endTime } =
+    listPicker;
 
   const isAndroid = Platform.OS === 'android';
   const currentDate = new Date(); // Hora atual
@@ -691,10 +672,7 @@ export const onChange = (event, selectedDateTime, listPicker) => {
           const currentMinute = currentDate.getMinutes(); // Minuto atual
 
           // Verifica se startTime é menor que o horário atual
-          if (
-            startTime.getHours() < currentHour ||
-            (startTime.getHours() === currentHour && startTime.getMinutes() < currentMinute)
-          ) {
+          if (startTime.getHours() < currentHour || (startTime.getHours() === currentHour && startTime.getMinutes() < currentMinute)) {
             // Se startTime for menor que a hora atual, ajusta startTime para a data e hora atuais
             setStartTime(currentDate);
             adjustEndTimeAndDate(selectedDateTime, currentDate, false); // Ajusta o endTime para 1 hora a mais que o startTime atualizado
@@ -768,8 +746,10 @@ export const onChange = (event, selectedDateTime, listPicker) => {
         } else {
           // Se endTime for maior que startTime, mas ainda dentro do mesmo dia
           // Apenas garante que o endDate pode ser igual ao startDate
-          if (selectedDateTime.getHours() > startTime.getHours() || 
-              (selectedDateTime.getHours() === startTime.getHours() && selectedDateTime.getMinutes() > startTime.getMinutes())) {
+          if (
+            selectedDateTime.getHours() > startTime.getHours() ||
+            (selectedDateTime.getHours() === startTime.getHours() && selectedDateTime.getMinutes() > startTime.getMinutes())
+          ) {
             setEndDate(startDate); // Deixa endDate igual a startDate
           }
         }

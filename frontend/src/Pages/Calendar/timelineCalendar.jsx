@@ -56,7 +56,7 @@ const TimelineCalendarScreen = () => {
   const { schedulesDB, veiculesDB, usersDB } = useDataContext();
   const { create, id } = route.params || {}; // Obtém os parâmetros de navegação (se existirem)
 
-  const EVENTS = create && id ? schedulesDB.filter(schedule => schedule.veicule_id === id) : schedulesDB  
+  const EVENTS = create && id ? schedulesDB.filter(schedule => schedule.veicule_id === id && schedule.status !== 'Ativa') : schedulesDB.filter(schedule => schedule.status !== 'Ativa')  
   
   // Estado para controlar a data atual e os eventos agrupados por data
   const [currentDate, setCurrentDate] = useState(getDate());

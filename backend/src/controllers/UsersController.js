@@ -87,7 +87,6 @@ class UserController {
       });
     } catch (error) {
       res.status(500).json({
-        response,
         title: 'Erro',
         msg: 'Erro ao criar usuário!',
         icon: 'close-circle',
@@ -156,7 +155,6 @@ class UserController {
       const { username, password } = req.body;
       const user = await this.userRepository.login(username, password);
 
-      // Se não encontrar o usuário, retorne erro
       if (!user) {
         throw new Error();
       }
@@ -170,9 +168,7 @@ class UserController {
         return;
       }
 
-      // Promise.all para executar as consultas em paralelo
       const [schedules, notify, veicules, users, sectors] = await Promise.all([
-        // this.schedulesRepository.getAll('user_id', user.id), // Consulta agendamentos
         this.schedulesRepository.getAll(), // Consulta agendamentos
         this.notifyRepository.getAll('user_id', user.id), // Consulta notificações
         this.veiculesRepository.getAll(), // Consulta veículos

@@ -67,7 +67,7 @@ const SearchableCardList = ({
           )}
         </View>
       </View>
-
+          
       {/* Renderiza o componente Filters apenas se filters não estiver vazio */}
       {filters.length > 0 && (
         <Filters

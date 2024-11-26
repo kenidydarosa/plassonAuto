@@ -6,7 +6,7 @@ export const validateSchedule = (user, veicule, dateStart, dateEnd, schedulesDB)
   // Percorre todas as reservas no banco de dados
   for (const item of schedulesDB) {
     // Verifica se a reserva atual é para o mesmo veículo
-    if (item.veicule_id === veicule) {
+    if (item.veicule_id === veicule === item.status ==='Ativa') {
       const existingStart = new Date(item.start);
       const existingEnd = new Date(item.end);
 

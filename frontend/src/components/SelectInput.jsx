@@ -28,7 +28,7 @@ import styleJS from './style'; // Estilos globais
  * 
  * @returns {React.Element} O componente `SelectInput`, renderizando o campo de entrada e o modal de seleção.
  */
-const SelectInput = ({ initialValue, value, setValue, list, icon, width, border, editable }) => {
+const SelectInput = ({ initialValue, value, setValue, list, icon, width, border, disabled }) => {
 
   // Estado para controlar a visibilidade do modal
   const [visible, setVisible] = useState(false);
@@ -73,7 +73,7 @@ const SelectInput = ({ initialValue, value, setValue, list, icon, width, border,
         </View>
 
         {/* Botão para abrir o modal */}
-        <TouchableOpacity style={styles.inputButton} onPress={showModal} disabled={editable}>
+        <TouchableOpacity style={styles.inputButton} onPress={showModal} disabled={disabled}>
           <Text style={[styles.buttonLabel, !value ? {color:'#ccc'} : '']}>
             {value || initialValue} {/* Exibe o valor selecionado ou o valor inicial */}
           </Text>
@@ -98,7 +98,7 @@ const SelectInput = ({ initialValue, value, setValue, list, icon, width, border,
           onRequestClose={hideModal} // Função chamada ao fechar o modal
         >
           {/* Overlay de fundo do modal */}
-          <TouchableOpacity style={styles.modalOverlay} onPress={hideModal} disabled={editable}>
+          <TouchableOpacity style={styles.modalOverlay} onPress={hideModal} disabled={disabled}>
             {/* Container do menu de seleção */}
             <View style={styles.menuContainer} onTouchStart={handleModalClick}>
               <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -108,7 +108,7 @@ const SelectInput = ({ initialValue, value, setValue, list, icon, width, border,
                     key={index}
                     onPress={() => handleSelectItem(item)} // Seleciona o item e fecha o modal
                     style={styles.menuItem}
-                    disabled={editable}
+                    disabled={disabled}
                   >
                     <Text style={styles.menuItemText}>{item}</Text>
                   </TouchableOpacity>
