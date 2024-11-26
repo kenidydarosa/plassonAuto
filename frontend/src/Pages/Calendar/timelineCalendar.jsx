@@ -54,10 +54,10 @@ const TimelineCalendarScreen = () => {
   const route = useRoute();
 
   const { schedulesDB, veiculesDB, usersDB } = useDataContext();
-
   const { create, id } = route.params || {}; // Obtém os parâmetros de navegação (se existirem)
-  const EVENTS = schedulesDB;
 
+  const EVENTS = create && id ? schedulesDB.filter(schedule => schedule.veicule_id === id) : schedulesDB  
+  
   // Estado para controlar a data atual e os eventos agrupados por data
   const [currentDate, setCurrentDate] = useState(getDate());
   const [eventsByDate, setEventsByDate] = useState(groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start)));
@@ -85,9 +85,6 @@ const TimelineCalendarScreen = () => {
 
   // Função chamada ao pressionar um evento na linha do tempo
   const onEventPress = (event) => {
-    // alert(event.title, `Title: ${event.title}\nStart: ${event.start}`);
-    // console.log(event)
-    // const createNewEvent = (timeString, timeObject) => {
     const { id } = event;
     navigation.navigate('NewSchedule', { create: false, id, onlyVisible: true });
     // };

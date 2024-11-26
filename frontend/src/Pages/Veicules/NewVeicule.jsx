@@ -49,7 +49,7 @@ const NewVeicule = () => {
   const [imgKey, setImgKey] = useState('');
   const [img, setImg] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [showAlert, setShowAlert] = uSeState(false);
   const [changeImage, setChangeImage] = useState(false);
   const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
 
@@ -210,7 +210,7 @@ const NewVeicule = () => {
           icon: 'close-circle',
         });
       }
-      setVisible(true);
+      setShowAlert(true);
     } finally {
       setLoadingImage(false); // Desativa o carregamento, independentemente do sucesso ou falha
     }
@@ -386,8 +386,8 @@ const NewVeicule = () => {
           icon={errorData.icon} // Usa os dados de erro capturados
           title={errorData.title}
           msg={errorData.msg}
-          visible={visible} // Define se o alerta está visível
-          setVisible={setVisible} // Função para controlar a visibilidade do alerta
+          showAlert={showAlert} // Define se o alerta está visível
+          setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
           setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
         />
       </ScrollView>

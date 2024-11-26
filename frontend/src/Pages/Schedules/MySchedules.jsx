@@ -15,10 +15,16 @@ import Loading from '../../components/Loading.jsx';
 
 export const MySchedules = () => {
   const navigation = useNavigation();
-  const { schedulesDB, veiculesDB, usersDB } = useDataContext();
+  const { userDB, schedulesDB, veiculesDB, usersDB } = useDataContext();
   const fontsLoaded = fontConfig();
 
-  let updateSchedule = schedulesDB;
+  //Filtra apenas as reservas que o usuário é dono.
+  let updateSchedule
+  if(userDB.name == 'Admin'){
+    updateSchedule = schedulesDB
+  }else{
+    updateSchedule = schedulesDB.filter(item => item.user_id === userDB.id);
+  }
   // Atualiza os schedules quando a tela ganha foco
   useFocusEffect(
     useCallback(() => {
@@ -116,7 +122,7 @@ export const MySchedules = () => {
         <SearchableCardList
           data={updateSchedule} // Passa os dados das reservas filtrados
           renderCard={renderCard} // Função que renderiza cada card
-          searchKeys={['user', 'title', 'summary', 'locale', 'start']} // Chaves para a pesquisa
+          searchKeys={['user_id', 'title', 'summary', 'locale', 'start']} // Chaves para a pesquisa
           filters={[
             { label: 'Todas', value: 'todos' },
             { label: 'Ativas', value: 'ativa' },

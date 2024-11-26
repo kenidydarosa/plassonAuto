@@ -531,7 +531,15 @@
 
 /** @format */
 
-import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Switch,
+  Platform,
+  ScrollView,
+  KeyboardAvoidingView,
+} from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
@@ -541,6 +549,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import styleJS from '../../components/style.js';
 import InputField from '../../components/InputFied.jsx';
 import SelectInput from '../../components/SelectInput.jsx';
+import AlertDialog from '../../components/Dialog.jsx';
 import { createSchedules, updateSchedules } from '../../routes/schedulesRoutes.js';
 import { validateSchedule } from './validateSchedule.js';
 import { EVENT_COLOR } from '../../data/data.js';
@@ -549,7 +558,8 @@ const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } = useDataContext();
+  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } =
+    useDataContext();
   const { create, id, timeString, onlyVisible } = route.params || {};
 
   // Variaveis de estado
@@ -588,7 +598,7 @@ const NewSchedule = () => {
   const [pickerField, setPickerField] = useState('');
   const [activeButton, setActiveButton] = useState('');
   const [loadingImage, setLoadingImage] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
 
   const listPicker = {
@@ -630,7 +640,9 @@ const NewSchedule = () => {
         setEndTime(endDate);
       } else {
         const currentSchedule = schedulesDB.find((item) => item.id === id);
-        const currentCar = veiculesDB.find((car) => car.id === currentSchedule.veicule_id);
+        const currentCar = veiculesDB.find(
+          (car) => car.id === currentSchedule.veicule_id
+        );
         const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
         setCar(currentCar);
@@ -717,21 +729,29 @@ const NewSchedule = () => {
       const fields = [user, title, summary, locale];
 
       if (fields.some((item) => item === '')) {
-        alert('Preencha todos os campos!');
+        setErrorData({
+          title: 'Erro',
+          msg: 'Preencha todos os campos!',
+          textButton:'Confirmar',
+          icon: 'close-circle',
+        });
+        setShowAlert(true);
         return;
       }
-      const validate = validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB)
-      
+      const validate = validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB);
+
+      console.log('validate:', validate);
+
       if (!validate) {
         setErrorData({
           title: 'Erro',
-          msg: 'Erro inesperado ao cadastrar o veículo.',
+          msg: 'Este horário está indisponível para este veículo!',
+          textButton:'Confirmar',
           icon: 'close-circle',
         });
-        setVisible(true);
+        setShowAlert(true);
         return;
       }
-      console.log('validateSchedule:', validate)
 
       const baseSchedule = {
         user_id: userID,
@@ -749,7 +769,9 @@ const NewSchedule = () => {
         color: EVENT_COLOR,
       };
 
-      const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
+      const schedules = create
+        ? await createSchedules(baseSchedule)
+        : await updateSchedules(id, baseSchedule);
       setSchedulesDB(schedules.response);
       navigation.navigate('BottomNavigator', {
         screen: 'MySchedules',
@@ -760,9 +782,10 @@ const NewSchedule = () => {
       setErrorData({
         title: 'Erro',
         msg: error.response?.data?.msg || 'Erro inesperado.',
+        textButton:'Ok',
         icon: 'close-circle',
       });
-      setVisible(true);
+      setShowAlert(true);
     }
   };
   return (
@@ -771,11 +794,19 @@ const NewSchedule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // ajuste se necessário
     >
-      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
+      <ScrollView
+        style={styleJS.containerForm}
+        contentContainerStyle={{ paddingBottom: 70 }}
+      >
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
-            <View style={[styleJS.statusBase, { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed }]}>
+            <View
+              style={[
+                styleJS.statusBase,
+                { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
+              ]}
+            >
               <Text
                 style={{
                   color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
@@ -793,7 +824,15 @@ const NewSchedule = () => {
               }}
             />
           </View>
-          <InputField icon={'account-circle'} placeholder={'Usuário'} value={user} func={setUser} editable={false} border={true} width={'100%'} />
+          <InputField
+            icon={'account-circle'}
+            placeholder={'Usuário'}
+            value={user}
+            func={setUser}
+            editable={false}
+            border={true}
+            width={'100%'}
+          />
           <SelectInput
             initialValue={'Selecione um título'}
             value={title}
@@ -908,8 +947,12 @@ const NewSchedule = () => {
             value={pickerField.includes('Date') ? startDate : startTime}
             mode={pickerMode}
             is24Hour={true}
-            display={Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'}
-            onChange={(event, selectedDateTime) => onChange(event, selectedDateTime, listPicker)}
+            display={
+              Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'
+            }
+            onChange={(event, selectedDateTime) =>
+              onChange(event, selectedDateTime, listPicker)
+            }
             themeVariant='light'
             minimumDate={minimumDate}
             locale='pt-br'
@@ -1046,6 +1089,16 @@ const NewSchedule = () => {
             <Text style={styleJS.textButton}>Confirmar</Text>
           </Button>
         </View>
+        {/* Alerta que aparece quando os dados de login estão incorretos */}
+        <AlertDialog
+        icon={errorData.icon} // Usa os dados de erro capturados
+        title={errorData.title}
+        msg={errorData.msg}
+        textButton={errorData.textButton}
+        showAlert={showAlert} // Define se o alerta está visível
+        setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
+        setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
+      />
       </ScrollView>
     </KeyboardAvoidingView>
   );

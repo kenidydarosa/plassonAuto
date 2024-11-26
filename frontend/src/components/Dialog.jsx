@@ -1,9 +1,11 @@
 /** @format */
 
-import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { Dialog, Portal, Text, Button } from 'react-native-paper';
-
+// import * as React from 'react';
+// import { StyleSheet } from 'react-native';
+// import { Dialog, Portal, Text, Button } from 'react-native-paper';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import AwesomeAlert from 'react-native-awesome-alerts';
 /**
  * Componente `AlertDialog` exibe um diálogo de alerta com um ícone, título e texto informativo.
  * Ele é utilizado para mostrar mensagens de alerta ao usuário, podendo ser fechado quando necessário.
@@ -18,37 +20,53 @@ import { Dialog, Portal, Text, Button } from 'react-native-paper';
  * 
  * @returns {React.Element} Componente `AlertDialog` exibindo um diálogo de alerta.
  */
-const AlertDialog = ({ visible, setVisible, setLoadingImage, icon, title, msg }) => {
-  // Função para esconder o diálogo e parar o carregamento do activeIndicator
-  const hideDialog = () => {
-    setVisible(false); // Fecha o diálogo
-    setLoadingImage(false); // Para o carregamento do activeIndicator
+const AlertDialog = ({ showAlert, setShowAlert, setLoadingImage, icon, title, msg, textButton }) => {
+
+  const hideAlertHandler = () => {
+    setShowAlert(false);
+    setLoadingImage(false);
   };
 
   return (
-    <Portal>
-      <Dialog visible={visible} onDismiss={hideDialog}>
-        {/* Ícone do diálogo */}
-        <Dialog.Icon icon={icon} color= {icon === 'close-circle' ? 'red' : 'green'} />
-        {/* Título do diálogo */}
-        <Dialog.Title style={styles.text}>{title}</Dialog.Title>
-        {/* Conteúdo do diálogo com o texto */}
-        <Dialog.Content>
-          <Text variant='bodyLarge' style={styles.text}>
-            {msg}
-          </Text>
-        </Dialog.Content>
-      </Dialog>
-    </Portal>
+    <View style={styles.containerDialog}>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title={title}
+        message={msg}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={true}
+        // showCancelButton={true}
+        showConfirmButton={true}
+        // cancelText="No, cancel"
+        confirmText={textButton}
+        confirmButtonColor="#DD6B55"
+        // onCancelPressed={hideAlertHandler}
+        onConfirmPressed={hideAlertHandler}
+      />
+    </View>
   );
 };
 
-export default AlertDialog;
-
-
 const styles = StyleSheet.create({
+  containerDialog: {
+    flex: 1,
+    position:'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  button: {
+    margin: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 5,
+    backgroundColor: "#AEDEF4",
+  },
   text: {
-    textAlign: 'center',
+    color: '#fff',
+    fontSize: 15,
   },
 });
 
+export default AlertDialog;

@@ -12,50 +12,59 @@ import { fetchUsers, loginUser } from '../../routes/userRoutes.js';
 const Login = () => {
   const navigation = useNavigation();
   const fontsLoaded = fontConfig();
-  const { setUserDB, setSchedulesDB, setVeiculesDB, setNotificationsDB, setUsersDB, setSectorsDB } = useDataContext();
+  const {
+    setUserDB,
+    setSchedulesDB,
+    setVeiculesDB,
+    setNotificationsDB,
+    setUsersDB,
+    setSectorsDB,
+  } = useDataContext();
 
   // Estado local para armazenar os valores dos campos de entrada
   const [username, setUsername] = useState('Kenidy.rosa');
   const [password, setPassword] = useState('1234');
   const [loadingImage, setLoadingImage] = useState(false); // Estado para controle de carregamento
-  const [visible, setVisible] = useState(false); // Controle de visibilidade do alerta
-  const [errorData, setErrorData] = useState({ title: '',  msg: '', icon: ''  });
+  const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
+  const [showAlert, setShowAlert] = useState(false);
 
-// Função que lida com o login
-const handleLogin = async () => {
-  setLoadingImage(true); // Ativa o carregamento ao clicar no botão
+  // Função que lida com o login
+  const handleLogin = async () => {
+    setLoadingImage(true); // Ativa o carregamento ao clicar no botão
 
-  try {
-    const { user, schedules, notify, veicules, users, sectors } = await loginUser(username, password);
+    try {
+      const { user, schedules, notify, veicules, users, sectors } = await loginUser(
+        username,
+        password
+      );
 
-    setLoadingImage(false);
-    setUserDB(user);
-    setSchedulesDB(schedules);
-    setNotificationsDB(notify);
-    setVeiculesDB(veicules);
-    setUsersDB(users);
-    setSectorsDB(sectors);
+      setLoadingImage(false);
+      setUserDB(user);
+      setSchedulesDB(schedules);
+      setNotificationsDB(notify);
+      setVeiculesDB(veicules);
+      setUsersDB(users);
+      setSectorsDB(sectors);
 
-    navigation.navigate('BottomNavigator');
-    
-  } catch (error) {
-    setLoadingImage(false);
+      navigation.navigate('BottomNavigator');
+    } catch (error) {
+      setLoadingImage(true);
 
-    if (error.response && error.response.data) {
-      const { title, msg, icon } = error.response.data;
-      setErrorData({ title, msg, icon });
+      if (error.response && error.response.data) {
+        const { title, msg, icon } = error.response.data;
+        setErrorData({ title, msg, icon, textButton: 'Tentar novamente' });
+      } else {
+        setErrorData({
+          title: 'Erro',
+          msg: 'Erro inesperado ao tentar fazer login.',
+          textButton: 'Tentar novamente',
+          icon: 'close-circle',
+        });
+      }
 
-    } else {
-      setErrorData({
-        title: 'Erro',
-        msg: 'Erro inesperado ao tentar fazer login.',
-        icon: 'close-circle'
-      });
+      setShowAlert(true);
     }
-
-    setVisible(true);
-  }
-};
+  };
 
   // Define a fonte padrão para o texto
   Text.defaultProps = {
@@ -66,7 +75,9 @@ const handleLogin = async () => {
   return (
     <View style={[styleJS.pageContainer, { justifyContent: 'center' }]}>
       <View style={styleJS.container}>
-        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+        <View
+          style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
+        >
           <Image
             source={require('../../../assets/logo.png')} // Imagem do logo da aplicação
             style={{ width: 200, height: 50 }} // Estilo da imagem
@@ -75,9 +86,20 @@ const handleLogin = async () => {
         <Text style={[styleJS.title, { marginTop: 0 }]}>PlassonAuto</Text>
 
         {/* Campo de entrada para o nome de usuário (Email) */}
-        <InputText value={username} setValue={setUsername} label='Usuário' icon={'account-circle'} />
+        <InputText
+          value={username}
+          setValue={setUsername}
+          label='Usuário'
+          icon={'account-circle'}
+        />
         {/* Campo de entrada para a senha */}
-        <InputText value={password} setValue={setPassword} label='Senha' type={'password'} icon={'eye'} />
+        <InputText
+          value={password}
+          setValue={setPassword}
+          label='Senha'
+          type={'password'}
+          icon={'eye'}
+        />
 
         {/* Botão de login */}
         <Button
@@ -96,8 +118,9 @@ const handleLogin = async () => {
         icon={errorData.icon} // Usa os dados de erro capturados
         title={errorData.title}
         msg={errorData.msg}
-        visible={visible} // Define se o alerta está visível
-        setVisible={setVisible} // Função para controlar a visibilidade do alerta
+        textButton={errorData.textButton}
+        showAlert={showAlert} // Define se o alerta está visível
+        setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
         setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
       />
     </View>

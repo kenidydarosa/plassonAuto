@@ -6,12 +6,12 @@ export const validateSchedule = (user, veicule, dateStart, dateEnd, schedulesDB)
   // Percorre todas as reservas no banco de dados
   for (const item of schedulesDB) {
     // Verifica se a reserva atual é para o mesmo veículo
-    if (item.veicule_id === veicule.id) {
+    if (item.veicule_id === veicule) {
       const existingStart = new Date(item.start);
       const existingEnd = new Date(item.end);
 
       // Verifica se o usuário é o dono da reserva atual
-      if (item.user_id === user.id) {
+      if (item.user_id === user) {
         // Permite que o usuário edite a reserva dentro do intervalo que ele já possui
         if (newStart >= existingStart && newEnd <= existingEnd) {
           // Se o horário está dentro do intervalo existente, a reserva é válida

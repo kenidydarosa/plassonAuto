@@ -172,7 +172,8 @@ class UserController {
 
       // Promise.all para executar as consultas em paralelo
       const [schedules, notify, veicules, users, sectors] = await Promise.all([
-        this.schedulesRepository.getAll('user_id', user.id), // Consulta agendamentos
+        // this.schedulesRepository.getAll('user_id', user.id), // Consulta agendamentos
+        this.schedulesRepository.getAll(), // Consulta agendamentos
         this.notifyRepository.getAll('user_id', user.id), // Consulta notificações
         this.veiculesRepository.getAll(), // Consulta veículos
         this.userRepository.getAll(), // Consulta todos os usuários
