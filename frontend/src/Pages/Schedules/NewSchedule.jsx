@@ -1,23 +1,16 @@
 // /** @format */
 
-// import {
-//   View,
-//   Text,
-//   TextInput,
-//   Switch,
-//   Platform,
-//   ScrollView,
-//   KeyboardAvoidingView,
-// } from 'react-native';
+// import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
 // import { Button } from 'react-native-paper';
 // import { useNavigation, useRoute } from '@react-navigation/native';
 // import { useDataContext } from '../../data/DataContext.js';
 // import React, { useEffect, useState } from 'react';
-// import { DateTimeButton, showDateTimePicker, onChange } from './DatePickerFunctions.jsx';
+// import { DateTimeButton, showDateTimePicker, onChange } from './DateTimeButton.jsx';
 // import DateTimePicker from '@react-native-community/datetimepicker';
 // import styleJS from '../../components/style.js';
 // import InputField from '../../components/InputFied.jsx';
 // import SelectInput from '../../components/SelectInput.jsx';
+// import AlertDialog from '../../components/Dialog.jsx';
 // import { createSchedules, updateSchedules } from '../../routes/schedulesRoutes.js';
 // import { validateSchedule } from './validateSchedule.js';
 // import { EVENT_COLOR } from '../../data/data.js';
@@ -26,15 +19,14 @@
 //   const route = useRoute();
 //   const navigation = useNavigation();
 
-//   const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } =
-//     useDataContext();
-//   const { create, id, timeString } = route.params || {};
+//   const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } = useDataContext();
+//   const { create, id, timeString, onlyVisible } = route.params || {};
 
 //   // Variaveis de estado
 //   const [car, setCar] = useState(null);
 //   const [userID, setUserID] = useState('');
 //   const [user, setUser] = useState('');
-//   const [title, setTitle] = useState('Selecione um título');
+//   const [title, setTitle] = useState('');
 //   const [summary, setSummary] = useState('');
 
 //   const [locale, setLocale] = useState('');
@@ -43,6 +35,7 @@
 //   const [startTime, setStartTime] = useState(new Date());
 //   const [endDate, setEndDate] = useState(new Date());
 //   const [endTime, setEndTime] = useState(new Date());
+//   const [minimumDate, setMinimumDate] = useState(new Date());
 
 //   const [veicule, setVeicule] = useState('');
 //   const [kmStart, setKmStart] = useState('');
@@ -65,7 +58,7 @@
 //   const [pickerField, setPickerField] = useState('');
 //   const [activeButton, setActiveButton] = useState('');
 //   const [loadingImage, setLoadingImage] = useState(false);
-//   const [visible, setVisible] = useState(false);
+//   const [showAlert, setShowAlert] = useState(false);
 //   const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
 
 //   const listPicker = {
@@ -77,10 +70,15 @@
 //     setPickerField,
 //     activeButton,
 //     setActiveButton,
+//     startDate,
 //     setStartDate,
+//     startTime,
 //     setStartTime,
+//     endDate,
 //     setEndDate,
+//     endTime,
 //     setEndTime,
+//     setMinimumDate,
 //   };
 
 //   useEffect(() => {
@@ -102,9 +100,7 @@
 //         setEndTime(endDate);
 //       } else {
 //         const currentSchedule = schedulesDB.find((item) => item.id === id);
-//         const currentCar = veiculesDB.find(
-//           (car) => car.id === currentSchedule.veicule_id
-//         );
+//         const currentCar = veiculesDB.find((car) => car.id === currentSchedule.veicule_id);
 //         const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
 //         setCar(currentCar);
@@ -160,7 +156,6 @@
 //     }
 //   }, [car]);
 
-//   const currentDate = new Date();
 //   // Função para formatar a data e a hora
 //   const formatDateTime = (date, time) => {
 //     const formattedDate = date.toLocaleDateString('en-CA'); // Formata a data para 'YYYY-MM-DD' no local timezone
@@ -186,20 +181,33 @@
 
 //   const confirmData = async () => {
 //     try {
-
 //       // Verifica se há algum campo vazio
-//       const dateStart = formatDateTime(endDate, endTime);
+//       const dateStart = formatDateTime(startDate, startTime);
 //       const dateEnd = formatDateTime(endDate, endTime);
 //       const fields = [user, title, summary, locale];
 
 //       if (fields.some((item) => item === '')) {
-//         alert('Preencha todos os campos!');
+//         setErrorData({
+//           title: 'Erro',
+//           msg: 'Preencha todos os campos!',
+//           textButton: 'Confirmar',
+//           icon: 'close-circle',
+//         });
+//         setShowAlert(true);
 //         return;
 //       }
+//       const validate = validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB);
 
-//       if (!validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB)) {
-//         setErrorData({ title: 'Erro', msg: 'Erro inesperado ao cadastrar o veículo.', icon: 'close-circle' });
-//         setVisible(true);
+//       console.log('validate:', validate);
+
+//       if (!validate) {
+//         setErrorData({
+//           title: 'Erro',
+//           msg: 'Este horário está indisponível para este veículo!',
+//           textButton: 'Confirmar',
+//           icon: 'close-circle',
+//         });
+//         setShowAlert(true);
 //         return;
 //       }
 
@@ -221,16 +229,19 @@
 
 //       const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
 //       setSchedulesDB(schedules.response);
-//       navigation.navigate('BottomNavigator', { screen: 'MySchedules', params: { data: schedules.response } });
-
+//       navigation.navigate('BottomNavigator', {
+//         screen: 'MySchedules',
+//         params: { data: schedules.response },
+//       });
 //     } catch (error) {
 //       setLoadingImage(false);
 //       setErrorData({
 //         title: 'Erro',
 //         msg: error.response?.data?.msg || 'Erro inesperado.',
+//         textButton: 'Ok',
 //         icon: 'close-circle',
 //       });
-//       setVisible(true);
+//       setShowAlert(true);
 //     }
 //   };
 //   return (
@@ -239,19 +250,11 @@
 //       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 //       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // ajuste se necessário
 //     >
-//       <ScrollView
-//         style={styleJS.containerForm}
-//         contentContainerStyle={{ paddingBottom: 70 }}
-//       >
+//       <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
 //         {/* Inputs de Título e Localização */}
 //         <View style={styleJS.section}>
 //           <View style={styleJS.row}>
-//             <View
-//               style={[
-//                 styleJS.statusBase,
-//                 { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
-//               ]}
-//             >
+//             <View style={[styleJS.statusBase, { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed }]}>
 //               <Text
 //                 style={{
 //                   color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
@@ -262,28 +265,34 @@
 //             </View>
 //             <Switch
 //               value={statusBt}
-//               disabled={create}
+//               disabled={create || onlyVisible}
 //               onValueChange={(value) => {
 //                 setStatusBt(value);
 //                 setStatus(value ? 'Ativa' : 'Cancelada');
 //               }}
 //             />
 //           </View>
-//           <InputField
-//             icon={'account-circle'}
-//             placeholder={'Usuário'}
+//           <SelectInput
+//             initialValue={'Usuário'}
 //             value={user}
-//             func={setUser}
-//             editable={false}
+//             setValue={setUser}
+//             list={usersDB.reduce((acc, user)=>{
+//               acc.push(user.name)
+//               return acc;
+//             }, [])}
 //             border={true}
+//             disabled={onlyVisible || userDB.name != 'Admin'}
+//             icon={'account-circle'}
 //             width={'100%'}
 //           />
+
 //           <SelectInput
-//             initialValue={title}
+//             initialValue={'Selecione um título'}
 //             value={title}
 //             setValue={setTitle}
 //             list={listTitlesDB}
 //             border={true}
+//             disabled={onlyVisible}
 //             icon={'target'}
 //             width={'100%'}
 //           />
@@ -292,7 +301,7 @@
 //             placeholder={'Descrição'}
 //             value={summary}
 //             func={setSummary}
-//             editable={true}
+//             editable={!onlyVisible}
 //             border={true}
 //             width={'100%'}
 //             multiline={true}
@@ -302,7 +311,7 @@
 //             placeholder={'Localização'}
 //             value={locale}
 //             func={setLocale}
-//             editable={true}
+//             editable={!onlyVisible}
 //             border={false}
 //             width={'100%'}
 //           />
@@ -313,7 +322,7 @@
 //           {/* Switch All-day */}
 //           <View style={styleJS.row}>
 //             <Text>Dia inteiro</Text>
-//             <Switch value={allDay} onValueChange={setAllDay} />
+//             <Switch value={allDay} onValueChange={setAllDay} disabled={onlyVisible} />
 //           </View>
 
 //           <View style={styleJS.row}>
@@ -322,7 +331,7 @@
 //             <View style={styleJS.buttons}>
 //               <DateTimeButton
 //                 label='Inicia'
-//                 date={startDate.toLocaleDateString('pt-BR', {
+//                 date={startDate.toLocaleDateString('BR', {
 //                   day: 'numeric',
 //                   month: 'short',
 //                   year: 'numeric',
@@ -330,6 +339,7 @@
 //                 style={styleJS.dateButton}
 //                 onPress={() => showDateTimePicker(listPicker, 'startDate', 'date')}
 //                 isActive={activeButton === 'startDate'}
+//                 disabled={onlyVisible}
 //               />
 //               {/* Start Time */}
 //               {!allDay && (
@@ -343,6 +353,7 @@
 //                   style={styleJS.timeButton}
 //                   onPress={() => showDateTimePicker(listPicker, 'startTime', 'time')}
 //                   isActive={activeButton === 'startTime'}
+//                   disabled={onlyVisible}
 //                 />
 //               )}
 //             </View>
@@ -362,6 +373,7 @@
 //                 style={styleJS.dateButton}
 //                 onPress={() => showDateTimePicker(listPicker, 'endDate', 'date')}
 //                 isActive={activeButton === 'endDate'}
+//                 disabled={onlyVisible}
 //               />
 //               {/* End Time */}
 //               {!allDay && (
@@ -375,6 +387,7 @@
 //                   style={styleJS.timeButton}
 //                   onPress={() => showDateTimePicker(listPicker, 'endTime', 'time')}
 //                   isActive={activeButton === 'endTime'}
+//                   disabled={onlyVisible}
 //                 />
 //               )}
 //             </View>
@@ -387,10 +400,10 @@
 //             value={pickerField.includes('Date') ? startDate : startTime}
 //             mode={pickerMode}
 //             is24Hour={true}
-//             display={ Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'  }
+//             display={Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'}
 //             onChange={(event, selectedDateTime) => onChange(event, selectedDateTime, listPicker)}
 //             themeVariant='light'
-//             minimumDate={currentDate}
+//             minimumDate={minimumDate}
 //             locale='pt-br'
 //             accentColor={styleJS.imgCardColor}
 //             style={styleJS.dateTimePicker}
@@ -414,7 +427,7 @@
 //             placeholder={'Km inicial'}
 //             value={kmStart}
 //             func={setKmStart}
-//             editable={false}
+//             editable={!onlyVisible}
 //             type={'numeric'}
 //             border={false}
 //             width={'50%'}
@@ -424,7 +437,7 @@
 //             placeholder={'Km final'}
 //             value={kmEnd}
 //             func={setKmEnd}
-//             editable={true}
+//             editable={!onlyVisible}
 //             type={'numeric'}
 //             border={false}
 //             width={'50%'}
@@ -445,7 +458,7 @@
 //             placeholder={'Tanque final'}
 //             value={boosterEnd}
 //             func={setBoosterEnd}
-//             editable={true}
+//             editable={!onlyVisible}
 //             border={false}
 //             width={'50%'}
 //           />
@@ -455,6 +468,7 @@
 //             style={[styleJS.input, { outline: 'none', height: 100 }]}
 //             placeholder='Notas'
 //             value={notes}
+//             editable={!onlyVisible}
 //             onChangeText={setNotes}
 //             multiline
 //           />
@@ -469,6 +483,7 @@
 //             </View>
 //             <Switch
 //               value={keyHandOver}
+//               disabled={onlyVisible}
 //               onValueChange={(value) => {
 //                 setkeyHandOver(value);
 //                 setKeyHandOverTime(
@@ -518,17 +533,27 @@
 //             loading={loadingImage}
 //             onPress={() => confirmData()}
 //             buttonColor={styleJS.colorButton}
+//             disabled={onlyVisible}
 //           >
 //             <Text style={styleJS.textButton}>Confirmar</Text>
 //           </Button>
 //         </View>
+//         {/* Alerta que aparece quando os dados de login estão incorretos */}
+//         <AlertDialog
+//           icon={errorData.icon} // Usa os dados de erro capturados
+//           title={errorData.title}
+//           msg={errorData.msg}
+//           textButton={errorData.textButton}
+//           showAlert={showAlert} // Define se o alerta está visível
+//           setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
+//           setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
+//         />
 //       </ScrollView>
 //     </KeyboardAvoidingView>
 //   );
 // };
 
 // export default NewSchedule;
-
 /** @format */
 
 import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingView } from 'react-native';
@@ -545,6 +570,7 @@ import AlertDialog from '../../components/Dialog.jsx';
 import { createSchedules, updateSchedules } from '../../routes/schedulesRoutes.js';
 import { validateSchedule } from './validateSchedule.js';
 import { EVENT_COLOR } from '../../data/data.js';
+import { listenToNotifications } from '../../services/Notification.js';
 
 const NewSchedule = () => {
   const route = useRoute();
@@ -729,8 +755,6 @@ const NewSchedule = () => {
       }
       const validate = validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB);
 
-      console.log('validate:', validate);
-
       if (!validate) {
         setErrorData({
           title: 'Erro',
@@ -760,6 +784,21 @@ const NewSchedule = () => {
 
       const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
       setSchedulesDB(schedules.response);
+
+      const notificationData = {
+        userID,
+        scheduleID: schedules.response.id, // ID do agendamento
+        title, 
+        summary, 
+      };
+
+      listenToNotifications(user, (data) => {
+        console.log('Notificação recebida:', data);
+      });
+  
+      // Caso você queira enviar a notificação logo após a criação do agendamento
+      socket.emit(`notification:${user}`, notificationData);
+
       navigation.navigate('BottomNavigator', {
         screen: 'MySchedules',
         params: { data: schedules.response },
@@ -803,15 +842,6 @@ const NewSchedule = () => {
               }}
             />
           </View>
-          {/* <InputField
-            icon={'account-circle'}
-            placeholder={'Usuário'}
-            value={user}
-            func={setUser}
-            editable={false}
-            border={true}
-            width={'100%'}
-          /> */}
           <SelectInput
             initialValue={'Usuário'}
             value={user}

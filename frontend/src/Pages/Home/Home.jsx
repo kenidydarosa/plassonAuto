@@ -4,6 +4,7 @@ import fontConfig from '../../config/fontConfig';
 import Header from '../../components/Header';
 import styleJS from '../../components/style';
 
+
 /**
  * Tela principal do aplicativo, chamada 'Home', que exibe um título e um cabeçalho.
  * Antes de renderizar o conteúdo, verifica se as fontes estão carregadas.
@@ -12,7 +13,6 @@ import styleJS from '../../components/style';
  * @returns {JSX.Element} A tela principal com cabeçalho e título "Home".
  */
 export const Home = () => {
-
   const fontsLoaded = fontConfig(); // Usa a configuração de fontes
 
   // Exibe um indicador de carregamento enquanto as fontes não estiverem carregadas
@@ -28,10 +28,11 @@ export const Home = () => {
 
   return (
     <View style={styleJS.pageContainer}>
+      {/* Adicione o NotificationListener aqui para garantir que ele seja montado */}
       <ScrollView contentContainerStyle={styleJS.container}>
-		{/* Cabeçaho e Título principal da tela */}
+        {/* Cabeçaho e Título principal da tela */}
         <Header />
-        <Text style={[styleJS.title, { marginTop: 0 }]}>Home</Text> 
+        <Text style={[styleJS.title, { marginTop: 0 }]}>Home</Text>
       </ScrollView>
     </View>
   );
