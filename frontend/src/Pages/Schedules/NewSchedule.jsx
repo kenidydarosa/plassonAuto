@@ -570,7 +570,7 @@ import AlertDialog from '../../components/Dialog.jsx';
 import { createSchedules, updateSchedules } from '../../routes/schedulesRoutes.js';
 import { validateSchedule } from './validateSchedule.js';
 import { EVENT_COLOR } from '../../data/data.js';
-import { listenToNotifications } from '../../services/Notification.js';
+import { sendNotification } from '../../services/Notification.js';
 
 const NewSchedule = () => {
   const route = useRoute();
@@ -785,25 +785,28 @@ const NewSchedule = () => {
       const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
       setSchedulesDB(schedules.response);
 
+      console.log(schedules.response)
+
+      // Enviar notificação para o backend via Socket.IO
       const notificationData = {
         userID,
-        scheduleID: schedules.response.id, // ID do agendamento
-        title, 
-        summary, 
+        scheduleID: id,
+        title,
+        summary,
       };
 
-      listenToNotifications(user, (data) => {
-        console.log('Notificação recebida:', data);
-      });
-  
-      // Caso você queira enviar a notificação logo após a criação do agendamento
-      socket.emit(`notification:${user}`, notificationData);
+      console.log(notificationData)
+      if(!create){
+        sendNotification(user, notificationData)
+      }
 
       navigation.navigate('BottomNavigator', {
         screen: 'MySchedules',
         params: { data: schedules.response },
       });
+
     } catch (error) {
+      console.log(error)
       setLoadingImage(false);
       setErrorData({
         title: 'Erro',
@@ -846,8 +849,8 @@ const NewSchedule = () => {
             initialValue={'Usuário'}
             value={user}
             setValue={setUser}
-            list={usersDB.reduce((acc, user)=>{
-              acc.push(user.name)
+            list={usersDB.reduce((acc, user) => {
+              acc.push(user.name);
               return acc;
             }, [])}
             border={true}

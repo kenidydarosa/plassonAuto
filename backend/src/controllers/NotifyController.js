@@ -147,10 +147,11 @@
 // export default NotifyController;
 
 import NotifyRepository from "../repository/NotifyRepository.js";
+const columnsArray = ['title', 'description', 'visualized', 'user_id'];
 
 class NotifyController {
     constructor(io) {
-        this.io = io; // Adicione o Socket.IO
+        this.io = io; // Adiciona o Socket.IO
         this.notifyRepository = new NotifyRepository();
     }
 
@@ -198,7 +199,6 @@ class NotifyController {
         try {
             const { body } = req;
 
-            const columnsArray = ['title', 'description', 'visualized', 'user_id'];
             const valuesArray = columnsArray.reduce((acc, columnName) => {
                 acc.push(body[columnName]);
                 return acc;
@@ -212,12 +212,9 @@ class NotifyController {
             }
 
             // Emitir notificação em tempo real
-            this.io.emit(`notification:${body.user_id}`, {
-                title: body.title,
-                description: body.description,
-                visualized: body.visualized,
-                created_at: new Date(),
-            });
+            this.io.emit(`notification:${body.user_id}`, body);
+
+            console.log(`Notificação criada e emitida:`, body);
 
             res.status(200).json({
                 response,
@@ -240,7 +237,6 @@ class NotifyController {
             const { id } = req.params;
             const { body } = req;
 
-            const columnsArray = ['title', 'description', 'visualized', 'user_id'];
             const valuesArray = columnsArray.reduce((acc, columnName) => {
                 acc.push(body[columnName]);
                 return acc;
@@ -295,3 +291,4 @@ class NotifyController {
 }
 
 export default NotifyController;
+

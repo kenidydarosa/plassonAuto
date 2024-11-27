@@ -1,28 +1,23 @@
-// listenToNotifications.js
 import { io } from 'socket.io-client';
 import { API_URL } from '../config/api.js';
 
 const socket = io(API_URL);
 
-export const listenToNotifications = (userName, onNotification) => {
-  if (!userName) {
-    console.warn('Usuário não está definido. Notificações não serão escutadas.');
+// Função para emitir notificações
+export const sendNotification = (user, notificationData) => {
+  if (!user) {
+    console.warn('Usuário não está definido. Notificações não serão enviadas.');
     return;
   }
 
-  const userChannel = `notification:${userName}`;
+  // Emitir notificação para o backend
+  socket.emit('sendNotification', user, notificationData);
 
-  // Inicia a escuta para o canal do usuário
-  socket.on(userChannel, (data) => {
-    console.log(`Nova notificação para ${userName}:`, data);
-    onNotification(data); // Chama a função de callback passando os dados da notificação
-  });
-
-  // Função para parar de escutar quando necessário
-  const stopListening = () => {
-    socket.off(userChannel);
-  };
-
-  return stopListening;
+  console.log(`Notificação enviada:`, notificationData);
 };
 
+// Listener para notificações emitidas pelo backend
+socket.on('broadcastNotification', (notificationData) => {
+  console.log("Msg backend:", notificationData);
+  alert("Msg backend:", notificationData);
+});
