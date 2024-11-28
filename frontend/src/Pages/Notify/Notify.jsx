@@ -1,6 +1,6 @@
 /** @format */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, ActivityIndicator, ScrollView } from 'react-native';
 import CardList from '../../components/CardList';
 import fontConfig from '../../config/fontConfig';
@@ -19,6 +19,13 @@ const Notify = () => {
   const fontsLoaded = fontConfig(); // Usa a configuração de fontes
   const { notifyDB, setNotifyDB } = useDataContext();
   const [data, setData] = useState(notifyDB); // Define estado com notifyData
+
+   // Atualiza o estado local 'data' sempre que 'notifyDB' mudar
+   useEffect(() => {
+    console.log('re-renderizou:', notifyDB)
+    setData(notifyDB || []); // Garante que o estado seja atualizado com as notificações mais recentes
+  }, [notifyDB]);
+
   // Se as fontes não estiverem carregadas, exibe um indicador de carregamento
   if (!fontsLoaded) {
     return <ActivityIndicator size='large' color='#D13C3CFF' />;

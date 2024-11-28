@@ -576,7 +576,7 @@ const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB } = useDataContext();
+  const { schedulesDB, setSchedulesDB, veiculesDB, userDB, listTitlesDB, usersDB, notifyDB, setNotifyDB } = useDataContext();
   const { create, id, timeString, onlyVisible } = route.params || {};
 
   // Variaveis de estado
@@ -794,9 +794,8 @@ const NewSchedule = () => {
         visualized:false
       };
 
-      console.log(notificationData)
       if(!create){
-        sendNotification(user, notificationData)
+        sendNotification(user, notificationData, notifyDB, setNotifyDB) 
       }
 
       navigation.navigate('BottomNavigator', {

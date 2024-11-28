@@ -30,8 +30,9 @@ O sistema de reserva de carros foi desenvolvido para facilitar a gestão de rese
 - **Gerenciamento de Frota**: Cadastro, edição e remoção de veículos disponíveis para reserva.
 - **Gestão de Usuários**: Adição e remoção de usuários, bem como a definição de permissões de acesso.
 
-## 🛠 Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 
+-- **Desenvolver**
 - **Frontend**: [React-native, CSS, etc.]
 - **Backend**: [Node.js, Express, SQLite, etc.]
 - **Banco de Dados**: SQLite
@@ -51,3 +52,37 @@ Antes de começar, certifique-se de ter as seguintes ferramentas instaladas:
 1. Clone o repositório para sua máquina local:
    ```bash
    git clone https://github.com/kenidydarosa/plassonAuto.git
+
+## 🖥️ Uso
+
+### Acesso
+Para fins de teste, você pode acessar o aplicativo com as seguintes credenciais:  
+- **Login de Adminitrador**: `Admin`  
+- **Login de usuário comum**: `Kenidy.rosa`  
+- **Senha**: `1234`
+
+### Resumo de Utilização
+
+1. **Usuário Comum** 👤  
+   - Acesse a **Página Inicial (Home)** 🏠.  
+   - Consulte **Minhas Reservas** 📋 para visualizar e gerenciar suas próprias reservas.  
+   - Confira **Notificações** 🔔 para receber alertas sobre o sistema e suas reservas.  
+   - Realize novas reservas clicando no botão flutuante ➕, escolhendo o veículo e preenchendo o formulário.  
+
+2. **Administrador** 🔑  
+   - Além das funcionalidades de usuário comum, você pode:  
+     - Gerenciar a aba **Veículos** 🚗 para cadastrar, editar ou inativar veículos.  
+     - Controlar a aba **Usuários** 👥, alterando a permissão para entrar no sistema.  
+     - Visualizar e editar **todas as reservas** 🛠️, mantendo o controle total do sistema.  
+
+### Navegação
+- Após o login, todos os usuários têm acesso à página inicial (**Home**) 🏠.  
+- Usuários comuns podem gerenciar suas próprias reservas e visualizar notificações.  
+- Administradores têm acesso adicional às abas de **Veículos**, **Usuários**, e podem visualizar e editar todas as reservas.
+
+## 📞 Contato
+
+- **Desenvolvedor**: Kenidy da Rosa  
+- **E-mail**: [kenidyy@hotmail.com](mailto:kenidyy@hotmail.com)  
+- **GitHub**: [github.com/kenidydarosa](https://github.com/kenidydarosa) 
+

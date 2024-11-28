@@ -1,14 +1,6 @@
 // DataContext.js
-import React, { createContext, useState, useContext } from 'react'; // Importa os hooks e funções do React
-import {
-  userData, // Dados de usuário
-  schedulesData, // Dados de agendamentos
-  usersData, // Dados de usuários
-  notifyData, // Dados de notificações
-  veiculesData, // Dados de veículos
-  listTitlesDB, // Títulos de lista
-  listSectorsDB, // Setores da lista
-} from './data'; // Importa os dados pré-definidos (como dados estáticos) de um arquivo 'data.js'
+import React, { createContext, useState, useContext } from 'react';
+import { listTitlesDB, listSectorsDB} from './data';
 
 // Criação de um contexto chamado DataContext, para gerenciar dados globais no aplicativo
 const DataContext = createContext();
@@ -41,7 +33,7 @@ export const DataProvider = ({ children }) => {
         listTitlesDB, // Fornece os títulos da lista
         listSectorsDB, // Fornece os setores da lista
         sectorsDB,
-        setSectorsDB
+        setSectorsDB,
       }}
     >
       {/* Os componentes filhos que recebem esse contexto */}
