@@ -5,7 +5,7 @@ import { Text, View, ActivityIndicator, ScrollView } from 'react-native';
 import CardList from '../../components/CardList';
 import fontConfig from '../../config/fontConfig';
 import styleJS from '../../components/style';
-import { notifyData } from '../../data/data';
+import { useDataContext } from '../../data/DataContext.js';
 
 /**
  * Tela de notificações que exibe uma lista de cards com as notificações.
@@ -17,8 +17,8 @@ import { notifyData } from '../../data/data';
  */
 const Notify = () => {
   const fontsLoaded = fontConfig(); // Usa a configuração de fontes
-  const [data, setData] = useState(notifyData); // Define estado com notifyData
-
+  const { notifyDB, setNotifyDB } = useDataContext();
+  const [data, setData] = useState(notifyDB); // Define estado com notifyData
   // Se as fontes não estiverem carregadas, exibe um indicador de carregamento
   if (!fontsLoaded) {
     return <ActivityIndicator size='large' color='#D13C3CFF' />;

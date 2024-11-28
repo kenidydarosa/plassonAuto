@@ -570,7 +570,7 @@ import AlertDialog from '../../components/Dialog.jsx';
 import { createSchedules, updateSchedules } from '../../routes/schedulesRoutes.js';
 import { validateSchedule } from './validateSchedule.js';
 import { EVENT_COLOR } from '../../data/data.js';
-import { sendNotification } from '../../services/Notification.js';
+import { sendNotification } from '../../services/Notify.js';
 
 const NewSchedule = () => {
   const route = useRoute();
@@ -785,14 +785,13 @@ const NewSchedule = () => {
       const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
       setSchedulesDB(schedules.response);
 
-      console.log(schedules.response)
-
       // Enviar notificação para o backend via Socket.IO
       const notificationData = {
-        userID,
-        scheduleID: id,
+        user_id: userID,
+        schedule_id: id,
         title,
         summary,
+        visualized:false
       };
 
       console.log(notificationData)
@@ -904,7 +903,7 @@ const NewSchedule = () => {
             <View style={styleJS.buttons}>
               <DateTimeButton
                 label='Inicia'
-                date={startDate.toLocaleDateString('BR', {
+                date={startDate.toLocaleDateString('pt-BR', {
                   day: 'numeric',
                   month: 'short',
                   year: 'numeric',

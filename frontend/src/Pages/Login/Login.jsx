@@ -8,6 +8,7 @@ import styleJS from '../../components/style.js';
 import fontConfig from '../../config/fontConfig.js';
 import AlertDialog from '../../components/Dialog.jsx';
 import { fetchUsers, loginUser } from '../../routes/userRoutes.js';
+export let userIDProvisorio
 
 const Login = () => {
   const navigation = useNavigation();
@@ -17,7 +18,7 @@ const Login = () => {
     setUserDB,
     setSchedulesDB,
     setVeiculesDB,
-    setNotificationsDB,
+    setNotifyDB,
     setUsersDB,
     setSectorsDB,
   } = useDataContext();
@@ -38,11 +39,11 @@ const Login = () => {
         username,
         password
       );
-
+      userIDProvisorio = user
       setLoadingImage(false);
       setUserDB(user);
       setSchedulesDB(schedules);
-      setNotificationsDB(notify);
+      setNotifyDB(notify);
       setVeiculesDB(veicules);
       setUsersDB(users);
       setSectorsDB(sectors);

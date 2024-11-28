@@ -19,11 +19,11 @@ export const MySchedules = () => {
   const fontsLoaded = fontConfig();
 
   //Filtra apenas as reservas que o usuário é dono.
-  let updateSchedule
-  if(userDB.name == 'Admin'){
-    updateSchedule = schedulesDB
-  }else{
-    updateSchedule = schedulesDB.filter(item => item.user_id === userDB.id);
+  let updateSchedule;
+  if (userDB.name == 'Admin') {
+    updateSchedule = schedulesDB;
+  } else {
+    updateSchedule = schedulesDB.filter((item) => item.user_id === userDB.id);
   }
   // Atualiza os schedules quando a tela ganha foco
   useFocusEffect(

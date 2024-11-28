@@ -1,5 +1,5 @@
 import BaseRepository from './BaseRepository.js';
-const columnsArray = ['title', 'description', 'visualized', 'user_id']
+const columnsArray = ['title', 'summary', 'visualized', 'user_id', 'schedule_id'];
 
 class NotifyRepository extends BaseRepository {
   async getAll(whereColumn = null, whereValue = null) {
@@ -21,12 +21,14 @@ class NotifyRepository extends BaseRepository {
     }
   }
 
-  async create(valuesArray) {
+  async create(valuesArray, whereColumn = null, whereValue = null) {
     try {
       const response = await super.create(
         'notify',
         columnsArray,
-        valuesArray
+        valuesArray,
+        whereColumn,
+        whereValue
       );
 
       return response;
@@ -36,12 +38,7 @@ class NotifyRepository extends BaseRepository {
   }
   async update(valuesArray, id) {
     try {
-      const response = await super.update(
-        'notify',
-        columnsArray,
-        valuesArray,
-        id
-      );
+      const response = await super.update('notify', columnsArray, valuesArray, id);
 
       return response;
     } catch (error) {

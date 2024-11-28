@@ -19,7 +19,7 @@ export const DataProvider = ({ children }) => {
   const [userDB, setUserDB] = useState(null); // Estado para o usuário atual (inicialmente null)
   const [schedulesDB, setSchedulesDB] = useState(null); // Estado para armazenar os agendamentos, com valor inicial vindo de 'schedulesData'
   const [usersDB, setUsersDB] = useState(null); // Estado para armazenar os dados dos usuários
-  const [notificationsDB, setNotificationsDB] = useState(null); // Estado para armazenar as notificações
+  const [notifyDB, setNotifyDB] = useState(null); // Estado para armazenar as notificações
   const [veiculesDB, setVeiculesDB] = useState(null); // Estado para armazenar os veículos
   const [sectorsDB, setSectorsDB] = useState(null); // Estado para armazenar os veículos
 
@@ -34,8 +34,8 @@ export const DataProvider = ({ children }) => {
         setSchedulesDB, // Função para atualizar os agendamentos
         usersDB, // Fornece os usuários
         setUsersDB, // Função para atualizar os usuários
-        notificationsDB, // Fornece as notificações
-        setNotificationsDB, // Função para atualizar as notificações
+        notifyDB, // Fornece as notificações
+        setNotifyDB, // Função para atualizar as notificações
         veiculesDB, // Fornece os veículos
         setVeiculesDB, // Função para atualizar os veículos
         listTitlesDB, // Fornece os títulos da lista

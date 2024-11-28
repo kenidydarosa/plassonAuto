@@ -1,5 +1,7 @@
 import { io } from 'socket.io-client';
 import { API_URL } from '../config/api.js';
+import { getNotify, createNotify } from '../routes/notifyRoutes.js';
+import { userIDProvisorio } from '../Pages/Login/Login.jsx';
 
 const socket = io(API_URL);
 
@@ -11,13 +13,17 @@ export const sendNotification = (user, notificationData) => {
   }
 
   // Emitir notificação para o backend
-  socket.emit('sendNotification', user, notificationData);
+  socket.emit('createNotify', user, notificationData);
 
   console.log(`Notificação enviada:`, notificationData);
 };
 
 // Listener para notificações emitidas pelo backend
-socket.on('broadcastNotification', (notificationData) => {
-  console.log("Msg backend:", notificationData);
-  alert("Msg backend:", notificationData);
+socket.on('broadcastNotification', async (notificationData) => {
+  if(userIDProvisorio.id === notificationData.user_id){
+    alert('socket')
+    console.log('o id é igual')
+    //Verificar aqui para atualizar o estado da váriavel, usar useEfecct, 
+    getNotify(notificationData.user_id)
+  }
 });

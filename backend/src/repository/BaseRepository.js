@@ -44,7 +44,7 @@ class BaseRepository {
     }
   }
 
-  async create(table, columnsArray, valuesArray) {
+  async create(table, columnsArray, valuesArray, whereColumn = null, whereValue = null) {
     const db = await openDb();
   
     try {
@@ -59,9 +59,7 @@ class BaseRepository {
       const flagsArray = new Array(baseColumnsArray.length).fill('?').join(', ');
   
       // Monta a query, incluindo o campo "id"
-      const queryText = `INSERT INTO ${table} (${baseColumnsArray.join(
-        ', '
-      )}) VALUES (${flagsArray})`;
+      const queryText = `INSERT INTO ${table} (${baseColumnsArray.join(', ')}) VALUES (${flagsArray})`;
   
       // Inicia a transação
       await db.exec('BEGIN TRANSACTION');
@@ -72,11 +70,22 @@ class BaseRepository {
       // Confirma a transação
       await db.exec('COMMIT');
   
-      // Recupera todos os itens da tabela após a inserção
-      const allItems = await db.all(`SELECT * FROM ${table}`);
+      // Cria a base da query SELECT
+      let query = `SELECT * FROM ${table}`;
+  
+      // Adiciona a cláusula WHERE se whereColumn e whereValue forem fornecidos
+      if (whereColumn !== null && whereValue !== null) {
+        query += ` WHERE ${whereColumn} = ?`;
+      }
+  
+      // Executa a query com ou sem o valor de WHERE
+      const response = whereColumn && whereValue !== null
+        ? await db.all(query, [whereValue])
+        : await db.all(query);
   
       // Retorna a resposta com os itens inseridos e todos os itens da tabela
-      return allItems;
+      return response;
+  
     } catch (error) {
       // Desfaz a transação em caso de erro
       await db.exec('ROLLBACK');
@@ -105,10 +114,9 @@ class BaseRepository {
       await db.exec('COMMIT');
       // Recupera todos os itens da tabela após a inserção
       const allItems = await db.all(`SELECT * FROM ${table}`);
-  
+
       // Retorna a resposta com os itens inseridos e todos os itens da tabela
       return allItems;
-
     } catch (error) {
       // Desfaz a transação em caso de erro
       await db.exec('ROLLBACK');

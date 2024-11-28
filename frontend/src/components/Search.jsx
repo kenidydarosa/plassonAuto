@@ -5,6 +5,7 @@ import { StyleSheet, FlatList, TextInput, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Filters from './Filters';
 import { TouchableOpacity } from 'react-native';
+import NothingText from './NothingText.jsx';
 
 /**
  * Componente SearchableCardList
@@ -59,15 +60,13 @@ const SearchableCardList = ({
             }}
           />
           {searchText !== '' && (
-            <TouchableOpacity
-              onPress={() => setSearchText('')}
-            >
+            <TouchableOpacity onPress={() => setSearchText('')}>
               <Ionicons name={'close-circle'} size={20} color={'grey'} />
             </TouchableOpacity>
           )}
         </View>
       </View>
-          
+
       {/* Renderiza o componente Filters apenas se filters não estiver vazio */}
       {filters.length > 0 && (
         <Filters
@@ -84,6 +83,7 @@ const SearchableCardList = ({
         renderItem={({ item }) => renderCard(item)}
         scrollEnabled={false}
       />
+      {filteredSearch.length === 0 && <NothingText />}
     </View>
   );
 };

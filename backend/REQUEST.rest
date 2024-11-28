@@ -15,16 +15,16 @@ Content-Type: application/json
 GET http://localhost:3000/users/aa78db29-e29b-4e58-8acc-383537781e10
 
 ### POST
-POST http://10.17.30.51:3000/users
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name":"Admin",
-    "username":"Admin",
+    "name":"Usuário2",
+    "username":"Usuario2",
     "password":"1234",
-    "email": "admin@hotmail.com",
-    "job":"Admin",
-    "sector_id":"df130e52-a639-440f-802f-9acb897bd9c2",
+    "email": "user@hotmail.com",
+    "job":"colaborador",
+    "sector_id":"7c0ec0ae-3ee8-4040-9529-a4f4f5e1cab0",
     "registration":"00000-0",
     "status":"Ativo"
 }
@@ -60,13 +60,13 @@ Content-Type: application/json
 
 {   
     "imgKey":"0c4fc5ac-f786-4a54-bb37-ffccae9952fb.png",
-    "model":"Virtus 1.0 turbo",
+    "model":"Cronos 1.0 turbo",
     "brand":"Volkswagem",
     "year": 2024,
     "color": "branco",
-    "plate":"XXX-XXX",
-    "renavam":"XXX-XXX",
-    "sector":"Administrativo",
+    "plate":"###-###",
+    "renavam":"###-###",
+    "sector_id":"7c0ec0ae-3ee8-4040-9529-a4f4f5e1cab0",
     "status":"Disponível",
     "kilometers": 24400,
     "booster": "1/4"
@@ -105,17 +105,17 @@ POST http://localhost:3000/schedules
 Content-Type: application/json
 
 {
-    "user_id":"25bc6913-417b-43dc-bca6-eb51eb1a3292",
-    "veicule_id": "0fa2d395-b1fc-4537-8e82-91f1aceb3616",
+    "user_id":"4fd498a7-bb82-4a0a-99f1-bfe20a48d64c",
+    "veicule_id": "f6bf57e6-fd9e-463d-8b86-d7156285cff6",
     "title":"Teste de 2",
     "summary":"Teste de 2",
     "color":"#E0FBFFBE",
     "locale":"Proave - Içara",
-    "start":"2024-10-15T14:10:25.358Z",
-    "end": "2024-10-15T18:26:25.358Z",
+    "start":"2024-10-27T14:10:25.358Z",
+    "end": "2024-10-2T18:26:25.358Z",
     "allDay": "false",
-    "keyHandOverTime": "2024-10-15T14:10:25.358Z",
-    "returnOfKeyTime": "2024-10-15T14:11:25.358Z",
+    "keyHandOverTime":"",
+    "returnOfKeyTime":"",
     "status": "Ativa",
     "notes":"teste observações"
 
@@ -133,8 +133,8 @@ Content-Type: application/json
     "schedule_date":"2024-10-11",
     "color":"#E0FBFFBE",
     "locale":"Proave - Içara",
-    "start":"2024-10-15T14:10:25.358Z",
-    "end": "2024-10-15T18:26:25.358Z",
+    "start":"2024-10-27T14:10:25.358Z",
+    "end": "2024-10-27T18:26:25.358Z",
     "allDay": "false",
     "keyHandOverTime": "2024-10-15T14:10:25.358Z",
     "returnOfKeyTime": "2024-10-15T14:11:25.358Z",

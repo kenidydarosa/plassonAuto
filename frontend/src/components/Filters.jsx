@@ -72,6 +72,7 @@ const styles = StyleSheet.create({
 	buttonText: {
 		color: '#333',
 		fontSize: 14,
+		fontFamily: 'Poppins_400Regular',
 	},
 	selectedButtonText: {
 		color: '#fff', 
