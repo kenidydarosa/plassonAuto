@@ -83,7 +83,7 @@ const SearchableCardList = ({
         renderItem={({ item }) => renderCard(item)}
         scrollEnabled={false}
       />
-      {filteredSearch.length === 0 && <NothingText />}
+      {filteredSearch.length === 0 && <NothingText title="Que pena!" msg="Ainda não tem nada aqui..." ico='😕'/>}
     </View>
   );
 };

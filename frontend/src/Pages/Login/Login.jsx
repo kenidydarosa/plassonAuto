@@ -85,7 +85,7 @@ const Login = () => {
         >
           <Image
             source={require('../../../assets/logo.png')} // Imagem do logo da aplicação
-            style={{ width: 200, height: 50 }} // Estilo da imagem
+            style={{ width: 230, height: 27 }} // Estilo da imagem
           />
         </View>
         <Text style={[styleJS.title, { marginTop: 0 }]}>PlassonAuto</Text>

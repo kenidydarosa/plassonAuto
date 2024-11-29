@@ -8,22 +8,12 @@ import IconWithLabel from './IconWithLabel';
 import fontConfig from '../config/fontConfig';
 import styleJS from './style';
 
-const NothingText = () => {
+const NothingText = ({title, msg, ico}) => {
   return (
     <View style={styles.card}>
-      <Text style={styles.text}>Que pena!</Text>
-      <Text style={styles.text}>Ainda não tem nada por aqui... </Text>
-      <Text style={{fontSize:30}}>😕</Text>
-      {/* <View style={styles.ico}>
-        <IconWithLabel
-          iconName={'database-remove-outline'}
-          size={40}
-          color={styleJS.primaryColor}
-          width={50}
-          height={50}
-          margin={0}
-        />
-      </View> */}
+      <Text style={styles.text}>{title}</Text>
+      <Text style={styles.text}>{msg}</Text>
+      <Text style={{fontSize:30}}>{ico}</Text>
     </View>
   );
 };
@@ -39,6 +29,7 @@ const styles = StyleSheet.create({
     alignItems:'center'  
   },
   text: {
+    textAlign:'center',  
     fontSize: 16,
     fontFamily: 'Poppins_400Regular',
   },

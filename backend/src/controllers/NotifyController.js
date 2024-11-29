@@ -120,7 +120,7 @@ class NotifyController {
                 return acc;
             }, []);
 
-            const response = await this.notifyRepository.update(valuesArray, id);
+            const response = await this.notifyRepository.update(valuesArray, id, 'user_id', body.user_id, 'visualized', 0);
 
             if (!response) {
                 throw new Error("Erro ao atualizar notificação");

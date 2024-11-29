@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { Text, View, ActivityIndicator, ScrollView } from 'react-native';
+import { Text, View, ActivityIndicator, ScrollView, Image } from 'react-native';
 import fontConfig from '../../config/fontConfig';
 import Header from '../../components/Header';
 import styleJS from '../../components/style';
-
+import NothingText from '../../components/NothingText';
 
 /**
  * Tela principal do aplicativo, chamada 'Home', que exibe um título e um cabeçalho.
@@ -29,10 +29,12 @@ export const Home = () => {
   return (
     <View style={styleJS.pageContainer}>
       {/* Adicione o NotificationListener aqui para garantir que ele seja montado */}
-      <ScrollView contentContainerStyle={styleJS.container}>
+      <ScrollView contentContainerStyle={[styleJS.container, {justifyContent:'center'}]}>
         {/* Cabeçaho e Título principal da tela */}
         <Header />
         <Text style={[styleJS.title, { marginTop: 0 }]}>Home</Text>
+        {/* <NothingText title="Bem Vindo!" msg="que você tenha uma ótima experiência." ico={'😊'}/> */}
+        <NothingText title="Bem Vindo ao PlassonAuto! 😊 " msg="Reserve seu veículo com rapidez e facilidade. Vamos começar?" ico={'🚗✨'}/>
       </ScrollView>
     </View>
   );

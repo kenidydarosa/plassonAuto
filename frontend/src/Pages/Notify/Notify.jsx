@@ -57,7 +57,6 @@ const Notify = () => {
         // Passar a notificação atualizada para a função updateNotify
         await updateNotify(id, notifyItem);
         setData((data) => data.filter((notify) => notify.id !== id || notify.visualizad == 1));
-
       }
     } catch (error) {
       if (error.response && error.response.data) {

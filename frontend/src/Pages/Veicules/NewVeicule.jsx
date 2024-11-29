@@ -49,7 +49,7 @@ const NewVeicule = () => {
   const [imgKey, setImgKey] = useState('');
   const [img, setImg] = useState(null);
   const [loadingImage, setLoadingImage] = useState(false);
-  const [showAlert, setShowAlert] = uSeState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [changeImage, setChangeImage] = useState(false);
   const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
 

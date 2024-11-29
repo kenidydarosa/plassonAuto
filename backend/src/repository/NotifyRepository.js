@@ -33,14 +33,22 @@ class NotifyRepository extends BaseRepository {
     }
   }
 
-  async create(valuesArray, whereColumn1 = null, whereValue1 = null) {
+  async create(
+    valuesArray,
+    whereColumn1 = null,
+    whereValue1 = null,
+    whereColumn2 = null,
+    whereValue2 = null
+  ) {
     try {
       const response = await super.create(
         'notify',
         columnsArray,
         valuesArray,
         whereColumn1,
-        whereValue1
+        whereValue1,
+        whereColumn2,
+        whereValue2
       );
 
       return response;
@@ -48,10 +56,21 @@ class NotifyRepository extends BaseRepository {
       throw error;
     }
   }
-  async update(valuesArray, id) {
+  async update(
+    valuesArray,
+    id,
+    whereColumn1 = null,
+    whereValue1 = null,
+    whereColumn2 = null,
+    whereValue2 = null) 
+   {
     try {
-      const response = await super.update('notify', columnsArray, valuesArray, id);
-
+      const response = await super.update(
+        'notify',
+         columnsArray,
+         valuesArray,
+         id,
+         );
       return response;
     } catch (error) {
       throw error;

@@ -242,7 +242,7 @@ const NewSchedule = () => {
         allDay,
         keyHandOverTime: setDateHours(startDate, keyHandOverTime),
         returnOfKeyTime: setDateHours(startDate, returnOfKeyTime),
-        status: create ? 'Ativa' : statusBt ? 'Ativa' : 'Cancelada',
+        status: create ? 'Ativa' : returnOfKey ? 'Realizada' : statusBt ? 'Ativa' : 'Cancelada',
         notes,
         color: EVENT_COLOR,
       };
@@ -254,8 +254,7 @@ const NewSchedule = () => {
 
       let text;
       if (initialStatus !== status) {
-        text = `O administrador alterou o status da sua reserva de
-        ${new Date( dateStart).toLocaleDateString()} para "${status}"`;
+        text = `O administrador alterou o status da sua reserva de ${new Date( dateStart).toLocaleDateString()} para "${status}"`;
       } else {
         text = `O administrador atualizou a sua reserva, verifique!`;
       }

@@ -74,7 +74,7 @@ const BottomNavigator = () => {
         name='Notificações'
         component={Notify}
         options={{
-          tabBarBadge: notificationCount > 0 ? notificationCount : null, // Badge aparece apenas se notificationCount for > 0
+          tabBarBadge: notificationCount > 0 ? notificationCount : null,
           headerShown: false,
         }}
       />

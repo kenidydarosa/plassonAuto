@@ -56,7 +56,7 @@ const CardList = ({ id, text1, text2, text3, tag, icon, type, setFunction, statu
     const [isSwitchOn, setIsSwitchOn] = useState(status === 'Ativo' ? true : false);
     const onToggleSwitch = () => {
       setIsSwitchOn(!isSwitchOn);
-	  setFunction(id)
+	    setFunction(id)
     };
 
     // Exibe o switch para alternar entre dois estados
