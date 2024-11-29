@@ -11,7 +11,7 @@ class NotifyController {
         try {
             const { id } = req.params;
 
-            const response = await this.notifyRepository.getAll('user_id', id);
+            const response = await this.notifyRepository.getAll('user_id', id, 'visualized', false);
 
             if (!response) {
                 throw new Error("Erro ao buscar notificações");
@@ -67,9 +67,6 @@ class NotifyController {
 
             // Emitir notificação em tempo real
             this.io.emit(`notification:${body.user_id}`, body);
-
-            console.log(`Notificação criada e emitida:`, body);
-
             res.status(200).json({
                 response,
                 title: 'Sucesso',
@@ -93,8 +90,6 @@ class NotifyController {
                 return acc;
             }, []);
 
-            console.log('controller', notificationData)
-
             // Salvar notificação no banco de dados
             const response = await this.notifyRepository.create(valuesArray, 'user_id', notificationData.user_id );
 
@@ -107,8 +102,6 @@ class NotifyController {
                 ...notificationData,
                 id: response.id,
             });
-
-            console.log(`Notificação criada e emitida:`, notificationData);
 
             return response; // Retorna o resultado da operação
         } catch (error) {
@@ -157,7 +150,6 @@ class NotifyController {
             if (!response) {
                 throw new Error("Erro ao excluir notificação");
             }
-
             res.status(200).json({
                 response,
                 title: 'Sucesso',

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../Pages/Home/Home';
 import User from '../Pages/User/User';
@@ -35,12 +35,17 @@ import { useDataContext } from '../data/DataContext';
  *
  * @returns {React.Element} Componente `BottomNavigator` renderizando a navegação com abas.
  */
-
 const Tab = createBottomTabNavigator();
 
 const BottomNavigator = () => {
-  const { userDB } = useDataContext();
+  const { userDB, notifyDB } = useDataContext();
+  const [notificationCount, setNotificationCount] = useState(0);
 
+  // Atualiza a contagem de notificações sempre que o notifyDB mudar
+  useEffect(() => {
+    setNotificationCount(notifyDB.length); // Atualiza o número de notificações
+  }, [notifyDB]); // Esse efeito será executado sempre que notifyDB mudar
+  
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -65,9 +70,14 @@ const BottomNavigator = () => {
     >
       <Tab.Screen name='Home' component={Home} options={{ headerShown: false }} />
       <Tab.Screen name='Reservas' component={MySchedules} options={{ headerShown: false }} />
-      <Tab.Screen name='Notificações' component={Notify} options={{ tabBarBadge: 5, headerShown: false }} />
-
-      {/* Renderiza as abas de Veículos e Usuários apenas se userDB.name for "Admin" */}
+      <Tab.Screen
+        name='Notificações'
+        component={Notify}
+        options={{
+          tabBarBadge: notificationCount > 0 ? notificationCount : null, // Badge aparece apenas se notificationCount for > 0
+          headerShown: false,
+        }}
+      />
       {userDB.name === 'Admin' && (
         <>
           <Tab.Screen name='Veículos' component={Veicules} options={{ headerShown: false }} />

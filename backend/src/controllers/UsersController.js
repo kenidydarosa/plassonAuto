@@ -170,7 +170,7 @@ class UserController {
 
       const [schedules, notify, veicules, users, sectors] = await Promise.all([
         this.schedulesRepository.getAll(), // Consulta agendamentos
-        this.notifyRepository.getAll('user_id', user.id), // Consulta notificações
+        this.notifyRepository.getAll('user_id', user.id, 'visualized', false), // Consulta notificações
         this.veiculesRepository.getAll(), // Consulta veículos
         this.userRepository.getAll(), // Consulta todos os usuários
         this.sectorsRepository.getAll(), // Consulta todos os usuários
@@ -190,7 +190,7 @@ class UserController {
     } catch (error) {
       console.log(error);
       res.status(401).json({
-        title: 'Erro',
+        title: 'Erro!',
         msg: 'Usuário ou senha inválidos.',
         icon: 'close-circle',
       });

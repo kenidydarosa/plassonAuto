@@ -12,17 +12,18 @@ export const getNotify = async (id) => {
   }
 };
 
-// export const getNotifyByID = async (id) => {
-//   const response = await axios.get(`${API_URL}/notify/${id}`);
+export const getNotifyByID = async (id) => {
+  const response = await axios.get(`${API_URL}/notify/${id}`);
 
-//   if (response.status === 200) {
-//     return response.data;
-//   } else {
-//     throw new Error(response.data);
-//   }
-// };
-export const createNotify = async (schedule) => {
-  const response = await axios.post(`${API_URL}/notify`, schedule, {
+  if (response.status === 200) {
+    return response.data;
+  } else {
+    throw new Error(response.data);
+  }
+};
+
+export const createNotify = async (notify) => {
+  const response = await axios.post(`${API_URL}/notify`, notify, {
     headers: { 'Content-Type': 'application/json' },
   });
   
@@ -33,8 +34,8 @@ export const createNotify = async (schedule) => {
   }
 };
 
-export const updateNotify = async (id, schedule) => {
-  const response = await axios.put(`${API_URL}/notify/${id}`, schedule, {
+export const updateNotify = async (id, notify) => {
+  const response = await axios.put(`${API_URL}/notify/${id}`, notify, {
     headers: { 'Content-Type': 'application/json' },
   });
   
@@ -46,7 +47,7 @@ export const updateNotify = async (id, schedule) => {
 };
 
 export const deletNotify = async (id) => {
-  const response = await axios.put(`${API_URL}/notify/${id}`);
+  const response = await axios.delete(`${API_URL}/notify/${id}`);
 
   if (response.status === 200) {
     return response.data;

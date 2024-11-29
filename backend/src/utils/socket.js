@@ -11,37 +11,43 @@ export default async function configureSocket(server) {
         },
     });
 
-    // Inicialize o NotifyController com o objeto io
     const notifyController = new NotifyController(io);
 
     io.on('connection', (socket) => {
-        // console.log('Usuário conectado:', socket.id);
-
-        // Registrar usuário no mapeamento
-        socket.on('register', (username) => {
-            connectedUsers[username] = socket.id;
-            // console.log(`Usuário registrado: ${username} -> ${socket.id}`);
+        // Registrar usuário no mapeamento usando o user_id
+        socket.on('register', (userId) => {
+            connectedUsers[userId] = socket.id;
         });
 
-        socket.on('createNotify', async (username, notificationData) => {
+        // Enviar notificação para usuário específico
+        socket.on('createNotify', async (notificationData) => {
+            const { user_id } = notificationData;
+
             try {
-                console.log(notificationData)
-                // Salvar a notificação no banco de dados usando o método do NotifyController
+                // Salvar a notificação no banco de dados
                 const savedNotification = await notifyController.createFromSocket(notificationData);
-                // Emitir para todos os clientes conectados
-                io.emit('broadcastNotification', { ...notificationData, id: savedNotification.id });
+
+                // Verifica se o usuário está conectado
+                const recipientSocketId = connectedUsers[user_id];
+                if (recipientSocketId) {
+                    io.to(recipientSocketId).emit('personalNotification', {
+                        ...notificationData,
+                        id: savedNotification.id,
+                    });
+                } else {
+                    console.warn(`Usuário com user_id ${user_id} não está conectado.`);
+                }
             } catch (error) {
-                console.error('Erro ao salvar notificação:', error);
-                socket.emit('errorNotification', 'Falha ao salvar notificação.');
+                console.error('Erro ao salvar ou enviar notificação:', error);
+                socket.emit('errorNotification', 'Falha ao salvar ou enviar notificação.');
             }
         });
 
         // Remover usuário ao desconectar
         socket.on('disconnect', () => {
-            for (const username in connectedUsers) {
-                if (connectedUsers[username] === socket.id) {
-                    delete connectedUsers[username];
-                    console.log(`Usuário desconectado: ${username}`);
+            for (const userId in connectedUsers) {
+                if (connectedUsers[userId] === socket.id) {
+                    delete connectedUsers[userId];
                     break;
                 }
             }

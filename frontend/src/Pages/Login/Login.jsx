@@ -8,6 +8,7 @@ import styleJS from '../../components/style.js';
 import fontConfig from '../../config/fontConfig.js';
 import AlertDialog from '../../components/Dialog.jsx';
 import { fetchUsers, loginUser } from '../../routes/userRoutes.js';
+import { initializeSocket, setupNotificationListener } from '../../services/Notify.js';
 export let userIDProvisorio
 
 const Login = () => {
@@ -47,7 +48,10 @@ const Login = () => {
       setVeiculesDB(veicules);
       setUsersDB(users);
       setSectorsDB(sectors);
+      initializeSocket(user)
+      setupNotificationListener(user, setNotifyDB)
       navigation.navigate('BottomNavigator');
+      
     } catch (error) {
       setLoadingImage(true);
 

@@ -68,7 +68,6 @@ class UserRepository extends BaseRepository {
   async delete(id) {
     try {
       const response = await super.delete('users', id);
-      console.log('Usuário deletado:', response);
       return response;
     } catch (error) {}
   }

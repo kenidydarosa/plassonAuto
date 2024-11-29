@@ -20,11 +20,11 @@ import AwesomeAlert from 'react-native-awesome-alerts';
  * 
  * @returns {React.Element} Componente `AlertDialog` exibindo um diálogo de alerta.
  */
-const AlertDialog = ({ showAlert, setShowAlert, setLoadingImage, icon, title, msg, textButton }) => {
+const AlertDialog = ({ showAlert, setShowAlert, icon, title, msg, textButton, setLoadingImage = null }) => {
 
   const hideAlertHandler = () => {
     setShowAlert(false);
-    setLoadingImage(false);
+    setLoadingImage ? setLoadingImage(false) : '';
   };
 
   return (

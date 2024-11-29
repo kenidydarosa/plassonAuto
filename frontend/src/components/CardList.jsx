@@ -164,4 +164,7 @@ const styles = StyleSheet.create({
   label: {
     marginBottom: 5,
   },
+  buttonCancel:{
+    alignItems:'flex-end'
+  }
 });

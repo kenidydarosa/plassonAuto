@@ -5,22 +5,40 @@ import { v4 as uuidv4 } from 'uuid';
 createTables();
 
 class BaseRepository {
-  async getAll(table, columnsArray, whereColumn = null, whereValue = null) {
+  async getAll(
+    table,
+    columnsArray,
+    whereColumn1 = null,
+    whereValue1 = null,
+    whereColumn2 = null,
+    whereValue2 = null
+  ) {
     const db = await openDb();
     try {
       // Cria a base da query
       let query = `SELECT ${columnsArray.join(', ')} FROM ${table}`;
 
-      // Adiciona a cláusula WHERE se whereColumn e whereValue forem fornecidos
-      if (whereColumn !== null && whereValue !== null) {
-        query += ` WHERE ${whereColumn} = ?`;
+      // Armazena os valores para os parâmetros WHERE
+      let params = [];
+
+      // Adiciona a primeira condição WHERE se whereColumn1 e whereValue1 forem fornecidos
+      if (whereColumn1 !== null && whereValue1 !== null) {
+        query += ` WHERE ${whereColumn1} = ?`;
+        params.push(whereValue1); // Adiciona o valor de whereValue1 nos parâmetros
       }
 
-      // Executa a query com ou sem o valor de WHERE
-      const response =
-        whereColumn && whereValue !== null
-          ? await db.all(query, [whereValue])
-          : await db.all(query);
+      // Adiciona a segunda condição WHERE se whereColumn2 e whereValue2 forem fornecidos
+      if (whereColumn2 !== null && whereValue2 !== null) {
+        if (params.length > 0) {
+          query += ` AND ${whereColumn2} = ?`; // Adiciona 'AND' se já houver uma cláusula WHERE
+        } else {
+          query += ` WHERE ${whereColumn2} = ?`; // Adiciona 'WHERE' se for a primeira condição
+        }
+        params.push(whereValue2); // Adiciona o valor de whereValue2 nos parâmetros
+      }
+
+      // Executa a query com ou sem os valores de WHERE
+      const response = await db.all(query, params);
 
       return response;
     } catch (error) {
@@ -44,48 +62,69 @@ class BaseRepository {
     }
   }
 
-  async create(table, columnsArray, valuesArray, whereColumn = null, whereValue = null) {
+  async create(
+    table,
+    columnsArray,
+    valuesArray,
+    whereColumn1 = null,
+    whereValue1 = null,
+    whereColumn2 = null,
+    whereValue2 = null
+  ) {
     const db = await openDb();
-  
+
     try {
       // Gera um UUID e adiciona ao início dos valores
       const id = uuidv4();
       valuesArray.unshift(id); // Adiciona o ID no início do valuesArray
-  
+
       // Adiciona "id" como a primeira coluna
       const baseColumnsArray = ['id', ...columnsArray];
-  
+
       // Gera os placeholders para a query (um "?" para cada valor)
       const flagsArray = new Array(baseColumnsArray.length).fill('?').join(', ');
-  
+
       // Monta a query, incluindo o campo "id"
-      const queryText = `INSERT INTO ${table} (${baseColumnsArray.join(', ')}) VALUES (${flagsArray})`;
-  
+      const queryText = `INSERT INTO ${table} (${baseColumnsArray.join(
+        ', '
+      )}) VALUES (${flagsArray})`;
+
       // Inicia a transação
       await db.exec('BEGIN TRANSACTION');
-  
+
       // Executa a consulta de inserção
       await db.run(queryText, valuesArray);
-  
+
       // Confirma a transação
       await db.exec('COMMIT');
-  
+
       // Cria a base da query SELECT
       let query = `SELECT * FROM ${table}`;
-  
-      // Adiciona a cláusula WHERE se whereColumn e whereValue forem fornecidos
-      if (whereColumn !== null && whereValue !== null) {
-        query += ` WHERE ${whereColumn} = ?`;
+
+      // Armazena os valores para os parâmetros WHERE
+      let params = [];
+
+      // Adiciona a primeira condição WHERE se whereColumn1 e whereValue1 forem fornecidos
+      if (whereColumn1 !== null && whereValue1 !== null) {
+        query += ` WHERE ${whereColumn1} = ?`;
+        params.push(whereValue1); // Adiciona o valor de whereValue1 nos parâmetros
       }
-  
-      // Executa a query com ou sem o valor de WHERE
-      const response = whereColumn && whereValue !== null
-        ? await db.all(query, [whereValue])
-        : await db.all(query);
-  
+
+      // Adiciona a segunda condição WHERE se whereColumn2 e whereValue2 forem fornecidos
+      if (whereColumn2 !== null && whereValue2 !== null) {
+        if (params.length > 0) {
+          query += ` AND ${whereColumn2} = ?`; // Adiciona 'AND' se já houver uma cláusula WHERE
+        } else {
+          query += ` WHERE ${whereColumn2} = ?`; // Adiciona 'WHERE' se for a primeira condição
+        }
+        params.push(whereValue2); // Adiciona o valor de whereValue2 nos parâmetros
+      }
+
+      // Executa a query com os parâmetros WHERE, se fornecidos
+      const response = await db.all(query, params);
+
       // Retorna a resposta com os itens inseridos e todos os itens da tabela
       return response;
-  
     } catch (error) {
       // Desfaz a transação em caso de erro
       await db.exec('ROLLBACK');
@@ -96,7 +135,6 @@ class BaseRepository {
       await db.close();
     }
   }
-  
 
   async update(table, columnsArray, valuesArray, id) {
     const db = await openDb();
