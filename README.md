@@ -57,7 +57,7 @@ O sistema de reserva de carros foi desenvolvido para facilitar a gestão de rese
 
   <!-- Linha 6 -->
   <div style="display: flex; gap: 10px;">
-    <img src="./frontend/assets/Fluxograma.jpeg" alt="Fluxograma" width="300px">
+    <img src="./frontend/assets/Fluxograma.jpg" alt="Fluxograma" width="300px">
   </div>
 
 </div>
