@@ -18,13 +18,41 @@ Bem-vindo ao sistema de reserva de carros para Plasson do Brasil. Este aplicativ
 
 O sistema de reserva de carros foi desenvolvido para facilitar a gestão de reservas de veículos dentro da empresa. Os usuários podem acessar o sistema através de um login e, a partir de uma interface intuitiva, visualizar suas reservas e adicionar novas conforme a disponibilidade. Administradores têm acesso a funcionalidades adicionais, como o controle de acesso de usuários e a administração da frota de veículos.
 
-# Imagens do App
+## Telas do Aplicativo
 
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-  <img src="./frontend/assets/Login.jpeg" alt="Tela de Login" width="300px">
-  <img src="./frontend/assets/Home.jpeg" alt="Tela Inicial" width="300px">
-  <img src="./frontend/assets/MinhasReservas.jpeg" alt="Minhas Reservas" width="300px">
-</div>
+### Tela de Login
+<img src="./frontend/assets/Login.jpeg" alt="Tela de Login" width="400px">
+
+### Tela Inicial (Home)
+<img src="./frontend/assets/Home.jpeg" alt="Tela Inicial" width="400px">
+
+### Minhas Reservas
+<img src="./frontend/assets/MinhasReservas.jpeg" alt="Minhas Reservas" width="400px">
+
+### Veículos
+<img src="./frontend/assets/Veículos.jpeg" alt="Veículos" width="400px">
+
+### Usuários
+<img src="./frontend/assets/Usuários.jpeg" alt="Usuários" width="400px">
+
+### Notificações
+<img src="./frontend/assets/Notificações.jpeg" alt="Notificações" width="400px">
+
+### Calendário
+<img src="./frontend/assets/Calendário.jpeg" alt="Calendário" width="400px">
+
+### Formulário de Reservas (Parte 1)
+<img src="./frontend/assets/Form%20de%20reservas%201.jpeg" alt="Formulário de Reservas 1" width="400px">
+
+### Formulário de Reservas (Parte 2)
+<img src="./frontend/assets/Form%20de%20reservas%202.jpeg" alt="Formulário de Reservas 2" width="400px">
+
+### Formulário de Veículos
+<img src="./frontend/assets/Form%20de%20veículos.jpeg" alt="Formulário de Veículos" width="400px">
+
+### Fluxograma
+<img src="./frontend/assets/Fluxograma.jpeg" alt="Fluxograma" width="400px">
+
 
 
 ## 🚀 Funcionalidades
