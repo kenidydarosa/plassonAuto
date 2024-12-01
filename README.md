@@ -18,6 +18,21 @@ Bem-vindo ao sistema de reserva de carros para Plasson do Brasil. Este aplicativ
 
 O sistema de reserva de carros foi desenvolvido para facilitar a gestão de reservas de veículos dentro da empresa. Os usuários podem acessar o sistema através de um login e, a partir de uma interface intuitiva, visualizar suas reservas e adicionar novas conforme a disponibilidade. Administradores têm acesso a funcionalidades adicionais, como o controle de acesso de usuários e a administração da frota de veículos.
 
+Imagens do App:
+
+./frontend/assets/Login.jpeg
+./frontend/assets/Home.jpeg
+./frontend/assets/MinhasReservas.jpeg
+./frontend/assets/Veículos.jpeg
+./frontend/assets/Usuários.jpeg
+./frontend/assets/Notificações.jpeg
+./frontend/assets/Calendário.jpeg
+./frontend/assets/Form de reservas 1.jpeg
+./frontend/assets/Form de reservas 2.jpeg
+./frontend/assets/Form de veículos.jpeg
+./frontend/assets/Fluxograma.jpeg
+
+
 ## 🚀 Funcionalidades
 
 ### Usuário Comum
