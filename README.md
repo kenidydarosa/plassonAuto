@@ -27,37 +27,37 @@ O sistema de reserva de carros foi desenvolvido para facilitar a gestão de rese
 <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
   <!-- Linha 1 -->
   <div style="display: flex; gap: 10px;">
-    <img src="./frontend/assets/Login.jpeg" alt="Tela de Login" width="400px">
-    <img src="./frontend/assets/Home.jpeg" alt="Tela Inicial" width="400px">
+    <img src="./frontend/assets/Login.jpeg" alt="Tela de Login" width="300px">
+    <img src="./frontend/assets/Home.jpeg" alt="Tela Inicial" width="300px">
   </div>
 
   <!-- Linha 2 -->
   <div style="display: flex; gap: 10px;">
-    <img src="./frontend/assets/MinhasReservas.jpeg" alt="Minhas Reservas" width="400px">
-    <img src="./frontend/assets/Veículos.jpeg" alt="Veículos" width="400px">
+    <img src="./frontend/assets/MinhasReservas.jpeg" alt="Minhas Reservas" width="300px">
+    <img src="./frontend/assets/Veículos.jpeg" alt="Veículos" width="300px">
   </div>
 
   <!-- Linha 3 -->
   <div style="display: flex; gap: 10px;">
-    <img src="./frontend/assets/Usuários.jpeg" alt="Usuários" width="400px">
-    <img src="./frontend/assets/Notificações.jpeg" alt="Notificações" width="400px">
+    <img src="./frontend/assets/Usuários.jpeg" alt="Usuários" width="300px">
+    <img src="./frontend/assets/Notificações.jpeg" alt="Notificações" width="300px">
   </div>
 
   <!-- Linha 4 -->
   <div style="display: flex; gap: 10px;">
-    <img src="./frontend/assets/Calendário.jpeg" alt="Calendário" width="400px">
-    <img src="./frontend/assets/Form%20de%20reservas%201.jpeg" alt="Formulário de Reservas 1" width="400px">
+    <img src="./frontend/assets/Calendário.jpeg" alt="Calendário" width="300px">
+    <img src="./frontend/assets/Form%20de%20reservas%201.jpeg" alt="Formulário de Reservas 1" width="300px">
   </div>
 
   <!-- Linha 5 -->
   <div style="display: flex; gap: 10px;">
-    <img src="./frontend/assets/Form%20de%20reservas%202.jpeg" alt="Formulário de Reservas 2" width="400px">
-    <img src="./frontend/assets/Form%20de%20veículos.jpeg" alt="Formulário de Veículos" width="400px">
+    <img src="./frontend/assets/Form%20de%20reservas%202.jpeg" alt="Formulário de Reservas 2" width="300px">
+    <img src="./frontend/assets/Form%20de%20veículos.jpeg" alt="Formulário de Veículos" width="300px">
   </div>
 
   <!-- Linha 6 -->
   <div style="display: flex; gap: 10px;">
-    <img src="./frontend/assets/Fluxograma.jpeg" alt="Fluxograma" width="400px">
+    <img src="./frontend/assets/Fluxograma.jpeg" alt="Fluxograma" width="300px">
   </div>
 
 </div>
