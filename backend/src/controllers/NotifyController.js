@@ -1,17 +1,17 @@
-import NotifyRepository from "../repository/NotifyRepository.js";
+import NotifyModel from "../Models/NotifyModel.js";
 const columnsArray = ['title', 'summary', 'visualized', 'user_id', 'schedule_id'];
 
 class NotifyController {
     constructor(io) {
         this.io = io; // Adiciona o Socket.IO
-        this.notifyRepository = new NotifyRepository();
+        this.notifyModel = new NotifyModel();
     }
 
     async getAll(req, res) {
         try {
             const { id } = req.params;
 
-            const response = await this.notifyRepository.getAll('user_id', id, 'visualized', false);
+            const response = await this.notifyModel.getAll('user_id', id, 'visualized', false);
 
             if (!response) {
                 throw new Error("Erro ao buscar notificações");
@@ -32,7 +32,7 @@ class NotifyController {
         try {
             const { id } = req.params;
 
-            const response = await this.notifyRepository.getByID(id);
+            const response = await this.notifyModel.getByID(id);
 
             if (!response) {
                 throw new Error("Erro ao buscar notificação");
@@ -59,7 +59,7 @@ class NotifyController {
             }, []);
 
             // Salvar notificação no banco de dados
-            const response = await this.notifyRepository.create(valuesArray);
+            const response = await this.notifyModel.create(valuesArray);
 
             if (!response) {
                 throw new Error("Erro ao criar notificação");
@@ -91,7 +91,7 @@ class NotifyController {
             }, []);
 
             // Salvar notificação no banco de dados
-            const response = await this.notifyRepository.create(valuesArray, 'user_id', notificationData.user_id );
+            const response = await this.notifyModel.create(valuesArray, 'user_id', notificationData.user_id );
 
             if (!response) {
                 throw new Error("Erro ao criar notificação");
@@ -120,7 +120,7 @@ class NotifyController {
                 return acc;
             }, []);
 
-            const response = await this.notifyRepository.update(valuesArray, id, 'user_id', body.user_id, 'visualized', 0);
+            const response = await this.notifyModel.update(valuesArray, id, 'user_id', body.user_id, 'visualized', 0);
 
             if (!response) {
                 throw new Error("Erro ao atualizar notificação");
@@ -145,7 +145,7 @@ class NotifyController {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const response = await this.notifyRepository.delete(id);
+            const response = await this.notifyModel.delete(id);
 
             if (!response) {
                 throw new Error("Erro ao excluir notificação");

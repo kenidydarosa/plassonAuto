@@ -21,7 +21,7 @@ O sistema de reserva de carros foi desenvolvido para facilitar a gestão de rese
 ## 🚀 Funcionalidades
 
 ### Usuário Comum
-- **Login Seguro**: Acesso ao sistema por meio de login com autenticação.
+- **Login Seguro**: Acesso ao sistema por meio de login.
 - **Visualização de Reservas**: Os usuários podem visualizar todas as reservas já feitas.
 - **Criação de Novas Reservas**: Possibilidade de realizar novas reservas de veículos conforme disponibilidade.
 
@@ -33,25 +33,28 @@ O sistema de reserva de carros foi desenvolvido para facilitar a gestão de rese
 ## 🛠️ Tecnologias Utilizadas
 
 -- **Desenvolver**
-- **Frontend**: [React-native, CSS, etc.]
-- **Backend**: [Node.js, Express, SQLite, etc.]
+- **Frontend**: [React-native, CSS, Expo]
+- **Backend**: [Node.js, Express, SQLite, Firebase]
 - **Banco de Dados**: SQLite
-- **Autenticação**: [Tecnologias de autenticação, por exemplo: JWT, OAuth, etc.]
 - **Versionamento de Código**: Git
 
 ## 📦 Pré-requisitos
 
 Antes de começar, certifique-se de ter as seguintes ferramentas instaladas:
 
-- [Node.js](https://nodejs.org/en/)
+- [Node.js](https://nodejs.org/en/) (Versão 18.19.0)
 - [Git](https://git-scm.com/)
-- [Banco de Dados] (por exemplo: MySQL, MongoDB, etc.)
+- [Banco de Dados] (SQLite, ou baixar a extensão MySQL para VS Code)
 
 ## 📥 Instalação
 
 1. Clone o repositório para sua máquina local:
-   ```bash
    git clone https://github.com/kenidydarosa/plassonAuto.git
+
+   Para rodar o frontend você pode rodar o comando o npx expo start
+   para o backend você pode rodar o comando npm start
+
+   Instale as dependências usando npm install
 
 ## 🖥️ Uso
 

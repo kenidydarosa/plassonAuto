@@ -21,7 +21,6 @@ import SelectInput from '../../components/SelectInput.jsx';
 import AlertDialog from '../../components/Dialog.jsx';
 import { createSchedules, updateSchedules } from '../../routes/schedulesRoutes.js';
 import { validateSchedule } from './validateSchedule.js';
-import { EVENT_COLOR } from '../../data/data.js';
 import { sendNotification } from '../../services/Notify.js';
 
 const NewSchedule = () => {
@@ -244,7 +243,7 @@ const NewSchedule = () => {
         returnOfKeyTime: setDateHours(startDate, returnOfKeyTime),
         status: create ? 'Ativa' : returnOfKey ? 'Realizada' : statusBt ? 'Ativa' : 'Cancelada',
         notes,
-        color: EVENT_COLOR,
+        color: styleJS.EVENT_COLOR,
       };
 
       const schedules = create
@@ -304,12 +303,14 @@ const NewSchedule = () => {
             <View
               style={[
                 styleJS.statusBase,
-                { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
+                { backgroundColor: status == 'Ativa' ? styleJS.statusGreen : status ==='Cancelada' ? styleJS.statusRed : styleJS.statusYellow},
+                // { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
               ]}
             >
               <Text
                 style={{
-                  color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
+                  // color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
+                  color:status == 'Ativa' ? styleJS.statusFontGreen : status ==='Cancelada' ? styleJS.statusFontRed : styleJS.statusFontYellow,
                 }}
               >
                 {status}
@@ -350,7 +351,7 @@ const NewSchedule = () => {
           />
           <InputField
             icon={'target'}
-            placeholder={'Descrição'}
+            placeholder={'*Descrição'}
             value={summary}
             func={setSummary}
             editable={!onlyVisible}
@@ -360,7 +361,7 @@ const NewSchedule = () => {
           />
           <InputField
             icon={'map-marker'}
-            placeholder={'Localização'}
+            placeholder={'*Localização'}
             value={locale}
             func={setLocale}
             editable={!onlyVisible}

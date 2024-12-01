@@ -6,7 +6,7 @@ const socket = io(API_URL);
 
 export const initializeSocket = (user) => {
   if (user) {
-    socket.emit('register', user.id); // Use o ID do usuário
+    socket.emit('register', user.id);
     console.log('Usuário registrado no socket:', user.id);
   } else {
     console.warn('Usuário não definido. Registro no socket não será enviado.');

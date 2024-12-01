@@ -1,6 +1,6 @@
-import BaseRepository from './BaseRepository.js';
+import BaseModel from './BaseModel.js';
 
-class sectorsRepository extends BaseRepository {
+class sectorsModel extends BaseModel {
   async getAll(whereColumn = null, whereValue = null) {
     try {
       const response = await super.getAll('sectors', ['*'], whereColumn, whereValue);
@@ -50,4 +50,4 @@ class sectorsRepository extends BaseRepository {
   }
 }
 
-export default sectorsRepository;
+export default sectorsModel;

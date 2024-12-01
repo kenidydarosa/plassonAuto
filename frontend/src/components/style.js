@@ -1,4 +1,4 @@
-// style.js
+import { Platform } from 'react-native';
 
 // Colors
 const primaryColor = '#4A8FBDFF';
@@ -176,13 +176,12 @@ const styleJS = {
     justifyContent: 'center',
     gap: 3,
   },
+  EVENT_COLOR:'#E0FBFFBE'
 };
 
 export default styleJS;
 
 // Theme Configuration
-import { Platform } from 'react-native';
-
 export const themeColor = styleJS.primaryColor;
 export const lightThemeColor = '#f2f7f7';
 

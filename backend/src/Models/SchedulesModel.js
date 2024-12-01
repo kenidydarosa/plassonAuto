@@ -1,4 +1,4 @@
-import BaseRepository from './BaseRepository.js';
+import BaseModel from './BaseModel.js';
 
 const columnsArray = [
     'user_id',
@@ -16,7 +16,7 @@ const columnsArray = [
     'notes',
   ];
 
-class SchedulesRepository extends BaseRepository {
+class SchedulesModel extends BaseModel {
   async getAll(whereColumn = null, whereValue = null) {
     try {
       const response = await super.getAll('schedules', ['*'], whereColumn, whereValue);
@@ -66,4 +66,4 @@ class SchedulesRepository extends BaseRepository {
   }
 }
 
-export default SchedulesRepository;
+export default SchedulesModel;

@@ -4,9 +4,7 @@ import groupBy from 'lodash/groupBy';
 import filter from 'lodash/filter';
 import find from 'lodash/find';
 import React, { useState } from 'react';
-import { Alert } from 'react-native';
 import { ExpandableCalendar, TimelineList, CalendarProvider, CalendarUtils, LocaleConfig } from 'react-native-calendars';
-import { getDate } from './mocks/timelineEvents';
 import styleJS, { getTheme } from '../../components/style';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
@@ -59,7 +57,7 @@ const TimelineCalendarScreen = () => {
   const EVENTS = create && id ? schedulesDB.filter(schedule => schedule.veicule_id === id && schedule.status !== 'Ativa') : schedulesDB.filter(schedule => schedule.status !== 'Ativa')  
   
   // Estado para controlar a data atual e os eventos agrupados por data
-  const [currentDate, setCurrentDate] = useState(getDate());
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [eventsByDate, setEventsByDate] = useState(groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start)));
 
   // Marcação de datas que têm eventos

@@ -36,11 +36,6 @@ yarn-error.*
 frontend/.env*.local
 backend/.env*.local
 
-# Firebase (frontend)
-frontend/config/firebaseConfig.js
-frontend/config/firebase*
-frontend/firebaseConfig.*
-
 # Backend-specific (se necessário)
 backend/node_modules/
 backend/dist/

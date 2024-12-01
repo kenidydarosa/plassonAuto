@@ -1,4 +1,4 @@
-import SchedulesRepository from '../repository/SchedulesRepository.js';
+import SchedulesModel from '../Models/SchedulesModel.js';
 const columnsArray = [
   'user_id',
   'veicule_id',
@@ -17,12 +17,12 @@ const columnsArray = [
 
 class SchedulesController {
   constructor() {
-    this.schedulesRepository = new SchedulesRepository();
+    this.schedulesModel = new SchedulesModel();
   }
 
   async getAll(req, res) {
     try {
-      const response = await this.schedulesRepository.getAll();
+      const response = await this.schedulesModel.getAll();
 
       if (!response) {
         throw error;
@@ -44,7 +44,7 @@ class SchedulesController {
     try {
       const { id } = req.params;
 
-      const response = await this.schedulesRepository.getByID(id);
+      const response = await this.schedulesModel.getByID(id);
 
       if (!response) {
         throw error;
@@ -71,7 +71,7 @@ class SchedulesController {
         return acc;
       }, []);
 
-      const response = await this.schedulesRepository.create(valuesArray);
+      const response = await this.schedulesModel.create(valuesArray);
 
       if (!response) {
         throw error;
@@ -103,7 +103,7 @@ class SchedulesController {
         return acc;
       }, []);
 
-      const response = await this.schedulesRepository.update(valuesArray, id);
+      const response = await this.schedulesModel.update(valuesArray, id);
 
       if (!response) {
         throw error;
@@ -129,7 +129,7 @@ class SchedulesController {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      const response = await this.schedulesRepository.delete(id);
+      const response = await this.schedulesModel.delete(id);
 
       if (!response) {
         throw error;

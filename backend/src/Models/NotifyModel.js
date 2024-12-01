@@ -1,7 +1,7 @@
-import BaseRepository from './BaseRepository.js';
+import BaseModel from './BaseModel.js';
 const columnsArray = ['title', 'summary', 'visualized', 'user_id', 'schedule_id'];
 
-class NotifyRepository extends BaseRepository {
+class NotifyModel extends BaseModel {
   async getAll(
     whereColumn1 = null,
     whereValue1 = null,
@@ -88,4 +88,4 @@ class NotifyRepository extends BaseRepository {
   }
 }
 
-export default NotifyRepository;
+export default NotifyModel;

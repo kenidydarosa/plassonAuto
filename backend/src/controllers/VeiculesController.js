@@ -1,4 +1,4 @@
-import VeiculesRepository from '../repository/VeiculesRepository.js';
+import VeiculesModel from '../Models/VeiculesModel.js';
 
 const columnsArray = [
   'imgKey',
@@ -15,11 +15,11 @@ const columnsArray = [
 ];
 class VeiculesController {
   constructor() {
-    this.veiculesRepository = new VeiculesRepository();
+    this.veiculesModel = new VeiculesModel();
   }
   async getAll(req, res) {
     try {
-      const response = await this.veiculesRepository.getAll();
+      const response = await this.veiculesModel.getAll();
 
       if (!response) {
         throw new Error();
@@ -39,7 +39,7 @@ class VeiculesController {
   async getById(req, res) {
     try {
       const { id } = req.params;
-      const response = await this.veiculesRepository.getByID(id);
+      const response = await this.veiculesModel.getByID(id);
 
       if (!response) {
         throw new Error();
@@ -64,7 +64,7 @@ class VeiculesController {
         return acc;
       }, []);
 
-      const response = await this.veiculesRepository.create(valuesArray);
+      const response = await this.veiculesModel.create(valuesArray);
       
       if (!response) {
         throw new Error();
@@ -96,7 +96,7 @@ class VeiculesController {
         return acc;
       }, []);
 
-      const response = await this.veiculesRepository.update(id, valuesArray);
+      const response = await this.veiculesModel.update(id, valuesArray);
 
       if (!response) {
         throw new Error();
@@ -121,7 +121,7 @@ class VeiculesController {
   async delete(req, res) {
     try {
       const { id } = req.params;
-      const response = await this.veiculesRepository.delete(id);
+      const response = await this.veiculesModel.delete(id);
 
       if (!response) {
         throw new Error();

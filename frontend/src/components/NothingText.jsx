@@ -8,6 +8,7 @@ import IconWithLabel from './IconWithLabel';
 import fontConfig from '../config/fontConfig';
 import styleJS from './style';
 
+// Retorna um card com um título, texto e um icone personalizado.
 const NothingText = ({title, msg, ico}) => {
   return (
     <View style={styles.card}>

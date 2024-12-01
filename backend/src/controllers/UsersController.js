@@ -1,9 +1,9 @@
 // usersController.js
-import UserRepository from '../repository/UserRepository.js';
-import SchedulesRepository from '../repository/SchedulesRepository.js';
-import NotifyRepository from '../repository/NotifyRepository.js';
-import VeiculesRepository from '../repository/VeiculesRepository.js';
-import sectorsRepository from '../repository/sectorsRepository.js';
+import UserModel from '../Models/UserModel.js';
+import SchedulesModel from '../Models/SchedulesModel.js';
+import NotifyModel from '../Models/NotifyModel.js';
+import VeiculesModel from '../Models/VeiculesModel.js';
+import sectorsModel from '../Models/SectorsModel.js';
 
 const columnsArray = [
   'name',
@@ -17,16 +17,16 @@ const columnsArray = [
 ];
 class UserController {
   constructor() {
-    this.userRepository = new UserRepository();
-    this.schedulesRepository = new SchedulesRepository();
-    this.notifyRepository = new NotifyRepository();
-    this.veiculesRepository = new VeiculesRepository();
-    this.sectorsRepository = new sectorsRepository();
+    this.userModel = new UserModel();
+    this.schedulesModel = new SchedulesModel();
+    this.notifyModel = new NotifyModel();
+    this.veiculesModel = new VeiculesModel();
+    this.sectorsModel = new sectorsModel();
   }
 
   async getAll(req, res) {
     try {
-      const response = await this.userRepository.getAll();
+      const response = await this.userModel.getAll();
 
       if (!response) {
         throw new Error();
@@ -47,7 +47,7 @@ class UserController {
     try {
       const { id } = req.params;
 
-      const response = await this.userRepository.getByID(id);
+      const response = await this.userModel.getByID(id);
 
       if (!response) {
         throw new Error();
@@ -73,7 +73,7 @@ class UserController {
         return acc;
       }, []);
 
-      const response = await this.userRepository.create(valuesArray);
+      const response = await this.userModel.create(valuesArray);
 
       if (!response) {
         throw new Error();
@@ -104,7 +104,7 @@ class UserController {
         return acc;
       }, []);
 
-      const response = await this.userRepository.update(valuesArray, id);
+      const response = await this.userModel.update(valuesArray, id);
 
       if (!response) {
         throw new Error();
@@ -130,7 +130,7 @@ class UserController {
       const { id } = req.params;
       console.log('ID do usuário a ser deletado:', id);
 
-      const response = await this.userRepository.delete(id);
+      const response = await this.userModel.delete(id);
 
       if (!response) {
         throw new Error();
@@ -153,7 +153,7 @@ class UserController {
   async login(req, res) {
     try {
       const { username, password } = req.body;
-      const user = await this.userRepository.login(username, password);
+      const user = await this.userModel.login(username, password);
 
       if (!user) {
         throw new Error();
@@ -169,11 +169,11 @@ class UserController {
       }
 
       const [schedules, notify, veicules, users, sectors] = await Promise.all([
-        this.schedulesRepository.getAll(), // Consulta agendamentos
-        this.notifyRepository.getAll('user_id', user.id, 'visualized', false), // Consulta notificações
-        this.veiculesRepository.getAll(), // Consulta veículos
-        this.userRepository.getAll(), // Consulta todos os usuários
-        this.sectorsRepository.getAll(), // Consulta todos os usuários
+        this.schedulesModel.getAll(), // Consulta agendamentos
+        this.notifyModel.getAll('user_id', user.id, 'visualized', false), // Consulta notificações
+        this.veiculesModel.getAll(), // Consulta veículos
+        this.userModel.getAll(), // Consulta todos os usuários
+        this.sectorsModel.getAll(), // Consulta todos os usuários
       ]);
 
       res.status(200).json({

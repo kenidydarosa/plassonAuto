@@ -33,7 +33,6 @@ export const Home = () => {
         {/* Cabeçaho e Título principal da tela */}
         <Header />
         <Text style={[styleJS.title, { marginTop: 0 }]}>Home</Text>
-        {/* <NothingText title="Bem Vindo!" msg="que você tenha uma ótima experiência." ico={'😊'}/> */}
         <NothingText title="Bem Vindo ao PlassonAuto! 😊 " msg="Reserve seu veículo com rapidez e facilidade. Vamos começar?" ico={'🚗✨'}/>
       </ScrollView>
     </View>

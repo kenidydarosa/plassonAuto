@@ -1,4 +1,4 @@
-import BaseRepository from './BaseRepository.js';
+import BaseModel from './BaseModel.js';
 
 const columnsArray = [
   'imgKey',
@@ -14,7 +14,7 @@ const columnsArray = [
   'booster',
 ];
 
-class VeiculesRepository extends BaseRepository {
+class VeiculesModel extends BaseModel {
   async getAll() {
     try {
       const response = await super.getAll('veicules', ['*']);
@@ -60,4 +60,4 @@ class VeiculesRepository extends BaseRepository {
   }
 }
 
-export default VeiculesRepository;
+export default VeiculesModel;

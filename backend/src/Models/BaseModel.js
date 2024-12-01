@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 createTables();
 
-class BaseRepository {
+class BaseModel {
   async getAll(
     table,
     columnsArray,
@@ -192,4 +192,4 @@ class BaseRepository {
   }
 }
 
-export default BaseRepository;
+export default BaseModel;

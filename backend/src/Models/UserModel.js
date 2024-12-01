@@ -1,4 +1,4 @@
-import BaseRepository from './BaseRepository.js';
+import BaseModel from './BaseModel.js';
 import { openDb } from '../db/conn.js'
 
 const columnsArray = [
@@ -11,7 +11,7 @@ const columnsArray = [
   'email',
   'status'
 ];
-class UserRepository extends BaseRepository {
+class UserModel extends BaseModel {
   async login(username, password) {
     const db = await openDb();
     try {
@@ -73,4 +73,4 @@ class UserRepository extends BaseRepository {
   }
 }
 
-export default UserRepository;
+export default UserModel;
