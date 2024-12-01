@@ -20,38 +20,11 @@ O sistema de reserva de carros foi desenvolvido para facilitar a gestão de rese
 
 # Imagens do App
 
-## Tela de Login
-![Tela de Login](./frontend/assets/Login.jpeg)
-
-## Tela Inicial (Home)
-![Tela Inicial](./frontend/assets/Home.jpeg)
-
-## Minhas Reservas
-![Minhas Reservas](./frontend/assets/MinhasReservas.jpeg)
-
-## Veículos
-![Veículos](./frontend/assets/Veículos.jpeg)
-
-## Usuários
-![Usuários](./frontend/assets/Usuários.jpeg)
-
-## Notificações
-![Notificações](./frontend/assets/Notificações.jpeg)
-
-## Calendário
-![Calendário](./frontend/assets/Calendário.jpeg)
-
-## Formulário de Reservas (Parte 1)
-![Formulário de Reservas 1](./frontend/assets/Form%20de%20reservas%201.jpeg)
-
-## Formulário de Reservas (Parte 2)
-![Formulário de Reservas 2](./frontend/assets/Form%20de%20reservas%202.jpeg)
-
-## Formulário de Veículos
-![Formulário de Veículos](./frontend/assets/Form%20de%20veículos.jpeg)
-
-## Fluxograma
-![Fluxograma](./frontend/assets/Fluxograma.jpeg)
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="./frontend/assets/Login.jpeg" alt="Tela de Login" width="300px">
+  <img src="./frontend/assets/Home.jpeg" alt="Tela Inicial" width="300px">
+  <img src="./frontend/assets/MinhasReservas.jpeg" alt="Minhas Reservas" width="300px">
+</div>
 
 
 ## 🚀 Funcionalidades
