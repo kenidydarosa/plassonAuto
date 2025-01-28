@@ -1,20 +1,22 @@
 import BaseModel from './BaseModel.js';
 
 const columnsArray = [
-    'user_id',
-    'veicule_id',
-    'title',
-    'summary',
-    'color',
-    'locale',
-    'start',
-    'end',
-    'allDay',
-    'keyHandOverTime',
-    'returnOfKeyTime',
-    'status',
-    'notes',
-  ];
+  'user_id',
+  'veicule_id',
+  'title',
+  'summary',
+  'color',
+  'locale',
+  'latitude',
+  'longitude',
+  'start',
+  'end',
+  'allDay',
+  'keyHandOverTime',
+  'returnOfKeyTime',
+  'status',
+  'notes',
+];
 
 class SchedulesModel extends BaseModel {
   async getAll(whereColumn = null, whereValue = null) {

@@ -59,6 +59,8 @@ async function createTables() {
         summary TEXT NOT NULL,
         color TEXT NOT NULL,
         locale TEXT NOT NULL,
+        latitude TEXT NOT NULL,
+        longitude TEXT NOT NULL,
         start TEXT NOT NULL,
         end TEXT NOT NULL,
         allDay INTEGER NOT NULL,

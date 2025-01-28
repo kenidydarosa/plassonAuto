@@ -6,6 +6,8 @@ const columnsArray = [
   'summary',
   'color',
   'locale',
+  'latitude',
+  'longitude',
   'start',
   'end',
   'allDay',
