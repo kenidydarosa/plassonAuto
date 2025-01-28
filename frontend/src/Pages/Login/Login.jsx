@@ -9,20 +9,12 @@ import fontConfig from '../../config/fontConfig.js';
 import AlertDialog from '../../components/Dialog.jsx';
 import { fetchUsers, loginUser } from '../../routes/userRoutes.js';
 import { initializeSocket, setupNotificationListener } from '../../services/Notify.js';
-export let userIDProvisorio
+export let userIDProvisorio;
 
 const Login = () => {
   const navigation = useNavigation();
   const fontsLoaded = fontConfig();
-  const {
-    userDB,
-    setUserDB,
-    setSchedulesDB,
-    setVeiculesDB,
-    setNotifyDB,
-    setUsersDB,
-    setSectorsDB,
-  } = useDataContext();
+  const { userDB, setUserDB, setSchedulesDB, setVeiculesDB, setNotifyDB, setUsersDB, setSectorsDB } = useDataContext();
 
   // Estado local para armazenar os valores dos campos de entrada
   const [username, setUsername] = useState('Kenidy.rosa');
@@ -36,11 +28,8 @@ const Login = () => {
     setLoadingImage(true); // Ativa o carregamento ao clicar no botão
 
     try {
-      const { user, schedules, notify, veicules, users, sectors } = await loginUser(
-        username,
-        password
-      );
-      userIDProvisorio = user
+      const { user, schedules, notify, veicules, users, sectors } = await loginUser(username, password);
+      userIDProvisorio = user;
       setLoadingImage(false);
       setUserDB(user);
       setSchedulesDB(schedules);
@@ -48,10 +37,9 @@ const Login = () => {
       setVeiculesDB(veicules);
       setUsersDB(users);
       setSectorsDB(sectors);
-      initializeSocket(user)
-      setupNotificationListener(user, setNotifyDB)
+      initializeSocket(user);
+      setupNotificationListener(user, setNotifyDB);
       navigation.navigate('BottomNavigator');
-      
     } catch (error) {
       setLoadingImage(true);
 
@@ -80,9 +68,7 @@ const Login = () => {
   return (
     <View style={[styleJS.pageContainer, { justifyContent: 'center' }]}>
       <View style={styleJS.container}>
-        <View
-          style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}
-        >
+        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
           <Image
             source={require('../../../assets/logo.png')} // Imagem do logo da aplicação
             style={{ width: 230, height: 27 }} // Estilo da imagem
@@ -91,20 +77,9 @@ const Login = () => {
         <Text style={[styleJS.title, { marginTop: 0 }]}>PlassonAuto</Text>
 
         {/* Campo de entrada para o nome de usuário (Email) */}
-        <InputText
-          value={username}
-          setValue={setUsername}
-          label='Usuário'
-          icon={'account-circle'}
-        />
+        <InputText value={username} setValue={setUsername} label='Usuário' icon={'account-circle'} />
         {/* Campo de entrada para a senha */}
-        <InputText
-          value={password}
-          setValue={setPassword}
-          label='Senha'
-          type={'password'}
-          icon={'eye'}
-        />
+        <InputText value={password} setValue={setPassword} label='Senha' type={'password'} icon={'eye'} />
 
         {/* Botão de login */}
         <Button

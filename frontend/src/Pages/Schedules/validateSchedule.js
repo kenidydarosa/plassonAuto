@@ -21,13 +21,13 @@ export const validateSchedule = (user, veicule, dateStart, dateEnd, schedulesDB)
 
       // Se não for o dono da reserva, verifica conflitos de horário
       if (
-        (newStart < existingEnd && newStart >= existingStart) || // Novo começa no intervalo da reserva existente
-        (newEnd > existingStart && newEnd <= existingEnd) || // Novo termina no intervalo da reserva existente
-        (newStart <= existingStart && newEnd >= existingEnd) || // Novo cobre toda a reserva existente
-        newStart === existingStart || // Novo começa exatamente no início da reserva existente
-        newEnd === existingEnd // Novo termina exatamente no final da reserva existente
+        (newStart < existingEnd && newStart >= existingStart) || // Novo registro começa no intervalo da reserva existente
+        (newEnd > existingStart && newEnd <= existingEnd) || // Novo registro termina no intervalo da reserva existente
+        (newStart <= existingStart && newEnd >= existingEnd) || // Novo registro cobre toda a reserva existente
+        newStart === existingStart || // Novo registro começa exatamente no início da reserva existente
+        newEnd === existingEnd // Novo registro termina exatamente no final da reserva existente
       ) {
-        // Conflito encontrado
+        // Existe conflito
         return false;
       }
     }

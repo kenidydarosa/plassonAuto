@@ -8,7 +8,8 @@ module.exports = function (api) {
       },
     },
     plugins: [
-      'react-native-reanimated/plugin', 
+      'react-native-paper/babel', // Se for necessário em desenvolvimento também
+      'react-native-reanimated/plugin', // Deve ser o último plugin
     ],
   };
 };

@@ -16,15 +16,17 @@ import AlertDialog from '../../components/Dialog.jsx';
  *
  * @returns {JSX.Element} A interface de usuário com a lista de usuários.
  */
+
 const User = () => {
   const { usersDB, setUsersDB, sectorsDB } = useDataContext();
-  const [visible, setVisible] = useState(false); // Controle de visibilidade do alerta
-  // Estado para armazenar os dados de erro
+  const [visible, setVisible] = useState(false);
+
   const [errorData, setErrorData] = useState({
     title: '',
     msg: '',
     icon: '',
   });
+
   // Verifica se as fontes foram carregadas corretamente
   const fontsLoaded = fontConfig();
 
@@ -83,8 +85,8 @@ const User = () => {
     const sector = sectorsDB.find((item) => item.id === user.sector_id);
     return (
       <CardList
-        key={user.id} // Passa o id do usuário
-        id={user.id} // Passa o id do usuário
+        key={user.id} // id do usuário
+        id={user.id} // id do usuário
         text1={user.name} // Nome do usuário
         text2={user.job} // Cargo do usuário
         text3={sector.name} // Setor do usuário

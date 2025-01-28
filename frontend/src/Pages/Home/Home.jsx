@@ -4,6 +4,7 @@ import fontConfig from '../../config/fontConfig';
 import Header from '../../components/Header';
 import styleJS from '../../components/style';
 import NothingText from '../../components/NothingText';
+// import MapView from 'react-native-maps';
 
 /**
  * Tela principal do aplicativo, chamada 'Home', que exibe um título e um cabeçalho.

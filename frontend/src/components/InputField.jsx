@@ -33,6 +33,7 @@ const InputField = ({
 	width,
 	multiline,
 	data = false,
+	onPress = ()=> {}
 }) => {
   // Estado para armazenar o valor exibido no campo de entrada
 	const [displayValue, setDisplayValue] = useState(value || '');
@@ -106,9 +107,10 @@ const InputField = ({
 				/>
 			</View>
 			<TextInput
+				onPress={onPress ? onPress : ''}
 				style={[styles.input, { outline: 'none' }]}
 				placeholder={placeholder}
-				value={displayValue} // Exibe o valor formatado no TextInput
+				value={value} // Exibe o valor formatado no TextInput
 				onChangeText={handleChange} // Chama o handleChange ao alterar o texto
 				editable={editable}
 				keyboardType={type === 'numeric' ? 'numeric' : 'default'} // Define o tipo de teclado (numérico ou padrão)
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		borderRadius: 5,
 		fontFamily: 'poppins',
-		width: '100%',
+		width: '90%',
 	},
 	borderBotton: {
 		borderBottomWidth: 1,

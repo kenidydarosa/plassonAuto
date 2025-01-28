@@ -12,16 +12,16 @@ import { getImageUrl } from '../../config/api.js';
 import Loading from '../../components/Loading.jsx';
 
 const Veicules = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
+
   // Obtém a lista de veículos do contexto
   const { veiculesDB, sectorsDB } = useDataContext();
-  // Obtém os parâmetros da rota, incluindo o tipo de tela
-  const route = useRoute();
-  // Hook de navegação para facilitar a navegação entre telas
-  const navigation = useNavigation();
+  
   // Função que verifica se as fontes estão carregadas
   const fontsLoaded = fontConfig();
-  // Desestrutura os parâmetros da rota, pegando o tipo
   const { type } = route.params || {};
+  
   // Condicional para verificar se estamos na tela de criação de agendamento
   const createSchedule = type === 'newSchedule' ? true : false;
 

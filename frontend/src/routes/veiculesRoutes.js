@@ -47,7 +47,6 @@ export const updateVeicule = async (id, veicule) => {
   if (response.status === 200) {
     return response.data;
   } else {
-    console.log(response)
     throw new Error(response.data);
   }
 };

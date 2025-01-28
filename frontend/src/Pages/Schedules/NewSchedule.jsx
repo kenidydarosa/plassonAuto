@@ -1,14 +1,6 @@
 /** @format */
 
-import {
-  View,
-  Text,
-  TextInput,
-  Switch,
-  Platform,
-  ScrollView,
-  KeyboardAvoidingView,
-} from 'react-native';
+import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback, TouchableHighlight } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
@@ -16,13 +8,14 @@ import React, { useEffect, useState } from 'react';
 import { DateTimeButton, showDateTimePicker, onChange } from './DateTimeButton.jsx';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styleJS from '../../components/style.js';
-import InputField from '../../components/InputFied.jsx';
+import InputField from '../../components/InputField.jsx';
 import SelectInput from '../../components/SelectInput.jsx';
 import AlertDialog from '../../components/Dialog.jsx';
 import { createSchedules, updateSchedules } from '../../routes/schedulesRoutes.js';
 import { validateSchedule } from './validateSchedule.js';
 import { sendNotification } from '../../services/Notify.js';
 
+//--------------------------------------------------------------------------------------------------------------------
 const NewSchedule = () => {
   const route = useRoute();
   const navigation = useNavigation();
@@ -36,6 +29,12 @@ const NewSchedule = () => {
     usersDB,
     notifyDB,
     setNotifyDB,
+    locale,
+    setLocale,
+    latitude,
+    setLatitude,
+    longitude,
+    setLongitude,
   } = useDataContext();
   const { create, id, timeString, onlyVisible } = route.params || {};
 
@@ -46,7 +45,6 @@ const NewSchedule = () => {
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
 
-  const [locale, setLocale] = useState('');
   const [allDay, setAllDay] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
@@ -116,11 +114,10 @@ const NewSchedule = () => {
         setEndDate(date);
         setStartTime(date);
         setEndTime(endDate);
+
       } else {
         const currentSchedule = schedulesDB.find((item) => item.id === id);
-        const currentCar = veiculesDB.find(
-          (car) => car.id === currentSchedule.veicule_id
-        );
+        const currentCar = veiculesDB.find((car) => car.id === currentSchedule.veicule_id);
         const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
 
         setCar(currentCar);
@@ -131,6 +128,8 @@ const NewSchedule = () => {
           setTitle(currentSchedule.title);
           setSummary(currentSchedule.summary);
           setLocale(currentSchedule.locale);
+          setLatitude(currentSchedule.latitude);
+          setLongitude(currentSchedule.longitude);
           setAllDay(currentSchedule.allDay === 'true' ? true : false);
           setStartDate(new Date(currentSchedule.start));
           setStartTime(new Date(currentSchedule.start));
@@ -200,9 +199,9 @@ const NewSchedule = () => {
     return currentDate;
   };
 
+  // Confirma os dados do formulário
   const confirmData = async () => {
     try {
-      // Verifica se há algum campo vazio
       const dateStart = formatDateTime(startDate, startTime);
       const dateEnd = formatDateTime(endDate, endTime);
       const fields = [user, title, summary, locale];
@@ -236,6 +235,8 @@ const NewSchedule = () => {
         title,
         summary,
         locale,
+        latitude,
+        longitude,
         start: dateStart,
         end: dateEnd,
         allDay,
@@ -246,14 +247,12 @@ const NewSchedule = () => {
         color: styleJS.EVENT_COLOR,
       };
 
-      const schedules = create
-        ? await createSchedules(baseSchedule)
-        : await updateSchedules(id, baseSchedule);
+      const schedules = create ? await createSchedules(baseSchedule) : await updateSchedules(id, baseSchedule);
       setSchedulesDB(schedules.response);
 
       let text;
       if (initialStatus !== status) {
-        text = `O administrador alterou o status da sua reserva de ${new Date( dateStart).toLocaleDateString()} para "${status}"`;
+        text = `O administrador alterou o status da sua reserva de ${new Date(dateStart).toLocaleDateString()} para "${status}"`;
       } else {
         text = `O administrador atualizou a sua reserva, verifique!`;
       }
@@ -287,30 +286,26 @@ const NewSchedule = () => {
       setShowAlert(true);
     }
   };
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // ajuste se necessário
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
-      <ScrollView
-        style={styleJS.containerForm}
-        contentContainerStyle={{ paddingBottom: 70 }}
-      >
+      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>
             <View
               style={[
                 styleJS.statusBase,
-                { backgroundColor: status == 'Ativa' ? styleJS.statusGreen : status ==='Cancelada' ? styleJS.statusRed : styleJS.statusYellow},
-                // { backgroundColor: statusBt ? styleJS.statusGreen : styleJS.statusRed },
+                { backgroundColor: status == 'Ativa' ? styleJS.statusGreen : status === 'Cancelada' ? styleJS.statusRed : styleJS.statusYellow },
               ]}
             >
               <Text
                 style={{
-                  // color: statusBt ? styleJS.statusFontGreen : styleJS.statusFontRed,
-                  color:status == 'Ativa' ? styleJS.statusFontGreen : status ==='Cancelada' ? styleJS.statusFontRed : styleJS.statusFontYellow,
+                  color: status == 'Ativa' ? styleJS.statusFontGreen : status === 'Cancelada' ? styleJS.statusFontRed : styleJS.statusFontYellow,
                 }}
               >
                 {status}
@@ -359,15 +354,18 @@ const NewSchedule = () => {
             width={'100%'}
             multiline={true}
           />
-          <InputField
-            icon={'map-marker'}
-            placeholder={'*Localização'}
-            value={locale}
-            func={setLocale}
-            editable={!onlyVisible}
-            border={false}
-            width={'100%'}
-          />
+          <TouchableHighlight  underlayColor="transparent" onPress={() =>  navigation.navigate('ModalSheetButton')}>
+            <InputField
+              icon={'map-marker'}
+              placeholder={'*Localização'}
+              value={locale}
+              func={setLocale}
+              editable={false}
+              border={false}
+              width={'100%'}
+              onPress={() =>  navigation.navigate('ModalSheetButton')}
+            />
+          </TouchableHighlight>
         </View>
 
         {/* Botões para Data e Hora */}
@@ -453,12 +451,8 @@ const NewSchedule = () => {
             value={pickerField.includes('Date') ? startDate : startTime}
             mode={pickerMode}
             is24Hour={true}
-            display={
-              Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'
-            }
-            onChange={(event, selectedDateTime) =>
-              onChange(event, selectedDateTime, listPicker)
-            }
+            display={Platform.OS === 'ios' && pickerMode === 'time' ? 'spinner' : 'inline'}
+            onChange={(event, selectedDateTime) => onChange(event, selectedDateTime, listPicker)}
             themeVariant='light'
             minimumDate={minimumDate}
             locale='pt-br'

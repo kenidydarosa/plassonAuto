@@ -1,6 +1,5 @@
-// DataContext.js
 import React, { createContext, useState, useContext } from 'react';
-import { listTitlesDB, listSectorsDB} from './data';
+import { listTitlesDB, listSectorsDB } from './data';
 
 // Criação de um contexto chamado DataContext, para gerenciar dados globais no aplicativo
 const DataContext = createContext();
@@ -13,35 +12,63 @@ export const DataProvider = ({ children }) => {
   const [usersDB, setUsersDB] = useState(null); // Estado para armazenar os dados dos usuários
   const [notifyDB, setNotifyDB] = useState(null); // Estado para armazenar as notificações
   const [veiculesDB, setVeiculesDB] = useState(null); // Estado para armazenar os veículos
-  const [sectorsDB, setSectorsDB] = useState(null); // Estado para armazenar os veículos
+  const [sectorsDB, setSectorsDB] = useState(null); // Estado para armazenar os setores
+  const [locale, setLocale] = useState(null); // Estado para armazenar o local atual
+  const [latitude, setLatitude] = useState(null); // Estado para armazenar a latitude do local atual
+  const [longitude, setLongitude] = useState(null); // Estado para armazenar a longitude do local atual
+  const [latitudeTemp, setLatitudeTemp] = useState(null); // Estado para armazenar uma latitude temporária
+  const [longitudeTemp, setLongitudeTemp] = useState(null); // Estado para armazenar uma longitude temporária
+  const [latitudeUser, setLatitudeUser] = useState(null); // Estado para armazenar a latitude do usuário
+  const [longitudeUser, setLongitudeUser] = useState(null); // Estado para armazenar a longitude do usuário
+  const [destination, setDestination] = useState(null); // Estado para armazenar o destino atual
+  const [routeInfo, setRouteInfo] = useState({ distance: '', duration: '' });;
+  const [notificationCount, setNotificationCount] = useState(0); // Estado para armazenar a contagem de notificações não lidas
+  const contextValue = {
+    userDB, // Fornece o estado do usuário atual
+    setUserDB, // Função para atualizar o estado do usuário
+    schedulesDB, // Fornece os agendamentos
+    setSchedulesDB, // Função para atualizar os agendamentos
+    usersDB, // Fornece os usuários
+    setUsersDB, // Função para atualizar os usuários
+    notifyDB, // Fornece as notificações
+    setNotifyDB, // Função para atualizar as notificações
+    veiculesDB, // Fornece os veículos
+    setVeiculesDB, // Função para atualizar os veículos
+    listTitlesDB, // Fornece os títulos da lista
+    listSectorsDB, // Fornece os setores da lista
+    sectorsDB, // Fornece os setores
+    setSectorsDB, // Função para atualizar os setores
+    locale, // Fornece o local atual
+    setLocale, // Função para atualizar o local atual
+    latitude, // Fornece a latitude do local atual
+    setLatitude, // Função para atualizar a latitude do local atual
+    longitude, // Fornece a longitude do local atual
+    setLongitude, // Função para atualizar a longitude do local atual
+    latitudeTemp, // Fornece a latitude temporária
+    setLatitudeTemp, // Função para atualizar a latitude temporária
+    longitudeTemp, // Fornece a longitude temporária
+    setLongitudeTemp, // Função para atualizar a longitude temporária
+    latitudeUser, // Fornece a latitude do usuário
+    setLatitudeUser, // Função para atualizar a latitude do usuário
+    longitudeUser, // Fornece a longitude do usuário
+    setLongitudeUser, // Função para atualizar a longitude do usuário
+    destination, // Fornece o destino atual
+    setDestination, // Função para atualizar o destino atual
+    notificationCount, // Fornece a contagem de notificações não lidas
+    setNotificationCount, // Função para atualizar a contagem de notificações não lidas
+    routeInfo,
+    setRouteInfo
+  };
 
   return (
     // O DataContext.Provider fornece o contexto para os componentes filhos.
     // O valor do contexto inclui os estados e suas funções de atualização
-    <DataContext.Provider
-      value={{
-        userDB, // Fornece o estado do usuário atual
-        setUserDB, // Função para atualizar o estado do usuário
-        schedulesDB, // Fornece os agendamentos
-        setSchedulesDB, // Função para atualizar os agendamentos
-        usersDB, // Fornece os usuários
-        setUsersDB, // Função para atualizar os usuários
-        notifyDB, // Fornece as notificações
-        setNotifyDB, // Função para atualizar as notificações
-        veiculesDB, // Fornece os veículos
-        setVeiculesDB, // Função para atualizar os veículos
-        listTitlesDB, // Fornece os títulos da lista
-        listSectorsDB, // Fornece os setores da lista
-        sectorsDB,
-        setSectorsDB,
-      }}
-    >
+    <DataContext.Provider value={contextValue}>
       {/* Os componentes filhos que recebem esse contexto */}
       {children}
     </DataContext.Provider>
   );
 };
 
-export const useDataContext = () => {
-  return useContext(DataContext);
-};
+// Hook personalizado para acessar o contexto DataContext
+export const useDataContext = () => useContext(DataContext);

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../Pages/Home/Home';
@@ -38,14 +37,15 @@ import { useDataContext } from '../data/DataContext';
 const Tab = createBottomTabNavigator();
 
 const BottomNavigator = () => {
-  const { userDB, notifyDB } = useDataContext();
-  const [notificationCount, setNotificationCount] = useState(0);
+  const { userDB, notifyDB, notificationCount, setNotificationCount } = useDataContext();
+  
+  // const [notificationCount, setNotificationCount] = useState(0);
 
   // Atualiza a contagem de notificações sempre que o notifyDB mudar
   useEffect(() => {
     setNotificationCount(notifyDB.length); // Atualiza o número de notificações
   }, [notifyDB]); // Esse efeito será executado sempre que notifyDB mudar
-  
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

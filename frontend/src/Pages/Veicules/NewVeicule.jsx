@@ -14,7 +14,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import styleJS from '../../components/style.js';
-import InputField from '../../components/InputFied.jsx';
+import InputField from '../../components/InputField.jsx';
 import SelectInput from '../../components/SelectInput.jsx';
 import AlertDialog from '../../components/Dialog.jsx';
 import uuid from 'react-native-uuid';

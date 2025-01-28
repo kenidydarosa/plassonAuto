@@ -19,7 +19,7 @@ import AlertDialog from '../../components/Dialog.jsx';
  */
 const Notify = () => {
   const fontsLoaded = fontConfig(); // Usa a configuração de fontes
-  const { notifyDB, setNotifyDB } = useDataContext();
+  const { notifyDB, setNotifyDB, setNotificationCount } = useDataContext();
   const [data, setData] = useState(notifyDB); // Define estado com notifyData
   const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
   const [showAlert, setShowAlert] = useState(false);
@@ -27,6 +27,7 @@ const Notify = () => {
   // Atualiza o estado local 'data' sempre que 'notifyDB' mudar
   useEffect(() => {
     setData(notifyDB || []); // Garante que o estado seja atualizado com as notificações mais recentes
+    setNotificationCount(notifyDB.length)
   }, [notifyDB]);
 
   // Se as fontes não estiverem carregadas, exibe um indicador de carregamento
@@ -55,8 +56,13 @@ const Notify = () => {
         // Atualizar o status da notificação
         notifyItem.visualized = true;
         // Passar a notificação atualizada para a função updateNotify
-        await updateNotify(id, notifyItem);
-        setData((data) => data.filter((notify) => notify.id !== id || notify.visualizad == 1));
+        const notifications = (await updateNotify(id, notifyItem)).response;
+        const updateData = notifications.filter((notify) => notify.id !== id && notify.visualized !== '1')
+
+        setData(updateData);
+        setNotificationCount(updateData.length)
+
+        // setData((data) => data.filter((notify) => notify.id !== id || notify.visualizad == 1));
       }
     } catch (error) {
       if (error.response && error.response.data) {

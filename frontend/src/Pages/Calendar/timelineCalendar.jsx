@@ -6,8 +6,7 @@ import find from 'lodash/find';
 import React, { useState } from 'react';
 import { ExpandableCalendar, TimelineList, CalendarProvider, CalendarUtils, LocaleConfig } from 'react-native-calendars';
 import styleJS, { getTheme } from '../../components/style';
-import { useNavigation } from '@react-navigation/native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext';
 
 const INITIAL_TIME = { hour: 9, minutes: 0 };
@@ -51,6 +50,7 @@ const TimelineCalendarScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
+  console.log('calendar')
   const { schedulesDB, veiculesDB, usersDB } = useDataContext();
   const { create, id } = route.params || {}; // Obtém os parâmetros de navegação (se existirem)
 
@@ -73,7 +73,6 @@ const TimelineCalendarScreen = () => {
 
   // Função chamada quando o mês é alterado
   const onMonthChange = (month) => {
-    // console.log('TimelineCalendarScreen onMonthChange: ', month);
   };
 
   // Navega para a tela de criação de novo evento (NewSchedule)
@@ -113,7 +112,10 @@ const TimelineCalendarScreen = () => {
       />
       <TimelineList
         events={eventsByDate} // Passa os eventos agrupados por data
-        keyExtractor={(item) => item.id || item.someUniqueIdentifier} // Utiliza uma chave única para cada evento
+        key={(item) => {
+          console.log('Id do item no TimelineList:', item.id); // Log para ver o id de cada item
+          return item.id;
+        }} 
         timelineProps={{
           format24h: true, // Define o formato de hora como 24 horas
           onBackgroundLongPress: createNewEvent, // Chama a função de navegação ao pressionar em branco
