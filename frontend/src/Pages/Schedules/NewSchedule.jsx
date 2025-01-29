@@ -559,7 +559,7 @@ const NewSchedule = () => {
             </View>
             <Switch
               value={!keyHandOver ? keyHandOver : returnOfKey}
-              disabled={!keyHandOver}
+              disabled={!keyHandOver || onlyVisible}
               onValueChange={(value) => {
                 value = !keyHandOver ? keyHandOver : value;
                 setReturnOfKey(value);

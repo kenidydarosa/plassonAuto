@@ -236,6 +236,7 @@ const ModalSheetButton = () => {
     longitudeTemp,
     setLongitudeTemp,
     routeInfo,
+    setDestination
   } = useDataContext();
 
   const [location, setLocation] = useState(null);
@@ -288,7 +289,7 @@ const ModalSheetButton = () => {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
-
+    
     const address = await getAddressFromCoordinates(latidudeX, longitudeX);
     setSelectedAddress(address);
 

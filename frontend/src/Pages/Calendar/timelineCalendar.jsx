@@ -1,4 +1,4 @@
-/** @format */
+// /** @format */
 
 import groupBy from 'lodash/groupBy';
 import filter from 'lodash/filter';
@@ -54,8 +54,8 @@ const TimelineCalendarScreen = () => {
   const { schedulesDB, veiculesDB, usersDB } = useDataContext();
   const { create, id } = route.params || {}; // Obtém os parâmetros de navegação (se existirem)
 
-  const EVENTS = create && id ? schedulesDB.filter(schedule => schedule.veicule_id === id && schedule.status !== 'Ativa') : schedulesDB.filter(schedule => schedule.status !== 'Ativa')  
-  
+  const EVENTS = create && id ? schedulesDB.filter(schedule => schedule.veicule_id === id && schedule.status !== 'Ativa') : schedulesDB.filter(schedule => schedule.status !== 'Ativa')
+
   // Estado para controlar a data atual e os eventos agrupados por data
   const [currentDate, setCurrentDate] = useState(new Date());
   const [eventsByDate, setEventsByDate] = useState(groupBy(EVENTS, (e) => CalendarUtils.getCalendarDateString(e.start)));
@@ -107,7 +107,6 @@ const TimelineCalendarScreen = () => {
         showScrollIndicator // Exibe o indicador de rolagem
         minDate={new Date().toISOString()} // Define a data mínima para o calendário (hoje)
         stickyHeaderIndices={true} // Faz o cabeçalho do calendário fixo
-        // hideArrows={false} // Exibe as setas de navegação
         theme={getTheme()} // Aplica o tema personalizado
       />
       <TimelineList
@@ -115,7 +114,7 @@ const TimelineCalendarScreen = () => {
         key={(item) => {
           console.log('Id do item no TimelineList:', item.id); // Log para ver o id de cada item
           return item.id;
-        }} 
+        }}
         timelineProps={{
           format24h: true, // Define o formato de hora como 24 horas
           onBackgroundLongPress: createNewEvent, // Chama a função de navegação ao pressionar em branco
@@ -131,3 +130,4 @@ const TimelineCalendarScreen = () => {
 };
 
 export default TimelineCalendarScreen;
+
