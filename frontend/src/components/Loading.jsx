@@ -5,7 +5,7 @@ import styleJS from './style';
 
 const Loading = () => (
   <View style={{position:'absolute'}}>
-  <ActivityIndicator animating={true} color={styleJS.primaryColor} />
+    <ActivityIndicator animating={true} color={styleJS.primaryColor} />
   </View>
 );
 

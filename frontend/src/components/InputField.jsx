@@ -88,7 +88,6 @@ const InputField = ({
 			func(text);
 		}
 	};
-
 	return (
 		<View
 			style={[
@@ -110,7 +109,7 @@ const InputField = ({
 				onPress={onPress ? onPress : ''}
 				style={[styles.input, { outline: 'none' }]}
 				placeholder={placeholder}
-				value={value} // Exibe o valor formatado no TextInput
+				value={displayValue} // Exibe o valor formatado no TextInput
 				onChangeText={handleChange} // Chama o handleChange ao alterar o texto
 				editable={editable}
 				keyboardType={type === 'numeric' ? 'numeric' : 'default'} // Define o tipo de teclado (numérico ou padrão)

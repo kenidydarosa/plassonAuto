@@ -2,11 +2,12 @@ export const validateSchedule = (user, veicule, dateStart, dateEnd, schedulesDB)
   // Converte as strings de data de início e fim para objetos Date
   const newStart = new Date(dateStart);
   const newEnd = new Date(dateEnd);
-
+  
+  console.log('validate')
   // Percorre todas as reservas no banco de dados
   for (const item of schedulesDB) {
     // Verifica se a reserva atual é para o mesmo veículo
-    if (item.veicule_id === veicule === item.status ==='Ativa') {
+    if (item.veicule_id === veicule && item.status ==='Ativa') {
       const existingStart = new Date(item.start);
       const existingEnd = new Date(item.end);
 

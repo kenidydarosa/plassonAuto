@@ -2,8 +2,8 @@
 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
-import { useCallback } from 'react';
-import { Text, ScrollView, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import { Text, ScrollView, View, RefreshControl } from 'react-native';
 import Card from '../../components/CardPost.jsx';
 import FloatingButton from '../../components/FloatingButton.jsx';
 import fontConfig from '../../config/fontConfig.js';
@@ -12,10 +12,13 @@ import styleJS from '../../components/style.js';
 import SearchableCardList from '../../components/Search.jsx';
 import { getImageUrl } from '../../config/api.js';
 import Loading from '../../components/Loading.jsx';
+import { updateData } from '../../routes/updateRoutes.js';
 
 export const MySchedules = () => {
   const navigation = useNavigation();
   const { userDB, schedulesDB, veiculesDB, usersDB } = useDataContext();
+  const dataContext = useDataContext();
+  const [loading, setLoading] = useState(false);
   const fontsLoaded = fontConfig();
 
   //Filtra apenas as reservas que o usuário é dono.
@@ -33,6 +36,12 @@ export const MySchedules = () => {
       }
     }, [schedulesDB, veiculesDB, usersDB])
   );
+
+  const onRefresh = async () => {
+    setLoading(true);
+    await updateData(userDB.id, dataContext);
+    setLoading(false);
+  };
 
   // Confere se as fontes foram carregadas
   if (!fontsLoaded) {
@@ -114,12 +123,17 @@ export const MySchedules = () => {
 
   return (
     <View style={styleJS.pageContainer}>
-      <ScrollView contentContainerStyle={styleJS.container}>
-        <Header />
-        <Text style={[styleJS.title, { marginTop: 0 }]}>Minhas reservas</Text>
 
+      <View style={styleJS.container}>
+      {/* <ScrollView contentContainerStyle={styleJS.container}
+        // refreshControl={<RefreshControl refreshing={loading} tintColor={styleJS.primaryColor} onRefresh={onRefresh} />}
+      > */}
+        <Header />
+        <Text style={[styleJS.title, { marginTop: 40 }]}>Minhas reservas</Text>
         {/* Componente SearchableCardList */}
         <SearchableCardList
+          onRefresh={onRefresh}
+          loading={loading}
           data={updateSchedule} // Passa os dados das reservas filtrados
           renderCard={renderCard} // Função que renderiza cada card
           searchKeys={['user_id', 'title', 'summary', 'locale', 'start']} // Chaves para a pesquisa
@@ -131,7 +145,8 @@ export const MySchedules = () => {
           ]}
           initialFilter={'todos'}
         />
-      </ScrollView>
+      {/* </ScrollView> */}
+      </View>
       <FloatingButton onPress={navigateToVeicules} />
     </View>
   );

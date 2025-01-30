@@ -154,9 +154,9 @@ class UserController {
     try {
       const { username, password } = req.body;
       const user = await this.userModel.login(username, password);
-
+      
       if (!user) {
-        throw new Error();
+        throw new Error("Usuário ou senha incorretos");
       }
 
       if (user.status == 'Inativo') {
@@ -192,6 +192,43 @@ class UserController {
       res.status(401).json({
         title: 'Erro!',
         msg: 'Usuário ou senha inválidos.',
+        icon: 'close-circle',
+      });
+    }
+  }
+  async getAllData(req, res){
+    try {
+      const { id } = req.params;
+      const user = await this.userModel.getByID(id);
+
+      if (!user) {
+        throw new Error();
+      }
+
+      const [schedules, notify, veicules, users, sectors] = await Promise.all([
+        this.schedulesModel.getAll(), // Consulta agendamentos
+        this.notifyModel.getAll('user_id', user.id, 'visualized', false), // Consulta notificações
+        this.veiculesModel.getAll(), // Consulta veículos
+        this.userModel.getAll(), // Consulta todos os usuários
+        this.sectorsModel.getAll(), // Consulta todos os usuários
+      ]);
+
+      res.status(200).json({
+        schedules,
+        notify,
+        veicules,
+        users,
+        sectors,
+        title: 'Sucesso',
+        msg: 'Login realizado com sucesso!',
+        icon: 'check-circle',
+      });
+      
+    } catch (error) {
+      console.log(error);
+      res.status(401).json({
+        title: 'Erro!',
+        msg: 'Erro ao atualizar.',
         icon: 'close-circle',
       });
     }

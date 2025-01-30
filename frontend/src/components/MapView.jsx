@@ -1,16 +1,18 @@
-// import React, { useEffect, useRef, useState, useMemo } from 'react';
+// import React, { useEffect, useRef, useState } from 'react';
 // import { View, StyleSheet, Dimensions, Alert, Platform, Text } from 'react-native';
 // import { IconButton } from 'react-native-paper';
-// import MapView, { MarkerAnimated, AnimatedRegion, Marker, Callout } from 'react-native-maps';
+// import MapView, { MarkerAnimated, AnimatedRegion, Marker } from 'react-native-maps';
 // import * as Location from 'expo-location';
 // import { useDataContext } from '../data/DataContext.js';
 // import { fetchPlaceName, GOOGLE_MAPS_API_KEY } from '../config/api.js';
-// import MapViewDirections from 'react-native-maps-directions'; // Importa o componente para rotas
+// import MapViewDirections from 'react-native-maps-directions';
 
 // const { width, height } = Dimensions.get('window');
 
 // // Função para calcular o ponto médio entre dois pontos geográficos
 // const calculateMidPoint = (origin, destination) => {
+//   if (!origin || !destination) return;
+
 //   const lat1 = origin.latitude * (Math.PI / 180);
 //   const lon1 = origin.longitude * (Math.PI / 180);
 //   const lat2 = destination.latitude * (Math.PI / 180);
@@ -73,20 +75,13 @@
 //   }, []);
 
 //   // Atualizar o ponto médio quando o destino mudar
-//   // useEffect(() => {
-//   //   setMidPoint(memoizedMidPoint);
-//   // }, [memoizedMidPoint]);
-
 //   useEffect(() => {
 //     if (latitudeUser && longitudeUser && destination?.latitude && destination?.longitude) {
-//       const newMidPoint = calculateMidPoint(
-//         { latitude: latitudeUser, longitude: longitudeUser },
-//         destination
-//       );
+//       const newMidPoint = calculateMidPoint({ latitude: latitudeUser, longitude: longitudeUser }, destination);
 //       setMidPoint(newMidPoint);
 //     }
-//   }, [latitudeUser, longitudeUser, destination]);
-  
+//   }, [destination]);
+
 //   // Atualizar o marcador e aplicar o efeito de balanço ao mudar a localização
 //   useEffect(() => {
 //     if (location) {
@@ -109,8 +104,8 @@
 //           const interval = setInterval(() => {
 //             coordinate
 //               .timing({
-//                 latitude: bounce[index].latitude,
-//                 longitude: bounce[index].longitude,
+//                 latitude: bounce[index]?.latitude,
+//                 longitude: bounce[index]?.longitude,
 //                 duration: 100,
 //                 useNativeDriver: false,
 //               })
@@ -119,14 +114,14 @@
 //             if (index >= bounce.length) clearInterval(interval);
 //           }, 150);
 //         });
-//       setDestination({ latitude:location.latitude, longitude:location.longitude})
+//       setDestination({ latitude: location.latitude, longitude: location.longitude });
 //       updatePlaceName();
 //     }
 //   }, [location]);
 
 //   const updatePlaceName = async () => {
 //     if (location) {
-//       const { name } = await fetchPlaceName({
+//       const name = await fetchPlaceName({
 //         latitude: location.latitude,
 //         longitude: location.longitude,
 //       });
@@ -153,18 +148,8 @@
 //     setLatitudeTemp(latitude);
 //     setLongitudeTemp(longitude);
 //     setSelectMaps(true);
-//     console.log(latitude)
-
 //     setDestination({ latitude, longitude });
-//     // memoizedMidPoint()
 //   };
-
-//   // const memoizedMidPoint = useMemo(() => {
-//   //   if (latitudeUser && longitudeUser && destination?.latitude && destination?.longitude) {
-//   //     return calculateMidPoint({ latitude: latitudeUser, longitude: longitudeUser }, destination);
-//   //   }
-//   //   return null;
-//   // }, [latitudeUser, longitudeUser, destination]);
 
 //   return (
 //     <View style={styles.container}>
@@ -172,9 +157,15 @@
 //         mapType='standard'
 //         ref={mapRef}
 //         style={styles.map}
+//         region={{
+//           latitude: location.latitude || 0,
+//           longitude: location.longitude || 0,
+//           latitudeDelta: 0.01,
+//           longitudeDelta: 0.01,
+//         }}
 //         initialRegion={{
-//           latitude: location?.latitude || 0,
-//           longitude: location?.longitude || 0,
+//           latitude: latitudeUser || 0,
+//           longitude: longitudeUser || 0,
 //           latitudeDelta: 0.01,
 //           longitudeDelta: 0.01,
 //         }}
@@ -200,7 +191,7 @@
 //         )}
 
 //         {/* Adiciona a rota se o destino estiver definido */}
-//         {destination && (
+//         {destination?.latitude && destination?.longitude && latitudeUser && longitudeUser && (
 //           <MapViewDirections
 //             origin={{ latitude: latitudeUser, longitude: longitudeUser }}
 //             destination={destination}
@@ -223,6 +214,13 @@
 //                   : `${Math.round(result.duration)} min`;
 
 //               setRouteInfo({ distance: textDistance, duration: timeDuration });
+//               console.log('onReady')
+
+//               // Ajustando o zoom para a rota inteira
+//               mapRef.current.fitToCoordinates([{ latitude: latitudeUser, longitude: longitudeUser }, destination], {
+//                 edgePadding: { top: 50, right: 50, bottom: 250, left: 50 },
+//                 animated: true,
+//               });
 //             }}
 //             onError={(errorMessage) => {
 //               console.error('Erro ao calcular a rota:', errorMessage);
@@ -276,12 +274,14 @@ import MapView, { MarkerAnimated, AnimatedRegion, Marker } from 'react-native-ma
 import * as Location from 'expo-location';
 import { useDataContext } from '../data/DataContext.js';
 import { fetchPlaceName, GOOGLE_MAPS_API_KEY } from '../config/api.js';
-import MapViewDirections from 'react-native-maps-directions'; 
+import MapViewDirections from 'react-native-maps-directions';
 
 const { width, height } = Dimensions.get('window');
 
 // Função para calcular o ponto médio entre dois pontos geográficos
 const calculateMidPoint = (origin, destination) => {
+  if (!origin || !destination) return;
+
   const lat1 = origin.latitude * (Math.PI / 180);
   const lon1 = origin.longitude * (Math.PI / 180);
   const lat2 = destination.latitude * (Math.PI / 180);
@@ -301,7 +301,15 @@ const calculateMidPoint = (origin, destination) => {
 
 const Map = ({ location, setSelectMaps }) => {
   const mapRef = useRef(null);
-  const { setLatitudeUser, setLongitudeUser, destination, setDestination, latitudeUser, longitudeUser, setLatitudeTemp, setLongitudeTemp, routeInfo, setRouteInfo } = useDataContext();
+  const {
+    coordUser,
+    setCoordUser,
+    setCoordTemp,
+    destination,
+    setDestination,
+    routeInfo,
+    setRouteInfo,
+  } = useDataContext();
 
   const [placeName, setPlaceName] = useState('Local selecionado');
   const [coordinate, setCoordinate] = useState(
@@ -327,21 +335,17 @@ const Map = ({ location, setSelectMaps }) => {
       const userLocation = await Location.getCurrentPositionAsync({});
       let { latitude, longitude } = userLocation.coords;
 
-      setLatitudeUser(latitude);
-      setLongitudeUser(longitude);
+      setCoordUser({ latitude, longitude });
     })();
   }, []);
 
   // Atualizar o ponto médio quando o destino mudar
   useEffect(() => {
-    if (latitudeUser && longitudeUser && destination?.latitude && destination?.longitude) {
-      const newMidPoint = calculateMidPoint(
-        { latitude: latitudeUser, longitude: longitudeUser },
-        destination
-      );
+    if (coordUser.latitude && coordUser.longitude && destination?.latitude && destination?.longitude) {
+      const newMidPoint = calculateMidPoint({ latitude: coordUser.latitude, longitude: coordUser.longitude }, destination);
       setMidPoint(newMidPoint);
     }
-  }, [latitudeUser, longitudeUser, destination]);
+  }, [destination]);
 
   // Atualizar o marcador e aplicar o efeito de balanço ao mudar a localização
   useEffect(() => {
@@ -365,8 +369,8 @@ const Map = ({ location, setSelectMaps }) => {
           const interval = setInterval(() => {
             coordinate
               .timing({
-                latitude: bounce[index].latitude,
-                longitude: bounce[index].longitude,
+                latitude: bounce[index]?.latitude,
+                longitude: bounce[index]?.longitude,
                 duration: 100,
                 useNativeDriver: false,
               })
@@ -382,7 +386,7 @@ const Map = ({ location, setSelectMaps }) => {
 
   const updatePlaceName = async () => {
     if (location) {
-      const { name } = await fetchPlaceName({
+      const name = await fetchPlaceName({
         latitude: location.latitude,
         longitude: location.longitude,
       });
@@ -405,12 +409,8 @@ const Map = ({ location, setSelectMaps }) => {
 
   const handleLocation = async (e) => {
     const { latitude, longitude } = e.nativeEvent.coordinate;
-
-    setLatitudeTemp(latitude);
-    setLongitudeTemp(longitude);
+    setCoordTemp({ latitude, longitude });
     setSelectMaps(true);
-    console.log(latitude)
-
     setDestination({ latitude, longitude });
   };
 
@@ -420,9 +420,15 @@ const Map = ({ location, setSelectMaps }) => {
         mapType='standard'
         ref={mapRef}
         style={styles.map}
+        region={{
+          latitude: location.latitude || coordUser.latitude || 0,
+          longitude: location.longitude || coordUser.longitude || 0,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
         initialRegion={{
-          latitude: location?.latitude || 0,
-          longitude: location?.longitude || 0,
+          latitude: coordUser.latitude || 0,
+          longitude: coordUser.longitude || 0,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
@@ -439,7 +445,7 @@ const Map = ({ location, setSelectMaps }) => {
         {location && <MarkerAnimated coordinate={coordinate} title={placeName} draggable onDragEnd={handleLocation} />}
 
         {/* Ponto médio com balão visível */}
-        {midPoint && (
+        {midPoint && routeInfo.distance && routeInfo.duration && (
           <Marker coordinate={midPoint}>
             <View style={styles.bubble}>
               <Text style={styles.bubbleText}>{`${routeInfo?.distance}\n${routeInfo?.duration}`}</Text>
@@ -448,9 +454,9 @@ const Map = ({ location, setSelectMaps }) => {
         )}
 
         {/* Adiciona a rota se o destino estiver definido */}
-        {destination && (
+        {destination?.latitude && destination?.longitude && coordUser.latitude && coordUser.longitude && (
           <MapViewDirections
-            origin={{ latitude: latitudeUser, longitude: longitudeUser }}
+            origin={{ latitude: coordUser.latitude, longitude: coordUser.longitude }}
             destination={destination}
             apikey={GOOGLE_MAPS_API_KEY}
             strokeWidth={4}
@@ -469,14 +475,14 @@ const Map = ({ location, setSelectMaps }) => {
                 result.duration > 60
                   ? `${Math.floor(result.duration / 60)}h${Math.round(result.duration % 60)}min`
                   : `${Math.round(result.duration)} min`;
-
+              
               setRouteInfo({ distance: textDistance, duration: timeDuration });
 
               // Ajustando o zoom para a rota inteira
-              mapRef.current.fitToCoordinates(
-                [ { latitude: latitudeUser, longitude: longitudeUser }, destination ],
-                { edgePadding: { top: 50, right: 50, bottom: 250, left: 50 }, animated: true }
-              );
+              mapRef.current.fitToCoordinates([{ latitude: coordUser.latitude, longitude: coordUser.longitude }, destination], {
+                edgePadding: { top: 50, right: 50, bottom: 250, left: 50 },
+                animated: true,
+              });
             }}
             onError={(errorMessage) => {
               console.error('Erro ao calcular a rota:', errorMessage);
@@ -522,4 +528,3 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-

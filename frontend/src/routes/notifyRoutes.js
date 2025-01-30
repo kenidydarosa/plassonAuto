@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '../config/api.js';
 
-// Função para buscar todos os usuários
+// Função para buscar todos as notificações
 export const getNotify = async (id) => {
   const response = await axios.get(`${API_URL}/notify/${id}`);
 

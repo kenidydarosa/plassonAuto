@@ -13,18 +13,40 @@
 
 // const ModalSheetButton = () => {
 //   const navigation = useNavigation();
-//   const { setLocale, latitude, setLatitude, longitude, setLongitude } = useDataContext();
-//   const [location, setLocation] = useState(null);
+//   const {
+//     setLocale,
+//     latitude,
+//     setLatitude,
+//     longitude,
+//     setLongitude,
+//     latitudeUser,
+//     longitudeUser,
+//     latitudeTemp,
+//     setLatitudeTemp,
+//     longitudeTemp,
+//     setLongitudeTemp,
+//     routeInfo,
+//     setRouteInfo,
+//   } = useDataContext();
 
-//   const [distance, setDistance] = useState('');
+//   const [location, setLocation] = useState(null);
+//   const [selectMaps, setSelectMaps] = useState(false);
+
 //   const [selectedAddress, setSelectedAddress] = useState('');
 //   const [street, setStreet] = useState('');
 //   const [neighborhood, setNeighborhood] = useState('');
+
 //   const [searchText, setSearchText] = useState('');
-//   const [showSecondModal, setShowSecondModal] = useState(false);
+//   const [textDistance, setTextDistance] = useState('');
 
 //   const bottomSheetRef = useRef(null);
 //   const secondBottomSheetRef = useRef(null);
+
+//   useEffect(() => {
+//     if ((latitudeTemp !== null && longitudeTemp !== null) || (latitudeUser !== null && longitudeUser !== null)) {
+//       selectedLocal();
+//     }
+//   }, [latitudeTemp, longitudeTemp, latitudeUser, longitudeUser]);
 
 //   useEffect(() => {
 //     // Ação na montagem da página
@@ -37,15 +59,28 @@
 
 //     // Ação na desmontagem da página
 //     return () => {
-//       bottomSheetRef.current?.snapToIndex(0);
+//       clearItems()
 //     };
 //   }, []);
 
-//   const selectedLocal = async (coordinates, selectMaps = false, myLocation = false) => {
-//     const { latitudeMaps, longitudeMaps } = coordinates;
+//   const clearItems = ()=>{
+//     bottomSheetRef.current?.snapToIndex(0);
+//     setLatitudeTemp(null)
+//     setLongitudeTemp(null)
+//     setLocation(null)
+//     setSelectMaps(false)
+//     setNeighborhood('')
+//     setSelectedAddress('')
+//     setTextDistance('')
+//     setSearchText('')
+//     setRouteInfo({ distance: '', duration: '' })
+//   }
 
-//     const latidudeX = selectMaps ? latitudeMaps : latitude;
-//     const longitudeX = selectMaps ? longitudeMaps : longitude;
+//   const selectedLocal = async () => {
+//     const latidudeX = selectMaps ? latitudeTemp : latitude;
+//     const longitudeX = selectMaps ? longitudeTemp : longitude;
+
+//     let myLocation = !(latitude && longitude);
 
 //     setLocation({
 //       latitude: latidudeX,
@@ -54,30 +89,19 @@
 //       longitudeDelta: 0.01,
 //     });
 
+//     //Verificar aqui o porque não está aparecendo o detalhe na tela
 //     const address = await getAddressFromCoordinates(latidudeX, longitudeX);
+//     const distance = routeInfo.distance && routeInfo.duration ?
+//      `${routeInfo.distance} de distância - Tempo estimado: ${routeInfo.duration}` : '';
+
+//     setTextDistance(distance);
 //     setSelectedAddress(address);
 
 //     const [streetString, neighborhoodString] = address.split(/,(.+)/);
 //     setStreet(streetString.trim());
 //     setNeighborhood(neighborhoodString.trim());
 
-//     setLatitude(latidudeX);
-//     setLongitude(longitudeX);
-
-//     if (latidudeX && longitudeX) {
-//       const distance = calculateDistance(latitudeMaps, longitudeMaps, latitude, longitude);
-
-//       setDistance(
-//         distance > 1
-//           ? `${distance.toFixed(1)} km de distância`
-//           : distance > 0.05
-//           ? `${(distance * 1000).toFixed(0)} metros de distância`
-//           : 'Seu local'
-//       );
-//     }
-
-//     if (bottomSheetRef.current && !myLocation) {
-//       setShowSecondModal(true);
+//     if (!myLocation) {
 //       secondBottomSheetRef.current?.snapToIndex(0);
 //       await bottomSheetRef.current?.close();
 //     }
@@ -91,75 +115,62 @@
 //     bottomSheetRef.current?.snapToIndex(1); // Retorna para 35%
 //   };
 
-//   const calculateDistance = (lat1, lon1, lat2, lon2) => {
-//     const toRad = (x) => (x * Math.PI) / 180;
-
-//     const R = 6371; // Raio da Terra em quilômetros
-//     const dLat = toRad(lat2 - lat1);
-//     const dLon = toRad(lon2 - lon1);
-
-//     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-//     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-//     return R * c; // Distância em quilômetros
-//   };
-
 //   const confirmData = () => {
 //     if (setLocale) {
 //       setLocale(selectedAddress);
-//       setLatitude(latitude);
-//       setLongitude(longitude);
+//       setLatitude(latitudeTemp);
+//       setLongitude(longitudeTemp);
 //     }
 
-//     bottomSheetRef.current?.snapToIndex(1);
-//     setShowSecondModal(false);
+//     bottomSheetRef.current?.snapToIndex(0);
 //     navigation.goBack();
 //   };
 
 //   return (
 //     <GestureHandlerRootView style={styles.container}>
-//       <View style={styles.mapContainer}>
-//         {location && <Map location={location} selectedLocal={selectedLocal} style={styles.map} />}
-//       </View>
+//       <View style={styles.mapContainer}>{location && <Map location={location} setSelectMaps={setSelectMaps} style={styles.map} />}</View>
 
-//       {!showSecondModal && (
-//         <BottomSheet ref={bottomSheetRef} snapPoints={['35%', '98%']} index={1}>
-//           <BottomSheetView style={styles.contentContainer}>
-//             <SearchGooglePlaces
-//               selectedLocal={selectedLocal}
-//               handleSearchFocus={handleSearchFocus}
-//               handleSearchBlur={handleSearchBlur}
-//               searchText={searchText}
-//               setSearchText={setSearchText}
-//             />
-//           </BottomSheetView>
-//         </BottomSheet>
-//       )}
+//       <BottomSheet ref={bottomSheetRef} snapPoints={['35%', '98%']} index={-1}>
+//         <BottomSheetView style={styles.contentContainer}>
+//           <SearchGooglePlaces
+//             handleSearchFocus={handleSearchFocus}
+//             handleSearchBlur={handleSearchBlur}
+//             searchText={searchText}
+//             setSearchText={setSearchText}
+//             setSelectMaps={setSelectMaps}
+//           />
+//         </BottomSheetView>
+//       </BottomSheet>
+//       {/* )} */}
 
-//       {showSecondModal && (
-//         <BottomSheet ref={secondBottomSheetRef} snapPoints={['35%']} index={1}>
-//           <BottomSheetView style={styles.contentContainer}>
-//             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-//               <Text style={styles.street}>{street || 'Nenhum endereço selecionado'}</Text>
-//               <TouchableOpacity
-//                 onPress={async () => {
-//                   await secondBottomSheetRef.current?.close();
-//                   bottomSheetRef.current?.snapToIndex(1);
-//                   setSearchText('');
-//                   setShowSecondModal(false);
-//                 }}
-//               >
-//                 <Ionicons name='close-circle' size={20} color='grey' />
-//               </TouchableOpacity>
-//             </View>
-//             <Text style={styles.neighborhood}>{neighborhood || ''}</Text>
-//             <Text style={styles.distanceSelected}>{distance}</Text>
+//       <BottomSheet ref={secondBottomSheetRef} snapPoints={['35%']} index={1}>
+//         <BottomSheetView style={styles.contentContainer}>
+//           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+//             <Text style={styles.street}>{street || 'Nenhum endereço selecionado'}</Text>
+//             <TouchableOpacity
+//               onPress={async () => {
+//                 bottomSheetRef.current?.snapToIndex(1);
+//                 await secondBottomSheetRef.current?.close();
+
+//                 setLatitudeTemp(null);
+//                 setLongitudeTemp(null);
+
+//                 setSearchText('');
+//                 setShowSecondModal(false);
+//               }}
+//             >
+//               <Ionicons name='close-circle' size={20} color='grey' />
+//             </TouchableOpacity>
+//           </View>
+//           <Text style={styles.neighborhood}>{neighborhood || ''}</Text>
+//           <Text style={styles.distanceSelected}>{textDistance}</Text>
+//           {latitudeTemp && longitudeTemp && (
 //             <Button icon='check-circle' mode='contained' onPress={confirmData} style={styles.button}>
 //               Confirmar
 //             </Button>
-//           </BottomSheetView>
-//         </BottomSheet>
-//       )}
+//           )}
+//         </BottomSheetView>
+//       </BottomSheet>
 //     </GestureHandlerRootView>
 //   );
 // };
@@ -216,6 +227,7 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Button } from 'react-native-paper';
 import { getAddressFromCoordinates } from '../config/api';
 import SearchGooglePlaces from './SearchGooglePlaces';
+import NothingText from './NothingText.jsx';
 import Map from './MapView';
 import { useDataContext } from '../data/DataContext.js';
 
@@ -223,21 +235,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ModalSheetButton = () => {
   const navigation = useNavigation();
-  const {
-    setLocale,
-    latitude,
-    setLatitude,
-    longitude,
-    setLongitude,
-    latitudeUser,
-    longitudeUser,
-    latitudeTemp,
-    setLatitudeTemp,
-    longitudeTemp,
-    setLongitudeTemp,
-    routeInfo,
-    setDestination
-  } = useDataContext();
+  const { setLocale, latitude, setLatitude, longitude, setLongitude, coordUser, coordTemp, setCoordTemp, routeInfo, setRouteInfo } = useDataContext();
 
   const [location, setLocation] = useState(null);
   const [selectMaps, setSelectMaps] = useState(false);
@@ -245,19 +243,24 @@ const ModalSheetButton = () => {
   const [selectedAddress, setSelectedAddress] = useState('');
   const [street, setStreet] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
-  // const [distance, setDistance] = useState('');
 
   const [searchText, setSearchText] = useState('');
-  const [showSecondModal, setShowSecondModal] = useState(false);
+  const [textDistance, setTextDistance] = useState('');
 
   const bottomSheetRef = useRef(null);
   const secondBottomSheetRef = useRef(null);
 
   useEffect(() => {
-    if ((latitudeTemp !== null && longitudeTemp !== null) || (latitudeUser !== null && longitudeUser !== null)) {
+    if ((coordTemp.latitude !== null && coordTemp.longitude !== null) || (coordUser.latitude !== null && coordUser.longitude !== null)) {
       selectedLocal();
     }
-  }, [latitudeTemp, longitudeTemp, latitudeUser, longitudeUser]);
+  }, [coordTemp, coordUser]);
+
+  useEffect(() => {
+    const distance = routeInfo.distance && routeInfo.duration ? `${routeInfo.distance} de distância - Tempo estimado: ${routeInfo.duration}` : '';
+
+    setTextDistance(distance);
+  }, [routeInfo]);
 
   useEffect(() => {
     // Ação na montagem da página
@@ -270,18 +273,27 @@ const ModalSheetButton = () => {
 
     // Ação na desmontagem da página
     return () => {
-      bottomSheetRef.current?.snapToIndex(0);
+      clearItems();
     };
   }, []);
 
-  const selectedLocal = async () => {
-    const latidudeX = selectMaps ? latitudeTemp : latitude;
-    const longitudeX = selectMaps ? longitudeTemp : longitude;
+  const clearItems = () => {
+    bottomSheetRef.current?.snapToIndex(0);
+    setCoordTemp({ latitude: null, longitude: null });
+    setLocation(null);
+    setSelectMaps(false);
+    setNeighborhood('');
+    setSelectedAddress('');
+    setTextDistance('');
+    setSearchText('');
+    setRouteInfo({ distance: '', duration: '' });
+  };
 
-    let myLocation = true;
-    if (latitude && longitude) {
-      myLocation = false;
-    }
+  const selectedLocal = async () => {
+    const latidudeX = selectMaps ? coordTemp.latitude : latitude;
+    const longitudeX = selectMaps ? coordTemp.longitude : longitude;
+
+    let myLocation = !(latitude && longitude);
 
     setLocation({
       latitude: latidudeX,
@@ -289,7 +301,8 @@ const ModalSheetButton = () => {
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
-    
+
+    //Verificar aqui o porque não está aparecendo o detalhe na tela
     const address = await getAddressFromCoordinates(latidudeX, longitudeX);
     setSelectedAddress(address);
 
@@ -297,9 +310,8 @@ const ModalSheetButton = () => {
     setStreet(streetString.trim());
     setNeighborhood(neighborhoodString.trim());
 
-    if (bottomSheetRef.current && !myLocation) {
-      setShowSecondModal(true);
-      secondBottomSheetRef.current?.snapToIndex(0);
+    if (!myLocation) {
+      secondBottomSheetRef.current?.snapToIndex(1);
       await bottomSheetRef.current?.close();
     }
   };
@@ -315,12 +327,11 @@ const ModalSheetButton = () => {
   const confirmData = () => {
     if (setLocale) {
       setLocale(selectedAddress);
-      setLatitude(latitudeTemp);
-      setLongitude(longitudeTemp);
+      setLatitude(coordTemp.latitude);
+      setLongitude(coordTemp.longitude);
     }
 
     bottomSheetRef.current?.snapToIndex(0);
-    setShowSecondModal(false);
     navigation.goBack();
   };
 
@@ -328,50 +339,48 @@ const ModalSheetButton = () => {
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.mapContainer}>{location && <Map location={location} setSelectMaps={setSelectMaps} style={styles.map} />}</View>
 
-      {!showSecondModal && (
-        <BottomSheet ref={bottomSheetRef} snapPoints={['35%', '98%']} index={1}>
-          <BottomSheetView style={styles.contentContainer}>
-            <SearchGooglePlaces
-              handleSearchFocus={handleSearchFocus}
-              handleSearchBlur={handleSearchBlur}
-              searchText={searchText}
-              setSearchText={setSearchText}
-              setSelectMaps={setSelectMaps}
-            />
-          </BottomSheetView>
-        </BottomSheet>
-      )}
+      <BottomSheet ref={bottomSheetRef} snapPoints={['35%', '98%']} index={-1}>
+        <BottomSheetView style={styles.contentContainer}>
+          <SearchGooglePlaces
+            handleSearchFocus={handleSearchFocus}
+            handleSearchBlur={handleSearchBlur}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            setSelectMaps={setSelectMaps}
+          />
+        </BottomSheetView>
+      </BottomSheet>
 
-      {showSecondModal && (
-        <BottomSheet ref={secondBottomSheetRef} snapPoints={['35%']} index={1}>
-          <BottomSheetView style={styles.contentContainer}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.street}>{street || 'Nenhum endereço selecionado'}</Text>
-              <TouchableOpacity
-                onPress={async () => {
-                  bottomSheetRef.current?.snapToIndex(1);
-                  await secondBottomSheetRef.current?.close();
-
-                  setLatitudeTemp(null);
-                  setLongitudeTemp(null);
-
-                  setSearchText('');
-                  setShowSecondModal(false);
-                }}
-              >
-                <Ionicons name='close-circle' size={20} color='grey' />
-              </TouchableOpacity>
+      <BottomSheet ref={secondBottomSheetRef} snapPoints={['35%']} index={1}>
+        <BottomSheetView style={styles.contentContainer}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View>
+              <Text style={styles.street}>{street || 'Nenhum endereço selecionado.'}</Text>
+              {!street && <Text style={styles.distanceSelected}>{'Selecione um local no mapa. 📌'}</Text>}
             </View>
-            <Text style={styles.neighborhood}>{neighborhood || ''}</Text>
-            <Text style={styles.distanceSelected}>{routeInfo.distance} de distância - Tempo estimado: {routeInfo.duration}</Text>
-            {latitudeTemp && longitudeTemp && (
-              <Button icon='check-circle' mode='contained' onPress={confirmData} style={styles.button}>
-                Confirmar
-              </Button>
-            )}
-          </BottomSheetView>
-        </BottomSheet>
-      )}
+            <TouchableOpacity
+              style={{ marginHorizontal: 10, position: 'absolute', right: 5 }}
+              onPress={async () => {
+                bottomSheetRef.current?.snapToIndex(1);
+                secondBottomSheetRef.current?.close();
+                i;
+                setCoordTemp({ latitude: null, longitude: null });
+                setSearchText('');
+                setShowSecondModal(false);
+              }}
+            >
+              <Ionicons name='close-circle' size={20} color='grey' />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.neighborhood}>{neighborhood || ''}</Text>
+          <Text style={styles.distanceSelected}>{textDistance}</Text>
+          {coordTemp.latitude && coordTemp.longitude && (
+            <Button icon='check-circle' mode='contained' onPress={confirmData} style={styles.button}>
+              Confirmar
+            </Button>
+          )}
+        </BottomSheetView>
+      </BottomSheet>
     </GestureHandlerRootView>
   );
 };
@@ -407,6 +416,7 @@ const styles = StyleSheet.create({
   street: {
     fontSize: 26,
     fontWeight: 'bold',
+    paddingBottom:7,
   },
   neighborhood: {
     fontSize: 16,

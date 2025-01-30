@@ -18,7 +18,7 @@ class UserModel extends BaseModel {
       const queryText = `SELECT * FROM users WHERE username = ? AND password = ?`;
       const response = await db.get(queryText, [username, password]);
 
-      delete response.password;
+      delete response?.password;
       return response;
 
     } catch (error) {

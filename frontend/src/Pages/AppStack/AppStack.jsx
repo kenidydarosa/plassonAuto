@@ -112,7 +112,7 @@ const AppStack = () => {
       </Stack.Group>
 
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="ModalSheetButton" component={ModalSheetButton} options={{ title: 'Maps'}} />
+        <Stack.Screen name="ModalSheetButton" component={ModalSheetButton} options={{ title: 'Maps 🗺️'}} />
       </Stack.Group>
     </Stack.Navigator>
   );

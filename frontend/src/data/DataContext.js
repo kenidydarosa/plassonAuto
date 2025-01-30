@@ -16,10 +16,13 @@ export const DataProvider = ({ children }) => {
   const [locale, setLocale] = useState(null); // Estado para armazenar o local atual
   const [latitude, setLatitude] = useState(null); // Estado para armazenar a latitude do local atual
   const [longitude, setLongitude] = useState(null); // Estado para armazenar a longitude do local atual
-  const [latitudeTemp, setLatitudeTemp] = useState(null); // Estado para armazenar uma latitude temporária
-  const [longitudeTemp, setLongitudeTemp] = useState(null); // Estado para armazenar uma longitude temporária
-  const [latitudeUser, setLatitudeUser] = useState(null); // Estado para armazenar a latitude do usuário
-  const [longitudeUser, setLongitudeUser] = useState(null); // Estado para armazenar a longitude do usuário
+  // const [latitudeTemp, setLatitudeTemp] = useState(null); // Estado para armazenar uma latitude temporária
+  // const [longitudeTemp, setLongitudeTemp] = useState(null); // Estado para armazenar uma longitude temporária
+  // const [latitudeUser, setLatitudeUser] = useState(null); // Estado para armazenar a latitude do usuário
+  // const [longitudeUser, setLongitudeUser] = useState(null); // Estado para armazenar a longitude do usuário
+
+  const [coordTemp, setCoordTemp] = useState({latitude: null, longitude:null}); // Estado para armazenar a longitude do usuário
+  const [coordUser, setCoordUser] = useState({latitude: null, longitude:null}); // Estado para armazenar a longitude do usuário
   const [destination, setDestination] = useState(null); // Estado para armazenar o destino atual
   const [routeInfo, setRouteInfo] = useState({ distance: '', duration: '' });;
   const [notificationCount, setNotificationCount] = useState(0); // Estado para armazenar a contagem de notificações não lidas
@@ -44,14 +47,12 @@ export const DataProvider = ({ children }) => {
     setLatitude, // Função para atualizar a latitude do local atual
     longitude, // Fornece a longitude do local atual
     setLongitude, // Função para atualizar a longitude do local atual
-    latitudeTemp, // Fornece a latitude temporária
-    setLatitudeTemp, // Função para atualizar a latitude temporária
-    longitudeTemp, // Fornece a longitude temporária
-    setLongitudeTemp, // Função para atualizar a longitude temporária
-    latitudeUser, // Fornece a latitude do usuário
-    setLatitudeUser, // Função para atualizar a latitude do usuário
-    longitudeUser, // Fornece a longitude do usuário
-    setLongitudeUser, // Função para atualizar a longitude do usuário
+    coordTemp,
+    setCoordTemp,
+    coordUser,
+    setCoordUser,
+
+
     destination, // Fornece o destino atual
     setDestination, // Função para atualizar o destino atual
     notificationCount, // Fornece a contagem de notificações não lidas

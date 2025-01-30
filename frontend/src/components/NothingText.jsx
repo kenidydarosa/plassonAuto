@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
   card: {
     paddingVertical: 10,
     borderRadius: 10,
+    padding:10,
     gap:10,
     borderWidth: 1,
     borderColor: styleJS.primaryColor,

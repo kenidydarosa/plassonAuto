@@ -7,7 +7,7 @@ import { fetchPlaces, fetchPlaceDetails } from '../config/api';
 import { useDataContext } from '../data/DataContext';
 
 const SearchGooglePlaces = ({ setSelectMaps, handleSearchFocus, handleSearchBlur, searchText, setSearchText }) => {
-  const { setLatitudeTemp, setLongitudeTemp, setDestination } = useDataContext();
+  const { setCoordTemp, setDestination } = useDataContext();
   const [results, setResults] = useState([]);
   const textInputRef = useRef(null);
 
@@ -21,8 +21,6 @@ const SearchGooglePlaces = ({ setSelectMaps, handleSearchFocus, handleSearchBlur
       setResults([]);
     }
   };
-
-  let display = 'none';
 
   return (
     <View style={styles.container}>
@@ -38,7 +36,6 @@ const SearchGooglePlaces = ({ setSelectMaps, handleSearchFocus, handleSearchBlur
               onFocus={handleSearchFocus}
               onChangeText={(text) => {
                 handleSearch(text);
-                display = searchText !== '' ? 'flex' : 'none';
               }}
               numberOfLines={1}
               ellipsizeMode='tail'
@@ -77,8 +74,7 @@ const SearchGooglePlaces = ({ setSelectMaps, handleSearchFocus, handleSearchBlur
                 const { latitude, longitude } = await fetchPlaceDetails(item.place_id);
 
                 if (latitude && longitude) {
-                  setLatitudeTemp(latitude);
-                  setLongitudeTemp(longitude);
+                  setCoordTemp({latitude, longitude})
                   setSelectMaps(true);
                   setDestination({ latitude, longitude });
                 }

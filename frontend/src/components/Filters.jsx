@@ -21,6 +21,7 @@ const Filters = ({ filters, onFilterSelect, selectedFilter }) => {
 	return (
 		<ScrollView
 			horizontal
+			style={{height:30}}
 			showsHorizontalScrollIndicator={false} // Remove o indicador de rolagem horizontal
 			contentContainerStyle={styles.scrollViewContainer}>
 			<View style={styles.container}>
@@ -54,6 +55,7 @@ export default Filters;
 const styles = StyleSheet.create({
 	scrollViewContainer: {
 		paddingVertical: 10,
+		height:60,
 		gap:15,
 		justifyContent:'space-evenly',
 	},

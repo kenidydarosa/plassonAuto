@@ -176,6 +176,13 @@ const NewSchedule = () => {
     }
   }, [car]);
 
+  const clearFields = ()=>{
+    setLocale('')
+    setLatitude(null)
+    setLongitude(null)
+  }
+
+
   // Função para formatar a data e a hora
   const formatDateTime = (date, time) => {
     const formattedDate = date.toLocaleDateString('en-CA'); // Formata a data para 'YYYY-MM-DD' no local timezone
@@ -266,10 +273,12 @@ const NewSchedule = () => {
         visualized: false,
       };
 
+      clearFields()
+
       if (!create) {
         sendNotification(userDB, notificationData, notifyDB, setNotifyDB);
       }
-
+    
       navigation.navigate('BottomNavigator', {
         screen: 'MySchedules',
         params: { data: schedules.response },
@@ -478,7 +487,7 @@ const NewSchedule = () => {
             placeholder={'Km inicial'}
             value={kmStart}
             func={setKmStart}
-            editable={!onlyVisible}
+            editable={false}
             type={'numeric'}
             border={false}
             width={'50%'}

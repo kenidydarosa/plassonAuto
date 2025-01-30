@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_URL } from '../config/api.js';
 
-// Função para buscar todos os usuários
+// Função para buscar todos as reservas
 export const getSchedules = async () => {
   const response = await axios.get(`${API_URL}/schedules`);
 

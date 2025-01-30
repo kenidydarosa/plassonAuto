@@ -33,8 +33,8 @@ const Login = () => {
       setLoadingImage(false);
       setUserDB(user);
       setSchedulesDB(schedules);
-      setNotifyDB(notify);
       setVeiculesDB(veicules);
+      setNotifyDB(notify);
       setUsersDB(users);
       setSectorsDB(sectors);
       initializeSocket(user);
