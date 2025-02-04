@@ -1,6 +1,6 @@
 /** @format */
 import React, { useEffect } from 'react';
-import { Text, ScrollView, View } from 'react-native';
+import { Text, ScrollView, View, RefreshControl, Dimensions } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import SearchableCardList from '../../components/Search.jsx';
 import fontConfig from '../../config/fontConfig.js';
@@ -10,13 +10,16 @@ import styleJS from '../../components/style.js';
 import { useDataContext } from '../../data/DataContext.js';
 import { getImageUrl } from '../../config/api.js';
 import Loading from '../../components/Loading.jsx';
+import { updateData } from '../../routes/updateRoutes.js';
 
 const Veicules = () => {
   const route = useRoute();
   const navigation = useNavigation();
-
+  
   // Obtém a lista de veículos do contexto
-  const { veiculesDB, sectorsDB } = useDataContext();
+  const {userDB, veiculesDB, sectorsDB, loading, setLoading } = useDataContext();
+  const dataContext = useDataContext();
+  const screenHeight = Dimensions.get("window").height;
   
   // Função que verifica se as fontes estão carregadas
   const fontsLoaded = fontConfig();
@@ -30,6 +33,12 @@ const Veicules = () => {
     return <Loading />;
   }
 
+    const onRefresh = async () => {
+      setLoading(true);
+      await updateData(userDB.id, dataContext);
+      setLoading(false);
+    };
+  
   // Função para navegar para a tela de 'NewVeicule' quando o botão flutuante é pressionado
   const navigateToNewVeicules = () => {
     navigation.navigate('NewVeicule', { create: true });
@@ -100,7 +109,12 @@ const Veicules = () => {
   return (
     <View style={styleJS.pageContainer}>
       {/* Container principal da página */}
-      <ScrollView style={styleJS.container}>
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
+        contentContainerStyle={styleJS.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} tintColor={styleJS.primaryColor} onRefresh={onRefresh} title='Carregando...' progressViewOffset={screenHeight / 2 - 50} />}
+      >
         {/* Título da página */}
         <Text style={[styleJS.title, title]}>Veículos</Text>
         {/* Componente de lista de cards pesquisáveis */}

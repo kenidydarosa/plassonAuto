@@ -41,18 +41,19 @@ const styleJS = {
   },
   container: {
     padding: 20,
-    gap: 15,
+    // gap: 15,
     backgroundColor: whiteColor,
   },
   containerForm: {
+    paddingBottom: 70,
     padding: 15,
     gap: 30,
   },
-
   // Titles and Texts
   title: {
     width: '100%',
     marginTop: 40,
+    paddingVertical:15,
     fontSize: 20,
     fontFamily: 'Poppins_500Medium',
   },
@@ -145,7 +146,7 @@ const styleJS = {
   header: {
     width: '100%',
     paddingTop: 30,
-    paddingBottom: 15,
+    // paddingBottom: 15,
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: borderColor,

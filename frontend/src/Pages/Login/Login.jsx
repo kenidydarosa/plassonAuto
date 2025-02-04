@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Button, Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
@@ -17,10 +17,10 @@ const Login = () => {
   const { userDB, setUserDB, setSchedulesDB, setVeiculesDB, setNotifyDB, setUsersDB, setSectorsDB } = useDataContext();
 
   // Estado local para armazenar os valores dos campos de entrada
-  const [username, setUsername] = useState('Kenidy.rosa');
+  const [username, setUsername] = useState('Admin');
   const [password, setPassword] = useState('1234');
   const [loadingImage, setLoadingImage] = useState(false); // Estado para controle de carregamento
-  const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
+  const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '', textButton: '' });
   const [showAlert, setShowAlert] = useState(false);
 
   // Função que lida com o login
@@ -50,8 +50,8 @@ const Login = () => {
         setErrorData({
           title: 'Erro',
           msg: 'Erro inesperado ao tentar fazer login.',
-          textButton: 'Tentar novamente',
           icon: 'close-circle',
+          textButton: 'Tentar novamente',
         });
       }
 
@@ -66,44 +66,46 @@ const Login = () => {
   };
 
   return (
-    <View style={[styleJS.pageContainer, { justifyContent: 'center' }]}>
-      <View style={styleJS.container}>
-        <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Image
-            source={require('../../../assets/logo.png')} // Imagem do logo da aplicação
-            style={{ width: 230, height: 27 }} // Estilo da imagem
-          />
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={[styleJS.pageContainer, { justifyContent: 'center' }]}>
+        <View style={styleJS.container}>
+          <View style={{ width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Image
+              source={require('../../../assets/logo.png')} // Imagem do logo da aplicação
+              style={{ width: 230, height: 27 }} // Estilo da imagem
+            />
+          </View>
+          <Text style={[styleJS.title, { marginTop: 0 }]}>PlassonAuto</Text>
+
+          {/* Campo de entrada para o nome de usuário (Email) */}
+          <InputText value={username} setValue={setUsername} label='Usuário' icon={'account-circle'} />
+          {/* Campo de entrada para a senha */}
+          <InputText value={password} setValue={setPassword} label='Senha' type={'password'} icon={'eye'} />
+
+          {/* Botão de login */}
+          <Button
+            icon='check-circle'
+            mode='contained'
+            loading={loadingImage}
+            onPress={handleLogin} // Chama a função de login quando pressionado
+            style={{ backgroundColor: styleJS.primaryColor, marginTop: 30 }}
+          >
+            Confirmar
+          </Button>
         </View>
-        <Text style={[styleJS.title, { marginTop: 0 }]}>PlassonAuto</Text>
 
-        {/* Campo de entrada para o nome de usuário (Email) */}
-        <InputText value={username} setValue={setUsername} label='Usuário' icon={'account-circle'} />
-        {/* Campo de entrada para a senha */}
-        <InputText value={password} setValue={setPassword} label='Senha' type={'password'} icon={'eye'} />
-
-        {/* Botão de login */}
-        <Button
-          icon='check-circle'
-          mode='contained'
-          loading={loadingImage}
-          onPress={handleLogin} // Chama a função de login quando pressionado
-          style={{ backgroundColor: styleJS.primaryColor, marginTop: 30 }}
-        >
-          Confirmar
-        </Button>
+        {/* Alerta que aparece quando os dados de login estão incorretos */}
+        <AlertDialog
+          icon={errorData.icon} // Usa os dados de erro capturados
+          title={errorData.title}
+          msg={errorData.msg}
+          textButton={errorData.textButton}
+          setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
+          showAlert={showAlert} // Define se o alerta está visível
+          setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
+        />
       </View>
-
-      {/* Alerta que aparece quando os dados de login estão incorretos */}
-      <AlertDialog
-        icon={errorData.icon} // Usa os dados de erro capturados
-        title={errorData.title}
-        msg={errorData.msg}
-        textButton={errorData.textButton}
-        showAlert={showAlert} // Define se o alerta está visível
-        setShowAlert={setShowAlert} // Função para controlar a visibilidade do alerta
-        setLoadingImage={setLoadingImage} // Passa a função para desabilitar o loading ao fechar o alerta
-      />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

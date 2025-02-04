@@ -1,14 +1,14 @@
 /** @format */
 
 import React, { useState, useEffect } from 'react';
-import { Text, View, ActivityIndicator, ScrollView } from 'react-native';
+import { Text, View, ActivityIndicator, ScrollView, RefreshControl, Dimensions  } from 'react-native';
 import CardList from '../../components/CardList';
 import fontConfig from '../../config/fontConfig';
 import styleJS from '../../components/style';
 import { useDataContext } from '../../data/DataContext.js';
 import { updateNotify, getNotify } from '../../routes/notifyRoutes.js';
 import AlertDialog from '../../components/Dialog.jsx';
-
+import { updateData } from '../../routes/updateRoutes.js';
 /**
  * Tela de notificações que exibe uma lista de cards com as notificações.
  * Cada card exibe o título, descrição e o tempo passado desde que a notificação foi criada.
@@ -19,15 +19,17 @@ import AlertDialog from '../../components/Dialog.jsx';
  */
 const Notify = () => {
   const fontsLoaded = fontConfig(); // Usa a configuração de fontes
-  const { notifyDB, setNotifyDB, setNotificationCount } = useDataContext();
+  const { userDB, notifyDB, setNotificationCount, loading, setLoading } = useDataContext();
   const [data, setData] = useState(notifyDB); // Define estado com notifyData
   const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
   const [showAlert, setShowAlert] = useState(false);
+  const dataContext = useDataContext();
+  const screenHeight = Dimensions.get("window").height;
 
   // Atualiza o estado local 'data' sempre que 'notifyDB' mudar
   useEffect(() => {
     setData(notifyDB || []); // Garante que o estado seja atualizado com as notificações mais recentes
-    setNotificationCount(notifyDB.length)
+    setNotificationCount(notifyDB.length);
   }, [notifyDB]);
 
   // Se as fontes não estiverem carregadas, exibe um indicador de carregamento
@@ -40,6 +42,13 @@ const Notify = () => {
     ...Text.defaultProps,
     style: { fontFamily: 'Poppins_400Regular' },
   };
+
+    const onRefresh = async () => {
+      setLoading(true);
+      await updateData(userDB.id, dataContext);
+      setLoading(false);
+    };
+  
 
   /**
    * Função para deletar um card a partir do seu id.
@@ -57,10 +66,10 @@ const Notify = () => {
         notifyItem.visualized = true;
         // Passar a notificação atualizada para a função updateNotify
         const notifications = (await updateNotify(id, notifyItem)).response;
-        const updateData = notifications.filter((notify) => notify.id !== id && notify.visualized !== '1')
+        const updateData = notifications.filter((notify) => notify.id !== id && notify.visualized !== '1');
 
         setData(updateData);
-        setNotificationCount(updateData.length)
+        setNotificationCount(updateData.length);
 
         // setData((data) => data.filter((notify) => notify.id !== id || notify.visualizad == 1));
       }
@@ -138,7 +147,10 @@ const Notify = () => {
 
   return (
     <View style={styleJS.pageContainer}>
-      <ScrollView style={styleJS.container}>
+      <ScrollView
+        contentContainerStyle={styleJS.container}
+        refreshControl={<RefreshControl refreshing={loading} tintColor={styleJS.primaryColor} title='Carregando...' titleColor={styleJS.primaryColor} onRefresh={onRefresh}  progressViewOffset={screenHeight / 2 - 50} />}
+      >
         <Text style={styleJS.title}>Notificações</Text>
         {renderCardNotify}
       </ScrollView>

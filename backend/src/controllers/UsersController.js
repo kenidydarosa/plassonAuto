@@ -214,6 +214,7 @@ class UserController {
       ]);
 
       res.status(200).json({
+        user,
         schedules,
         notify,
         veicules,

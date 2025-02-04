@@ -1,7 +1,7 @@
 /** @format */
 
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { useState, useEffect } from 'react';
 import { Switch } from 'react-native-paper';
 import styleJS from './style';
 import IconWithLabel from './IconWithLabel';
@@ -53,7 +53,14 @@ const CardList = ({ id, text1, text2, text3, tag, icon, type, setFunction, statu
     );
   } else {
     // Se o tipo não for "notify", exibe um interruptor
-    const [isSwitchOn, setIsSwitchOn] = useState(status === 'Ativo' ? true : false);
+    const [isSwitchOn, setIsSwitchOn] = useState(status === 'Ativo');
+
+    // Atualiza o estado se a prop `status` mudar
+    useEffect(() => {
+      setIsSwitchOn(status === 'Ativo');
+    }, [status]);
+
+
     const onToggleSwitch = () => {
       setIsSwitchOn(!isSwitchOn);
 	    setFunction(id)
@@ -72,6 +79,8 @@ const CardList = ({ id, text1, text2, text3, tag, icon, type, setFunction, statu
   }
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    
     <View style={styles.card}>
       {/* Exibe a área do ícone e o texto */}
       <View style={styles.containerletters}>
@@ -99,6 +108,7 @@ const CardList = ({ id, text1, text2, text3, tag, icon, type, setFunction, statu
         {button}
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 

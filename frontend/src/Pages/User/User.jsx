@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import { useDataContext } from '../../data/DataContext.js';
 import { updateUser } from '../../routes/userRoutes.js';
-import { Text, View, ActivityIndicator, ScrollView } from 'react-native';
+import { Text, View, ActivityIndicator, ScrollView, RefreshControl, Dimensions } from 'react-native';
 import CardList from '../../components/CardList'; // Componente que renderiza um cartão de usuário
 import fontConfig from '../../config/fontConfig'; // Função para configurar a fonte
 import SearchableCardList from '../../components/Search'; // Componente que permite a busca nos cards
 import styleJS from '../../components/style'; // Estilos usados na página
 import AlertDialog from '../../components/Dialog.jsx';
-
+import { updateData } from '../../routes/updateRoutes.js';
 /**
  * Componente User
  * Exibe uma lista de usuários com cards pesquisáveis.
@@ -18,7 +18,10 @@ import AlertDialog from '../../components/Dialog.jsx';
  */
 
 const User = () => {
-  const { usersDB, setUsersDB, sectorsDB } = useDataContext();
+  const { userDB, usersDB, setUsersDB, sectorsDB, loading, setLoading } = useDataContext();
+  const dataContext = useDataContext();
+  const screenHeight = Dimensions.get('window').height;
+
   const [visible, setVisible] = useState(false);
 
   const [errorData, setErrorData] = useState({
@@ -41,6 +44,13 @@ const User = () => {
     style: { fontFamily: 'Poppins_400Regular' },
   };
 
+  const onRefresh = async () => {
+    setLoading(true);
+    await updateData(userDB.id, dataContext);
+
+    setLoading(false);
+  };
+
   /**
    * Função que renderiza um card de usuário.
    *
@@ -60,9 +70,7 @@ const User = () => {
         }
 
         const userData = await updateUser(currentUser);
-        const userUpdated = usersDB.map((user) =>
-          user.id === id ? { ...user, ...userData } : user
-        );
+        const userUpdated = usersDB.map((user) => (user.id === id ? { ...user, ...userData } : user));
         setUsersDB(userUpdated);
       }
     } catch (error) {
@@ -100,7 +108,18 @@ const User = () => {
 
   return (
     <View style={styleJS.pageContainer}>
-      <ScrollView style={styleJS.container}>
+      <ScrollView
+        contentContainerStyle={styleJS.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            tintColor={styleJS.primaryColor}
+            onRefresh={onRefresh}
+            title='Carregando...'
+            progressViewOffset={screenHeight / 2 - 50}
+          />
+        }
+      >
         <Text style={styleJS.title}>Usuários</Text>
         {/* Componente de lista de cards pesquisáveis */}
         <SearchableCardList

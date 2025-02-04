@@ -4,7 +4,7 @@ import { View, Text, TextInput, Switch, Platform, ScrollView, KeyboardAvoidingVi
 import { Button } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { DateTimeButton, showDateTimePicker, onChange } from './DateTimeButton.jsx';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styleJS from '../../components/style.js';
@@ -76,6 +76,8 @@ const NewSchedule = () => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [errorData, setErrorData] = useState({ title: '', msg: '', icon: '' });
+  const currentSchedule = useRef(null)
+
 
   const listPicker = {
     showPicker,
@@ -116,30 +118,32 @@ const NewSchedule = () => {
         setEndTime(endDate);
 
       } else {
-        const currentSchedule = schedulesDB.find((item) => item.id === id);
-        const currentCar = veiculesDB.find((car) => car.id === currentSchedule.veicule_id);
-        const currentUser = usersDB.find((user) => user.id === currentSchedule.user_id);
+        currentSchedule.current = schedulesDB.find((item) => item.id === id);
+        
+        const schedule = currentSchedule.current
+        const currentCar = veiculesDB.find((car) => car.id === schedule.veicule_id);
+        const currentUser = usersDB.find((user) => user.id === schedule.user_id);
 
         setCar(currentCar);
 
-        if (currentSchedule) {
+        if (schedule) {
           setUserID(currentUser.id);
           setUser(currentUser.name);
-          setTitle(currentSchedule.title);
-          setSummary(currentSchedule.summary);
-          setLocale(currentSchedule.locale);
-          setLatitude(currentSchedule.latitude);
-          setLongitude(currentSchedule.longitude);
-          setAllDay(currentSchedule.allDay === 'true' ? true : false);
-          setStartDate(new Date(currentSchedule.start));
-          setStartTime(new Date(currentSchedule.start));
-          setEndDate(new Date(currentSchedule.end));
-          setEndTime(new Date(currentSchedule.end));
-          setNotes(currentSchedule.notes);
+          setTitle(schedule.title);
+          setSummary(schedule.summary);
+          setLocale(schedule.locale);
+          setLatitude(schedule.latitude);
+          setLongitude(schedule.longitude);
+          setAllDay(schedule.allDay === 'true' ? true : false);
+          setStartDate(new Date(schedule.start));
+          setStartTime(new Date(schedule.start));
+          setEndDate(new Date(schedule.end));
+          setEndTime(new Date(schedule.end));
+          setNotes(schedule.notes);
 
           setKeyHandOverTime(
-            currentSchedule.keyHandOverTime
-              ? new Date(currentSchedule.keyHandOverTime).toLocaleTimeString([], {
+            schedule.keyHandOverTime
+              ? new Date(schedule.keyHandOverTime).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
                   hour12: false,
@@ -148,8 +152,8 @@ const NewSchedule = () => {
           );
 
           setReturnOfKeyTime(
-            currentSchedule.returnOfKeyTime
-              ? new Date(currentSchedule.returnOfKeyTime).toLocaleTimeString([], {
+            schedule.returnOfKeyTime
+              ? new Date(schedule.returnOfKeyTime).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
                   hour12: false,
@@ -157,12 +161,12 @@ const NewSchedule = () => {
               : '--:--'
           );
 
-          setkeyHandOver(!!currentSchedule.keyHandOverTime);
-          setReturnOfKey(!!currentSchedule.returnOfKeyTime);
+          setkeyHandOver(!!schedule.keyHandOverTime);
+          setReturnOfKey(!!schedule.returnOfKeyTime);
 
-          setStatus(currentSchedule.status);
-          setInitialStatus(currentSchedule.status);
-          currentSchedule.status === 'Ativa' ? setStatusBt(true) : setStatusBt(false);
+          setStatus(schedule.status);
+          setInitialStatus(schedule.status);
+          schedule.status === 'Ativa' ? setStatusBt(true) : setStatusBt(false);
         }
       }
     }
@@ -223,7 +227,7 @@ const NewSchedule = () => {
         setShowAlert(true);
         return;
       }
-      const validate = validateSchedule(userID, car.id, dateStart, dateEnd, schedulesDB);
+      const validate = validateSchedule(userDB, car.id, dateStart, dateEnd, currentSchedule.current, schedulesDB);
 
       if (!validate) {
         setErrorData({
@@ -302,7 +306,7 @@ const NewSchedule = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
-      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 70 }}>
+      <ScrollView style={styleJS.containerForm} contentContainerStyle={{ paddingBottom: 100 }}>
         {/* Inputs de Título e Localização */}
         <View style={styleJS.section}>
           <View style={styleJS.row}>

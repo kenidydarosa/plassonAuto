@@ -7,6 +7,7 @@ import {
   Image,
   ActivityIndicator,
   TouchableHighlight,
+  Keyboard,
 } from 'react-native';
 import IconWithLabel from './IconWithLabel';
 import fontConfig from '../config/fontConfig';
@@ -72,6 +73,7 @@ const Card = ({
   // Função para lidar com o clique no cartão e navegação
   const handlePress = () => {
     if (href) {
+      Keyboard.dismiss()
       navigation.navigate(href, sendParams ? { create, id } : undefined);
     } else {
       console.warn('Nenhuma rota definida para este card!');
@@ -84,49 +86,49 @@ const Card = ({
   const imageSource = { uri: imgUrl };
 
   return (
-    <TouchableHighlight onPress={handlePress} style={styles.card} underlayColor={styleJS.whiteColor}>
-  <View>
-    {/* Header do cartão */}
-    <View style={styles.header}>
-      <View style={styles.containerTitle}>
-        <Text style={styles.title}>{`${title} ${complement}`}</Text>
-        <View style={[styles.status, { backgroundColor: statusColor }]}>
-          <Text style={{ color: statusFont }}>{status}</Text>
+    <TouchableHighlight onPress={handlePress} style={styles.card} underlayColor={styleJS.whiteColor} >
+      <View>
+        {/* Header do cartão */}
+        <View style={styles.header}>
+          <View style={styles.containerTitle}>
+            <Text style={styles.title}>{`${title} ${complement}`}</Text>
+            <View style={[styles.status, { backgroundColor: statusColor }]}>
+              <Text style={{ color: statusFont }}>{status}</Text>
+            </View>
+          </View>
+          <Text>{subtitle}</Text>
+        </View>
+        {/* Conteúdo do cartão */}
+        <View style={styles.content}>
+          <View style={styles.veicule}>
+            {loadingImage && <Loading />}
+            <Image
+              source={imageSource}
+              style={styles.image}
+              onLoad={() => setLoadingImage(false)}
+              onError={() => setLoadingImage(true)}
+            />
+          </View>
+          <View style={styles.infoVeicule}>
+            {[icon1, icon2, icon3].map((icon, index) => (
+              <View key={index} style={styles.flex}>
+                <View style={styles.ico}>
+                  <IconWithLabel
+                    iconName={icon}
+                    size={18}
+                    color={styleJS.primaryColor}
+                    width={20}
+                    height={22}
+                    margin={0}
+                  />
+                </View>
+                <Text>{[text1, text2, text3][index]}</Text>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
-      <Text>{subtitle}</Text>
-    </View>
-    {/* Conteúdo do cartão */}
-    <View style={styles.content}>
-      <View style={styles.veicule}>
-        {loadingImage && <Loading />}
-        <Image
-          source={imageSource}
-          style={styles.image}
-          onLoad={() => setLoadingImage(false)}
-          onError={() => setLoadingImage(true)}
-        />
-      </View>
-      <View style={styles.infoVeicule}>
-        {[icon1, icon2, icon3].map((icon, index) => (
-          <View key={index} style={styles.flex}>
-            <View style={styles.ico}>
-              <IconWithLabel
-                iconName={icon}
-                size={18}
-                color={styleJS.primaryColor}
-                width={20}
-                height={22}
-                margin={0}
-              />
-            </View>
-            <Text>{[text1, text2, text3][index]}</Text>
-          </View>
-        ))}
-      </View>
-    </View>
-  </View>
-</TouchableHighlight>
+    </TouchableHighlight>
   );
 };
 
@@ -172,9 +174,9 @@ const styles = StyleSheet.create({
   veicule: {
     width: '40%',
     borderRadius: 8,
-    alignItems:'center',
-    justifyContent:'center',
-    position:'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
     backgroundColor: styleJS.imgCardColor,
   },
   image: {

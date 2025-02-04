@@ -6,6 +6,7 @@ import {
   Platform,
   ScrollView,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
 } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -87,17 +88,19 @@ const NewVeicule = () => {
       alert('Desculpe, precisamos da permissão para acessar suas fotos!');
       return;
     }
-
+    
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaType,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.3,
     });
-
+    
     if (!result.canceled) {
       setImg(result.assets[0].uri); // Atualiza a imagem escolhida
     }
+
+    Keyboard.dismiss()
   };
 
   // Função para fazer upload da imagem no Firebase Storage
@@ -195,7 +198,9 @@ const NewVeicule = () => {
 
       setVeiculesDB(updatedData); // Atualiza os dados no contexto
 
+      Keyboard.dismiss()
       navigation.goBack();
+      
     } catch (error) {
       setLoadingImage(false);
       console.log(error);
@@ -211,6 +216,7 @@ const NewVeicule = () => {
         });
       }
       setShowAlert(true);
+
     } finally {
       setLoadingImage(false); // Desativa o carregamento, independentemente do sucesso ou falha
     }
@@ -223,6 +229,7 @@ const NewVeicule = () => {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
       <ScrollView
+        keyboardShouldPersistTaps='handled'
         style={styleJS.containerForm}
         contentContainerStyle={{ paddingBottom: 70 }}
       >

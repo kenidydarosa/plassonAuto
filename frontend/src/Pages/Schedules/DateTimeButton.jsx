@@ -110,7 +110,6 @@ const defineMinimumDate = (pickerField, setMinimumDate, startDate, startTime, en
 export const onChange = (event, selectedDateTime, listPicker) => {
   const { pickerField, setStartDate, setStartTime, setEndDate, setEndTime, setShowPicker, setActiveButton, startDate, endDate, startTime, endTime } =
     listPicker;
-
   const isAndroid = Platform.OS === 'android';
   const currentDate = new Date(); // Hora atual
 
@@ -266,6 +265,7 @@ export const onChange = (event, selectedDateTime, listPicker) => {
     }
     if (isAndroid) {
       setShowPicker(false);
+      setActiveButton('');
     }
   }
 };

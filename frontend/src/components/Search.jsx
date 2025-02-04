@@ -1,7 +1,7 @@
 /** @format */
 
 import React, { useState } from 'react';
-import { StyleSheet, FlatList, TextInput, View, RefreshControl, ScrollView } from 'react-native';
+import { StyleSheet, FlatList, TextInput, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Filters from './Filters';
 import { TouchableOpacity } from 'react-native';
@@ -15,14 +15,13 @@ import styleJS from './style.js';
  * @param {Function} renderCard - Função que renderiza cada card (ou item) da lista.
  * @param {Array} searchKeys - Array de strings representando as chaves do objeto que serão utilizadas na busca.
  */
-const SearchableCardList = ({ data, renderCard, searchKeys, filters = [], initialFilter = '', loading, onRefresh }) => {
+const SearchableCardList = ({ data, renderCard, searchKeys, filters = [], initialFilter = '' }) => {
   // Define o estado 'searchText' para armazenar o termo de busca digitado pelo usuário.
   const [searchText, setSearchText] = useState('');
   const [selectedFilter, setSelectedFilter] = useState(initialFilter);
 
   // Filtra os itens com base no filtro selecionado
   const filteredItems = selectedFilter === initialFilter ? data : data.filter((item) => item.status.toLowerCase() === selectedFilter.toLowerCase());
-
   // Filtra os itens da lista com base no texto digitado e nas chaves definidas em 'searchKeys'.
   const filteredSearch = filteredItems.filter((item) => {
     return searchKeys.some((key) => {
@@ -36,43 +35,40 @@ const SearchableCardList = ({ data, renderCard, searchKeys, filters = [], initia
   });
 
   return (
-    <View style={{ flexGrow: 1}}>
-      <View style={styles.containerInput}>
-        <Ionicons name={'search'} size={18} color={'#B7B7B7'} />
-        <View style={styles.containerText}>
-          <TextInput
-            style={[styles.searchBar, { outline: 'none' }]}
-            placeholder='Pesquisar...'
-            value={searchText}
-            onChangeText={(text) => {
-              setSearchText(text);
-            }}
-          />
-          {searchText !== '' && (
-            <TouchableOpacity onPress={() => setSearchText('')}>
-              <Ionicons name={'close-circle'} size={20} color={'grey'} />
-            </TouchableOpacity>
-          )}
+    <View style={{ flexGrow: 1 }}>
+      <View style={{ paddingBottom: 10, gap: 5 }}>
+        <View style={styles.containerInput}>
+          <Ionicons name={'search'} size={18} color={'#B7B7B7'} />
+          <View style={styles.containerText}>
+            <TextInput
+              style={[styles.searchBar, { outline: 'none' }]}
+              placeholder='Pesquisar...'
+              value={searchText}
+              onChangeText={(text) => {
+                setSearchText(text);
+              }}
+            />
+            {searchText !== '' && (
+              <TouchableOpacity onPress={() => setSearchText('')}>
+                <Ionicons name={'close-circle'} size={20} color={'grey'} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
+
+        {/* Renderiza o componente Filters apenas se filters não estiver vazio */}
+        {filters.length > 0 && <Filters filters={filters} onFilterSelect={(value) => setSelectedFilter(value)} selectedFilter={selectedFilter} />}
       </View>
 
-      {/* Renderiza o componente Filters apenas se filters não estiver vazio */}
-      {filters.length > 0 && <Filters filters={filters} onFilterSelect={(value) => setSelectedFilter(value)} selectedFilter={selectedFilter} />}
-     
       {/* Lista os itens filtrados com base no texto da pesquisa */}
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={{ height: '74%' }}
-        refreshControl={<RefreshControl refreshing={loading} tintColor={styleJS.primaryColor} onRefresh={onRefresh} />}
-      >
-        <FlatList
-          data={filteredSearch}
-          keyExtractor={(item) => item.id.toString()} // Garantir que 'item.id' seja uma string
-          renderItem={({ item }) => renderCard(item)}
-          scrollEnabled={false}
-        />
-        {filteredSearch.length === 0 && <NothingText title='Que pena!' msg='Ainda não tem nada aqui...' ico='😕' />}
-      </ScrollView>
+      <FlatList
+        keyboardShouldPersistTaps='handled'
+        data={filteredSearch}
+        keyExtractor={(item) => item.id.toString()} // Garantir que 'item.id' seja uma string
+        renderItem={({ item }) => renderCard(item)}
+        scrollEnabled={false}
+      />
+      {filteredSearch.length === 0 && <NothingText title='Que pena!' msg='Não tem nada aqui...' ico='😕' />}
     </View>
   );
 };
@@ -87,7 +83,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 40,
     backgroundColor: '#F0F2F5',
-    marginVertical: 10,
   },
   searchBar: {
     flexGrow: 1,

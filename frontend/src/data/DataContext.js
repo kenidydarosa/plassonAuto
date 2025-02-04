@@ -15,17 +15,14 @@ export const DataProvider = ({ children }) => {
   const [sectorsDB, setSectorsDB] = useState(null); // Estado para armazenar os setores
   const [locale, setLocale] = useState(null); // Estado para armazenar o local atual
   const [latitude, setLatitude] = useState(null); // Estado para armazenar a latitude do local atual
-  const [longitude, setLongitude] = useState(null); // Estado para armazenar a longitude do local atual
-  // const [latitudeTemp, setLatitudeTemp] = useState(null); // Estado para armazenar uma latitude temporária
-  // const [longitudeTemp, setLongitudeTemp] = useState(null); // Estado para armazenar uma longitude temporária
-  // const [latitudeUser, setLatitudeUser] = useState(null); // Estado para armazenar a latitude do usuário
-  // const [longitudeUser, setLongitudeUser] = useState(null); // Estado para armazenar a longitude do usuário
-
+  const [longitude, setLongitude] = useState(null); // Estado para armazenar a longitude do local atual  
   const [coordTemp, setCoordTemp] = useState({latitude: null, longitude:null}); // Estado para armazenar a longitude do usuário
   const [coordUser, setCoordUser] = useState({latitude: null, longitude:null}); // Estado para armazenar a longitude do usuário
   const [destination, setDestination] = useState(null); // Estado para armazenar o destino atual
   const [routeInfo, setRouteInfo] = useState({ distance: '', duration: '' });;
   const [notificationCount, setNotificationCount] = useState(0); // Estado para armazenar a contagem de notificações não lidas
+  const [loading, setLoading] = useState(false);
+  
   const contextValue = {
     userDB, // Fornece o estado do usuário atual
     setUserDB, // Função para atualizar o estado do usuário
@@ -51,8 +48,8 @@ export const DataProvider = ({ children }) => {
     setCoordTemp,
     coordUser,
     setCoordUser,
-
-
+    loading,
+    setLoading,
     destination, // Fornece o destino atual
     setDestination, // Função para atualizar o destino atual
     notificationCount, // Fornece a contagem de notificações não lidas

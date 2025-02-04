@@ -3,7 +3,7 @@
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDataContext } from '../../data/DataContext.js';
 import { useCallback, useState } from 'react';
-import { Text, ScrollView, View, RefreshControl } from 'react-native';
+import { Text, ScrollView, View, RefreshControl, Dimensions } from 'react-native';
 import Card from '../../components/CardPost.jsx';
 import FloatingButton from '../../components/FloatingButton.jsx';
 import fontConfig from '../../config/fontConfig.js';
@@ -16,11 +16,11 @@ import { updateData } from '../../routes/updateRoutes.js';
 
 export const MySchedules = () => {
   const navigation = useNavigation();
-  const { userDB, schedulesDB, veiculesDB, usersDB } = useDataContext();
+  const { userDB, schedulesDB, veiculesDB, usersDB, loading, setLoading } = useDataContext();
   const dataContext = useDataContext();
-  const [loading, setLoading] = useState(false);
   const fontsLoaded = fontConfig();
-
+  const screenHeight = Dimensions.get("window").height;
+  
   //Filtra apenas as reservas que o usuário é dono.
   let updateSchedule;
   if (userDB.name == 'Admin') {
@@ -123,17 +123,16 @@ export const MySchedules = () => {
 
   return (
     <View style={styleJS.pageContainer}>
-
-      <View style={styleJS.container}>
-      {/* <ScrollView contentContainerStyle={styleJS.container}
-        // refreshControl={<RefreshControl refreshing={loading} tintColor={styleJS.primaryColor} onRefresh={onRefresh} />}
-      > */}
+      <ScrollView
+        keyboardShouldPersistTaps='handled'
+        contentContainerStyle={styleJS.container}
+        refreshControl={
+          <RefreshControl refreshing={loading} tintColor={styleJS.primaryColor} onRefresh={onRefresh} title='Carregando...' progressViewOffset={screenHeight / 2 - 50} />}
+      >
         <Header />
-        <Text style={[styleJS.title, { marginTop: 40 }]}>Minhas reservas</Text>
+        <Text style={[styleJS.title, { marginTop: 0 }]}>Minhas reservas</Text>
         {/* Componente SearchableCardList */}
         <SearchableCardList
-          onRefresh={onRefresh}
-          loading={loading}
           data={updateSchedule} // Passa os dados das reservas filtrados
           renderCard={renderCard} // Função que renderiza cada card
           searchKeys={['user_id', 'title', 'summary', 'locale', 'start']} // Chaves para a pesquisa
@@ -145,8 +144,7 @@ export const MySchedules = () => {
           ]}
           initialFilter={'todos'}
         />
-      {/* </ScrollView> */}
-      </View>
+      </ScrollView>
       <FloatingButton onPress={navigateToVeicules} />
     </View>
   );
