@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     height: 25,
   },
   content: {
-    paddingVertical: 10,
+    paddingVertical: 5,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 5,

@@ -225,7 +225,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { Button } from 'react-native-paper';
-import { getAddressFromCoordinates } from '../config/api';
+import { getAddressFromCoordinates } from '../api/api';
 import SearchGooglePlaces from './SearchGooglePlaces';
 import Map from './MapView';
 import { useDataContext } from '../data/DataContext.js';
@@ -245,6 +245,7 @@ const ModalSheetButton = () => {
 
   const [searchText, setSearchText] = useState('');
   const [textDistance, setTextDistance] = useState('');
+  const [showSecondModal, setShowSecondModal] = useState(true)
 
   const bottomSheetRef = useRef(null);
   const secondBottomSheetRef = useRef(null);
@@ -309,8 +310,10 @@ const ModalSheetButton = () => {
     setStreet(local);
     setNeighborhood(localDetails);
 
-    if (!myLocation) {
-      secondBottomSheetRef.current?.snapToIndex(0);
+    if (!myLocation && showSecondModal) {
+      setTimeout(() => {
+        secondBottomSheetRef.current?.snapToIndex(0);
+      }, 500);
       bottomSheetRef.current?.close();
     }
   };
@@ -352,21 +355,22 @@ const ModalSheetButton = () => {
         </BottomSheetView>
       </BottomSheet>
 
-      <BottomSheet ref={secondBottomSheetRef} snapPoints={['32%']} index={0}>
+      <BottomSheet ref={secondBottomSheetRef} snapPoints={['32%']} index={-1}>
         <BottomSheetView style={styles.contentContainer}>
           <View style={styles.containerItems}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <Text style={styles.street}>{street || 'Nenhum endereço selecionado.'}</Text>
-              {!street && <Text style={styles.distanceSelected}>{'Selecione um local no mapa. 📌'}</Text>}
+              <View style={{width:'100%'}}>
+                <Text style={styles.street}>{street || 'Nenhum endereço selecionado.'}</Text>
+                {!street && <Text style={styles.distanceSelected}>{'Selecione um local no mapa. 📌'}</Text>}
+              </View>
               <TouchableOpacity
                 style={{ position: 'absolute', right: 0 }}
                 onPress={async () => {
-                  bottomSheetRef.current?.snapToIndex(0);
-                  secondBottomSheetRef.current?.close();
-                  i;
+                  setShowSecondModal(false);
                   setCoordTemp({ latitude: null, longitude: null });
                   setSearchText('');
-                  setShowSecondModal(false);
+                  bottomSheetRef.current?.snapToIndex(0);
+                  secondBottomSheetRef.current?.close();
                 }}
               >
                 <Ionicons name='close-circle' size={20} color='grey' />
@@ -436,7 +440,7 @@ const styles = StyleSheet.create({
   },
   containerItems: {
     height: '98%',
-    paddingBottom: 15
+    paddingBottom: 15,
   },
 });
 

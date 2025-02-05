@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../config/api.js';
+import { API_URL } from '../api/api.js';
 
 // Função para buscar todos as notificações
 export const getNotify = async (id) => {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../config/api.js';
+import { API_URL } from '../api/api.js';
 
 // Função para fazer login (pode ser feita uma requisição POST para autenticar)
 export const loginUser = async (username, password) => {

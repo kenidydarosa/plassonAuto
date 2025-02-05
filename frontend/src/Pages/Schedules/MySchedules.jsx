@@ -10,7 +10,7 @@ import fontConfig from '../../config/fontConfig.js';
 import Header from '../../components/Header.jsx';
 import styleJS from '../../components/style.js';
 import SearchableCardList from '../../components/Search.jsx';
-import { getImageUrl } from '../../config/api.js';
+import { getImageUrl } from '../../api/api.js';
 import Loading from '../../components/Loading.jsx';
 import { updateData } from '../../routes/updateRoutes.js';
 

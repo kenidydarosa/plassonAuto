@@ -8,7 +8,7 @@ import Card from '../../components/CardPost.jsx';
 import FloatingButton from '../../components/FloatingButton.jsx';
 import styleJS from '../../components/style.js';
 import { useDataContext } from '../../data/DataContext.js';
-import { getImageUrl } from '../../config/api.js';
+import { getImageUrl } from '../../api/api.js';
 import Loading from '../../components/Loading.jsx';
 import { updateData } from '../../routes/updateRoutes.js';
 

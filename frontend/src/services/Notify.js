@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { API_URL } from '../config/api.js';
+import { API_URL } from '../api/api.js';
 import { getNotify } from '../routes/notifyRoutes.js';
 
 const socket = io(API_URL);

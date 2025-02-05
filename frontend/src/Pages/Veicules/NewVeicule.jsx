@@ -19,7 +19,7 @@ import InputField from '../../components/InputField.jsx';
 import SelectInput from '../../components/SelectInput.jsx';
 import AlertDialog from '../../components/Dialog.jsx';
 import uuid from 'react-native-uuid';
-import { getImageUrl } from '../../config/api.js';
+import { getImageUrl } from '../../api/api.js';
 import { storage } from '../../config/firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import IconWithLabel from '../../components/IconWithLabel.jsx';

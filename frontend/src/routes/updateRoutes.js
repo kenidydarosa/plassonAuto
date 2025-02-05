@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../config/api.js';
+import { API_URL } from '../api/api.js';
 
 export const updateData = async (id, dataContext) => {
   try {

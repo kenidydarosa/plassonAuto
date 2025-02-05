@@ -3,7 +3,7 @@ import { View, TextInput, FlatList, Text, StyleSheet, TouchableOpacity, Keyboard
 import IconWithLabel from './IconWithLabel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import styleJS from './style';
-import { fetchPlaces, fetchPlaceDetails } from '../config/api';
+import { fetchPlaces, fetchPlaceDetails } from '../api/api';
 import { useDataContext } from '../data/DataContext';
 
 const SearchGooglePlaces = ({ setSelectMaps, handleSearchFocus, handleSearchBlur, searchText, setSearchText }) => {
